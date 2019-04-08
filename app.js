@@ -87,7 +87,7 @@ app.post("/login", (request, response) => {
                 })
             } 
             else {
-                //console.log(alumno);
+                
                 response.json(alumno);
                 //oracle.connect(oracle.run);
                 response.status(201); //el alumno es correcto
