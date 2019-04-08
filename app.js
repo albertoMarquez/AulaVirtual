@@ -62,7 +62,6 @@ app.get("/getId", (request, response) => {
 //import Cookie from "./public/js/cookie";
 app.post("/login", (request, response) => {
     daoU.isAlumno(request.body.login, request.body.password, (err, op, alumno) =>{
-        //console.log(usuario);
         if (err){
             response.status(400); //mal introducido
             response.end();
