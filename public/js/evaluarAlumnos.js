@@ -31,7 +31,8 @@ $(document).ready(function() {
             contentType: "application/json",
             data: {id:user.idProfesor},
             success: function(data) {
-               data.forEach(e => {
+
+                data.forEach(e => {
                    
                 var elem = $("#template").clone();
                 elem.find("#nombre").text(e.nombre);
@@ -51,9 +52,15 @@ $(document).ready(function() {
                 $("#template").before(elem);
                });
                $('#tablaA').DataTable();
-               
+               var table = $('#tablaA').DataTable();
                $('.dataTables_length').addClass('bs-select');
                // el orden de la tabla lo he sacado de aqui https://mdbootstrap.com/docs/jquery/tables/sort/ 
+               $('#tablaA').on('click', 'tbody tr', function(){
+                  // console.log('TR cell textContent : ', this);
+                  var data = table.row( this ).data();
+                 
+                  console.log(data);
+               });
             },
             error: function() {
                 alert("Error al mostrar los ejercicios");
