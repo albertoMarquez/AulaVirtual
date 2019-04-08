@@ -375,6 +375,53 @@ class DAOUsers {
             }
         })
     }
+
+    evaluaAlumno(idProfesor, callback){
+        this.pool.getConnection((err, con)=>{
+            if(err){
+                callback(err);
+            }else{
+                var sql = `select * 
+                from (select tb1.nombre, tb1.apellidos, tb1.nota, tb1.numOk, tb1.IdGEjerAlumno, tb1.intentos, tb1.resultado, tb1.fechaEntrega, tb1.idEjercicio as "idEjer", tb1.entregaRetrasada, e.idProfesor, e.numScriptsSol, e.titulo from ejercicio e join (
+                        select a.nombre, a.apellidos, ea.nota, ea.numOK, ea.idAlumno, ea.idGrupo as "IdGEjerAlumno", ea.intentos, ea.resultado, ea.fecha as "fechaEntrega", ea.idEjercicio, ea.entregaRetrasada 
+                        from ejercicioAlumno ea join alumno a 
+                        ON a.idAlumno = ea.idAlumno) tb1
+                    ON e.idEjercicio = tb1.idEjercicio) tb2 join (select g.idGrupo, g.idAsignatura as "idGrupoAsignatura", g.grupo, a.curso 
+                                                                from asignatura a join grupos g 
+                                                                ON g.idAsignatura = a.idAsignatura) tb3
+                ON tb3.idGrupo = tb2.IdGEjerAlumno
+                WHERE tb2.idProfesor = ?;`;
+                                            
+               
+                con.query(sql, [idProfesor], (err, filas)=>{
+                    if(err){
+                        callback(err);
+                    }else{
+                        var sol = [];
+                        var row = {};
+                        filas.forEach(e=>{
+                            row.nombre = e.nombre;
+                            row.apellidos = e.apellidos;
+                            row.idEjer = e.idEjer;
+                            row.titulo = e.titulo;
+                            row.numScriptsOK = e.numOK;
+                            row.numsScriptsTotales = e.numScriptsSol;
+                            row.entregaRetrasada = e.entregaRetrasada;
+                            row.cursoGrupo = e.curso + "º " + e.grupo;
+                            row.intentos = e.intentos;
+                            row.resultado = e.resultado;
+                            row.nota = e.nota;
+                            sol.push(row);
+                            row = {};
+                        });
+                        callback(undefined, sol); 
+                    }
+                });
+                con.release();
+            }
+        })
+    }
+
 }
    
 module.exports = {
