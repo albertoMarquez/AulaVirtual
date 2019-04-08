@@ -1,0 +1,11 @@
+td {
+    height: 40px;
+    vertical-align: bottom;
+    color: #85c12F;
+}
+th{
+    color: #006b48;
+}
+th, td {
+    padding: 15px;
+}

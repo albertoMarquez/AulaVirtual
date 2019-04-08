@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html lang="es">
+    <head>
+        <meta charset="utf-8"> 
+        <title>Inicio</title>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.css" rel="stylesheet"/>
+        <link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.css" rel="stylesheet"/>
+        <link rel="stylesheet" href="/css/main_style.css" type="text/css" />
+        <link rel="stylesheet" href="/css/indexAlumnos.css" type="text/css" />
+
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.2/moment.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+        
+        <script src="/js/index.js"></script>
+        <script src="/js/cookie.js"></script>
+
+    </head>
+    <body>
+        <div id="cabecera"></div>
+        <div id="menu"></div>    
+        <div class="container">
+            <div class="cuerpo">
+               <!-- Login -->
+                <div class="formulario_login" id="formulario_login">
+                    <form>
+                        <span style="font-size: 30px;">Identificarse</span>
+                        <div class="form-group">
+                            <label for="user" class="form_label">Nombre de usuario</label>
+                            <input type="email" id="user" required  class="form-control"  placeholder="Nombre usuario"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="form_label">Contraseña</label>
+                            <input type="password" class="form-control" id="password" placeholder="Password" required />
+                        </div>
+                        <button type="submit" value="Submit"class="btn btn-default aceptar" id="login">Aceptar</button>
+                    </form>
+                    
+                </div> 
+
+                <div class="formulario_login hidden" id="formulario_pass">
+                    <form>
+                        <span style="font-size: 30px;">Cambio de contraseña</span>
+                        <div class="form-group">
+                            <label for="pass1" class="form_label">Contraseña nueva</label>
+                            <input type="password" class="form-control" id="password1" placeholder="Password" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="pass2" class="form_label">Repite la contraseña</label>
+                            <input type="password" class="form-control" id="password2" placeholder="Password" required />
+                        </div>
+                        <button type="submit" value="Submit"class="btn btn-default cambiarPass" id="cambioPass">Cambiar</button>
+                    </form>
+                </div> 
+            </div>           
+        </div>        
+    </body>
+</html>

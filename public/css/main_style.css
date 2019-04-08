@@ -1,0 +1,251 @@
+#main{
+    color:white;
+}
+#main:hover{
+    background-color: #0a160a;
+}
+body{
+    font-family: "Open Sans", "Verdana", sans-serif;
+    background-color: white;
+    font-size: 15px;
+}
+input[type=text]{
+    padding: 5px 8px;
+    width: 10%;
+    box-sizing: border-box;
+}
+input[type=submit] {
+    text-decoration: none;
+    padding: 10px;
+    font-weight: 600;
+   
+    background-color:#b6d055;;
+    color: #3f5d55;
+    border-radius: 6px;
+}
+
+label{
+    margin-right: 15px; 
+    color:#1b3323;
+}
+span{
+  
+    display:block;
+    text-align:center;
+}
+p{
+    color : black;
+    text-align: center;
+}
+textarea{
+    color : black;
+}
+h1{
+    text-align: center;
+    color: #006b48;
+}
+
+input{
+    margin: 5px;
+    color:black;
+}
+a{
+    color:#333;
+}
+.dropdown-menu > a{
+    color:white;
+}
+a:hover, a:focus {
+    color: #feffff;
+    background-color: #5a8651;
+    text-decoration: none;
+}
+
+/*---Cabecera AulaVirtual---*/
+.cabecera_top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    padding: 20px;
+    /*color oscuro de la pagina*/
+    background-color: #0a160a;
+    margin: 0;
+}
+
+.bienvenido {
+    margin: 30px;
+}
+.portada {
+    display: flex;
+    list-style-type: none;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(230, 230, 230);
+}
+.menu {
+	list-style-type: none;
+	overflow: hidden;
+	/*margin: auto;*/
+	margin-top: 20px;
+	width: 900px;
+	padding: 0;
+}
+
+.menu li{
+	float: left;
+	padding: 0px 50px 0px 0px;
+	display: block;
+	font-size: 22px;
+	color: rgb(0, 0, 0);
+}
+
+.menu a {
+	color: rgb(0, 0, 0);
+}
+#menu1 {
+	display: flex;
+	justify-content: flex-start;
+}
+.formulario_login {
+    width: 80%;
+    background-color:#f4f4f4;
+    padding: 20px 20px;
+    margin: 40px auto; 
+    border-radius: 10px;
+    color:#b6d055;
+    box-shadow: 0 2px 2px rgba(0,0,0,0.3);
+}
+
+
+.nuevo_usuario {
+    background-color:#b6d055;
+    color: white;
+}
+
+.nuevoUser{
+    background-color:#b6d055;
+    color: white;
+}
+
+.cambiarPass{
+    background-color:#b6d055;
+    color: rgb(255, 255, 255);
+    font-weight: normal;
+}
+
+.aceptar {
+    background-color: #b6d055;
+    color: rgb(255, 255, 255);
+    font-weight: normal;
+}
+
+.form_label {
+    font-weight: normal;
+}
+
+.menu_partidas {
+    list-style-type: none;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+}
+
+.elemento_menu {
+    padding: 20px;
+    float: left;
+    font-size: 16px;
+    border-bottom-style: solid;
+    border-width: 2px;
+    border-color: rgb(212, 212, 212);
+}
+
+.seleccionado {
+    border-bottom-style: solid;
+    border-width: 2px;
+    border-color: #85c12F;
+    font-weight: bold;
+    
+}
+
+.seleccionado>a{
+    color: rgb(77, 77, 77);
+}
+
+.cuerpo {
+    width: 100%;
+    margin: auto;
+}
+
+.columna_izq {
+    padding: 0 20px;
+    width: 800px;
+}
+
+.box {
+    background-color: rgb(238, 238, 238);
+    
+    margin: 30px auto;
+    padding: 30px;
+    border-radius: 10px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: lightgray;
+}
+
+.inputLong {
+    width: 660px;
+}
+
+.form_group_custom {
+    margin: 20px auto;
+}
+
+.box2 {
+    background-color: rgb(238, 238, 238);
+    margin: 30px auto;
+    border-radius: 10px;
+    padding-top: 20px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: lightgray;
+    height: auto;
+}
+
+.j_seleccionado {
+    background-color: #32CD32;
+    color: white;
+}
+
+.bottom_cell {
+    width: 100%; 
+    background-color: white;
+    border-top: solid 1px lightgray;
+    margin-top: 15px;
+    padding: 30px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.hidden {
+    display: none;
+    visibility: hidden;
+}
+
+/* ---------BOTONES MENU DE LA PAGINA PPAL---------- */
+.btn-group > .btn {
+    background-color:#3f5d55;
+    color:white;
+}
+#menu{
+    padding: 0px 1px 0px 20px;
+    background-color: #3f5d55;
+}
+.dropdown-header {
+    padding: 0px;
+}
+
+.open > .dropdown-menu {
+    background-color: #3f5d55;
+    color: white; 
+}

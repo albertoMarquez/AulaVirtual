@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html lang="es">
+    <head>
+        <meta charset="utf-8"> 
+        <title>Inicio</title>
+        
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.css" rel="stylesheet"/>
+        <link href="/css/main_style.css" rel="stylesheet">
+        <link href="/css/subirAlumno.css" rel="stylesheet">
+        
+  
+     
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script  src="/js/subirAlumno.js"></script>
+        <script src="/js/cookie.js"></script>
+    </head>
+    <body>
+
+        <div id="cabecera">
+            <% include ../public/cabecera.html %>
+        </div>
+        <div id ="menu">
+            <% include ../public/menuAlumno.html %>
+        </div>
+        
+       
+        <!-- Login -->
+        <div class="formulario_login">
+            <form>
+                <span id="titulo"><%= data.titulo %></span>
+                <div class="datosEnunciado">
+                    <div id="notaDiv">
+                        <h3>Nota:</h3>
+                        <h3 id="nota"><strong><%= data.nota %></strong></h3>
+                    </div>
+                    
+                    <div id="linkEjercicio">
+                        <span id="enunciadoText">Enunciado del ejercicio</span> 
+                        <a href="<%= data.enun %>"id="botonPdf"><i class="fa fa-file-pdf-o" style="font-size:48px;color:#32CD32"></i></a>
+                    </div>
+                </div>
+             
+               
+                    <div class= "solProfAlum">
+                       <div class= "tfield" id="comentarioProfesor">
+                            <textarea id="solProf"> <%= data.solucionProfe %>  </textarea>
+                        </div>
+                        <div class= "tfield" id="solAlumno">
+                            <textarea id="solAlmun" placeholder = "Solución del alumno para el ejercicio"><%= data.solucion %></textarea>
+                        </div> 
+                    </div>
+       
+                <div class ="datosFormulario">
+                    <label for="txt_procedimientoAlumno">Subir Ejercicio</label>
+                    <input type="file" name="uploadedfile" id="procedimientoAlumno">
+                </div>
+                <div class="alert alert-info hidde">Resultado de la base de datos</div>
+                <div id="boton">
+                    <button type="submit" value="Submit" class="btn btn-default aceptar" id="evaluar">Evaluar</button>
+                </div>
+                
+            </form>
+        </div>             
+    </body>
+</html>

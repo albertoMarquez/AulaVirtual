@@ -1,0 +1,81 @@
+
+
+#listaPorTemas{
+    margin-top: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px;
+    width: 700px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    background-color:  #f4f4f4;
+    box-shadow: 0 2px 2px rgba(0,0,0,0.3);
+    list-style-type: none;
+    border-radius: 10px;
+
+}
+.tema{
+    background-color:  #f4f4f4;
+    border-radius: 20px;
+    padding: 15px;
+    justify-content: flex-start;
+    margin:15px;
+    display: flex;
+    flex-direction: row;
+}
+
+#enunciado{
+ 
+    font-size: 20px;
+    height: 40px;
+    width: 390px;
+}
+#listaPorTemas a:link{
+    text-decoration: none;
+    color:#85c12F;
+}
+#listaPorTemas a:active{
+    color:#006b48;
+}
+
+#imagenMensaje{
+    
+    width: 200px;
+    height: 40px;
+    font-size: 20px;
+}
+
+#listaAlumnos{
+    margin-top: 15px;
+    margin-left: auto;
+    margin-right: auto;
+  
+    padding: 20px;
+    width: 700px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    background-color:  #f4f4f4;
+    color: #85c12F;
+    box-shadow: 0 2px 2px rgba(0,0,0,0.3);
+    list-style-type: none;
+    border-radius: 10px;
+}
+
+.alumno{
+    display:flex;
+    border-radius: 20px;
+    flex-direction: row;
+    justify-content: space-around;
+    background-color:  #f4f4f4;
+    color: #85c12F;
+    padding: 11px;
+    margin: 25px;
+    font-size: 20px;
+}
+
+#listaAlumnos a{
+    text-decoration: none;
+}
+

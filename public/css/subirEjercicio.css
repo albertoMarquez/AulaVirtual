@@ -1,0 +1,129 @@
+#formulario{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 15px;
+    width: 700px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    background-color:  #f4f4f4;
+    box-shadow: 0 2px 2px rgba(0,0,0,0.3);
+    border-radius: 15px;
+    height: auto;
+    border-radius: 10px;
+}
+.datosFormulario{
+    display: flex;
+    justify-content: flex-start;
+    background-color:  #f4f4f4;
+    color: #1b3323;
+    margin:30px;
+    padding: 5px;
+    border-radius: 15px;
+}
+#enunciado{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+label{
+    padding: 5px;
+    border: 10px;
+    display: inline-block;
+    width: 250px;
+    /*background-color: yellow;*/ 
+    color: #1b3323;
+    font-weight: bold;
+}
+.btn-warning {
+    color: #fff;
+    background-color: #b6d055;
+    border-color: #b6d055;
+}
+#form{
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+    height: auto;
+    width: auto;
+    
+}
+.input-group .form-control {
+    margin-bottom: 41px;
+}
+input[type=text] {
+    width: 94%;
+}
+form input, form text{
+    display: block;    
+} 
+#text_observ{
+    margin:5px;
+    width: 350px;
+    height: 200px;
+    border: 2px solid #006b48;
+    color:black;
+}
+
+#solucion{
+    margin:5px;
+    width: 700px;
+    height: 200px;
+    border: 2px solid #006b48;
+    color:black;
+}
+
+.btn.btn-warning.btn-reset:hover{
+    background-color: #5a8651;
+    border-color:#5a8651;
+}
+.btn.btn-warning.btn-reset:link{
+    background-color: #5a8651;
+    border-color:#5a8651;
+}
+.btn.btn-warning.btn-reset:link:hover{
+    background-color: #5a8651;
+    border-color:#5a8651;
+}
+.btn.btn-warning.btn-reset:active:hover{
+    background-color: #5a8651;
+    border-color:#5a8651;
+}
+.btn.btn-warning.btn-reset:visited:hover{
+    background-color: #5a8651;
+    border-color:#5a8651;
+}
+.btn.btn-warning.btn-reset:active{
+    background-color: #5a8651;
+    border-color:#5a8651;
+}
+.btn.btn-warning.btn-reset:visited{
+    background-color: #5a8651;
+    border-color:#5a8651;
+}
+
+::btn.btn-warning.btn-reset{
+    background-color: #5a8651;
+    border-color:#5a8651;
+}
+
+
+.btn-primary:hover{
+    background-color: #5a8651;
+}
+.btn-primary:active{
+    background-color: #5a8651;
+}
+
+.btn-primary:link{
+    background-color: #5a8651;
+}
+.btn-primary:visited{
+    background-color: #5a8651;
+}
+.btn-primary{
+    background-color: #b6d055;
+    border-color: #b6d055;
+}

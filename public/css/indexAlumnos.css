@@ -1,0 +1,39 @@
+
+#listaEjs{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 15px;
+    width: 80%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f4f4f4;
+    box-shadow: 0 2px 2px rgba(0,0,0,0.3);
+    padding: 15px;
+    border-radius: 10px;
+}
+.introduccion{
+    background-color: #f4f4f4;
+    margin:15px;
+    color:#669a37;
+
+}
+.ejs_ex{
+    display: flex;
+    flex-direction: column;
+    width: 350px;
+    box-shadow: 0 2px 2px rgba(0,0,0,0.3);
+    margin:15px;
+    padding: 5px;
+    background-color:  #f4f4f4;
+    border-radius: 15px;
+}
+
+.botones{
+    display: flex;
+    justify-content: space-between;
+    margin: 15px;
+    color:#669a37;
+   
+}

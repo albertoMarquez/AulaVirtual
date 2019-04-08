@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html lang="es">
+<head>
+    <meta charset="utf-8"> 
+    <title>Inicio</title>
+    <link rel="stylesheet" href="/css/bootstrap.css" type="text/css" />
+    <link rel="stylesheet" href="/css/subirEjercicio.css" type="text/css" />
+    <link rel="stylesheet" href="/css/main_style.css" type="text/css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.css" rel="stylesheet"/>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.css" rel="stylesheet"/>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.2/moment.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="/js/index.js"></script>
+    <script src="/js/cookie.js"></script>
+</head>
+<body>
+
+    
+        <div id="cabecera"></div>
+        <div id = "menu"></div>
+     
+
+   <!-- <div class="alert alert-warning alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>¡Cuidado!</strong> Es muy importante que leas este mensaje de alerta.
+    </div>
+    <div class="alert alert-info">...</div>
+    <div class="alert alert-warning">...</div>
+    <div class="alert alert-danger">
+            <a href="#" class="alert-link">...</a>
+    </div> -->
+    <div id ="formulario">
+    <form action="/corregirProblema" method="post">
+        <div id="form">
+            <div>
+                <div class ="datosFormulario">
+                    <label for="lbl_tituloProblema">Titulo: </label>
+                    <label for="txt_titulo">Completar el procedimiento de aumento de sueldo </label>
+                </div>
+                <div class ="datosFormulario" id="sol">
+                    <textarea name="observaciones" id="solucion" placeholder = "Solucion..."></textarea>
+                </div>
+                <div class ="datosFormulario">
+                    <label for="txt_tituloProblema">Nota: </label>
+                    <input type="text" name ="nota">
+                </div>
+                <div id="botonSubmit">
+                    <input type="submit" value="CALIFICAR">
+                </div>
+            </div>
+        </div>
+    </form>
+</body>

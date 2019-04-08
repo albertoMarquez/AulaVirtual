@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html lang="es">
+    <head>
+        <meta charset="utf-8"> 
+        <title>Inicio</title>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.css" rel="stylesheet"/>
+        <link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.css" rel="stylesheet"/>
+        <link rel="stylesheet" href="/css/mostrarListaEjer.css" type="text/css" />
+        <link rel="stylesheet" href="/css/main_style.css" type="text/css" />
+        <link rel="stylesheet" href="/css/evaluarAlumnos.css" type="text/css" />
+
+
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.2/moment.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+        <script src="js/evaluarAlumnos.js"></script>
+        <script src="js/cookie.js"></script>
+    </head>
+    <body>
+        
+        <div id="cabecera"></div>
+        <div id="menu"></div>
+
+        <div id="tablaAlumnos">
+            <table id=tablaA class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Apellidos</th>
+                        <th scope="col">ID de ejercicio</th>
+                        <th scope="col">Titulo del ejercicio</th>
+                        <th scope="col">Numero scripts OK</th>
+                        <th scope="col">Numero de scripts totales</th>
+                        <th scope="col">Entrega retrasada</th>
+                        <th scope="col">Curso y grupo</th>
+                        <th scope="col">Intentos</th>
+                        <th scope="col">Resultado</th>
+                        <th scope="col">Nota</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr id="template"class="hidden">
+                        <td id="nombre">Nombre</td>
+                        <td id="apellidos">Apellidos</td>
+                        <td id="idEjer">ID de ejercicio</td>
+                        <td id="titulo">Titulo del ejercicio</td>
+                        <td id="numScriptsOK">Numero scripts OK</td>
+                        <td id="numsScriptsTotales">Numero de scripts totales</td>
+                        <td id="entregaRetrasada">Entrega retrasada</td>
+                        <td id="cursoGrupo">Curso y grupo</td>
+                        <td id="intentos">Intentos</td>
+                        <td id="resultado">Resultado</td>
+                        <td id="nota">Nota</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>    
+    </body>
+</html>

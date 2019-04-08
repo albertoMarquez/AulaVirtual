@@ -1,0 +1,18 @@
+input[type=text] {
+    width: 80%;
+}
+
+input[type=password]{
+    width: 80%;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+span{
+    padding: 9px;
+}

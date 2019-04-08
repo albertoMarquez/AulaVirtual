@@ -1,0 +1,49 @@
+textarea{
+    width: 461px;
+    height: 488px;
+    margin: 25px;
+    resize:none;
+}
+
+#boton{
+    display: flex;
+    justify-content: center;
+}
+
+.datosEnunciado{
+    display: flex;
+    justify-content: space-between;
+}
+
+#notaDiv{
+    display: flex;
+}
+
+.datosFormulario{
+    display: flex;
+    justify-content: start;
+}
+
+.solProfAlum{
+    display: flex;
+    justify-content: center;
+}
+
+#enunciadoText{
+    font-size: 16px;
+    padding-right: 12px;
+}
+
+#linkEjercicio{
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
+}
+
+#titulo{
+    font-size: 34px;
+}
+
+.formulario_login {
+    padding: 55px;
+}

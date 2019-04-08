@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html lang="es">
+    <head>
+        <meta charset="utf-8"> 
+        <title>Inicio</title>
+        <!--MIRAR CUANDO HAYA MAS TIEMPO-->
+
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.css" rel="stylesheet"/>
+        <link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.css" rel="stylesheet"/>
+        <link rel="stylesheet" href="/css/main_style.css" type="text/css" /> 
+        <link rel="stylesheet" href="css/altaEjercicio.css" type="text/css" /> 
+        <!--<link rel="stylesheet" href="/css/subirEjercicio.css" type="text/css" />-->
+        
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.2/moment.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+        <script src="/js/scriptAsignatura.js"></script>
+        <script src="/js/cookie.js"></script>
+
+        
+    </head>
+    <body>
+        <div id="cabecera"></div>
+        <div id = "menu"></div>
+
+        <div class ="datosFormulario">
+            <div class="container">
+                <div class="panel-group">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Crear Asignatura</div>
+                    <div class="panel-body">
+                        <input type="text" placeholder="Nombre de la Asignatura" id="nombreAsignatura">
+                        <label for="curso" class="form_label"> Curso:</label>
+                        <select id ="cursoAsignatura" >
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                        </select>
+                        <button type="submit" value="Submit" class="btn btn-default" id="BCrearAsignatura">Crear</button>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="panel-group">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Eliminar Asignatura</div>
+                        <div class="panel-body">
+                            <select id="sEliminarAsignatura" class="">
+                            </select>
+                            <button type="submit" value="Submit" class="btn btn-default" id="BEliminarAsignatura">Eliminar</button>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>        
+    </body>
+</html>
