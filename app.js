@@ -537,6 +537,8 @@ app.get("/entregaRetrasada",(request, response)=>{
             response.status(400);
             response.end();
         }else{
+            //en teoria deberia de pasarme el id de los alumnos
+            //con eso me sirve en el js para despues poner nota a un alumno
             console.log(filas);
             response.json(filas);
             response.status(201);

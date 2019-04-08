@@ -376,13 +376,14 @@ class DAOUsers {
         })
     }
 
+    //falta depurar la query
     evaluaAlumno(idProfesor, callback){
         this.pool.getConnection((err, con)=>{
             if(err){
                 callback(err);
             }else{
                 var sql = `select * 
-                from (select tb1.nombre, tb1.apellidos, tb1.nota, tb1.numOk, tb1.IdGEjerAlumno, tb1.intentos, tb1.resultado, tb1.fechaEntrega, tb1.idEjercicio as "idEjer", tb1.entregaRetrasada, e.idProfesor, e.numScriptsSol, e.titulo from ejercicio e join (
+                from (select tb1.idAlumno, tb1.nombre, tb1.apellidos, tb1.nota, tb1.numOk, tb1.IdGEjerAlumno, tb1.intentos, tb1.resultado, tb1.fechaEntrega, tb1.idEjercicio as "idEjer", tb1.entregaRetrasada, e.idProfesor, e.numScriptsSol, e.titulo from ejercicio e join (
                         select a.nombre, a.apellidos, ea.nota, ea.numOK, ea.idAlumno, ea.idGrupo as "IdGEjerAlumno", ea.intentos, ea.resultado, ea.fecha as "fechaEntrega", ea.idEjercicio, ea.entregaRetrasada 
                         from ejercicioAlumno ea join alumno a 
                         ON a.idAlumno = ea.idAlumno) tb1
@@ -392,7 +393,6 @@ class DAOUsers {
                 ON tb3.idGrupo = tb2.IdGEjerAlumno
                 WHERE tb2.idProfesor = ?;`;
                                             
-               
                 con.query(sql, [idProfesor], (err, filas)=>{
                     if(err){
                         callback(err);
@@ -400,6 +400,7 @@ class DAOUsers {
                         var sol = [];
                         var row = {};
                         filas.forEach(e=>{
+                            row.idAlumno = e.idAlumno;
                             row.nombre = e.nombre;
                             row.apellidos = e.apellidos;
                             row.idEjer = e.idEjer;
