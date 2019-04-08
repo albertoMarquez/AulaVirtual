@@ -32,7 +32,7 @@ $(document).ready(function() {
         $("#evaluar").click(function(event) {
             ///PROGRAMAR FUNCIONES
             event.preventDefault();
-            subirScriptlumno(user);
+            entregaRetrasada(19);
         });
     }else{
         var link = window.location.href;
@@ -43,7 +43,7 @@ $(document).ready(function() {
  
  function entregaRetrasada(idEjercicio){
     let fechaSubida = new Date();
-    info = {fechaSubida: fechaSubida};
+    info = {fechaSubida: fechaSubida,idEjercicio: idEjercicio};
     $.ajax({
         method: "POST",
         url: "/entregaRetrasada",
@@ -53,15 +53,14 @@ $(document).ready(function() {
         success: function(retrasada) {
             if(retrasada)
                 alert("Fecha retrasada");
-            var link = window.location.href;
-            var res = link.split("/");
-            window.location = res[1] + "/principal.html";
+            return retrasada;
         },
         error: function() {
             alert("Error al comprobar la fecha de entrega");
         } 
     });
  }
+
  function subirScriptlumno(user){
     alert("hola");
     var link = window.location.href;

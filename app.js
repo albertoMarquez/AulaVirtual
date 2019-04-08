@@ -530,6 +530,21 @@ app.get("/evaluaAlumno", (request, response)=>{
     })
 });
 
+app.get("/entregaRetrasada",(request, response)=>{
+    console.log("app");
+    daoE.entregaRetrasada(request, (err, filas)=>{
+        if(err){
+            response.status(400);
+            response.end();
+        }else{
+            console.log(filas);
+            response.json(filas);
+            response.status(201);
+            response.end();
+        }
+    })
+});
+
 app.listen(config.port, function(err) {
     if (err) {
         console.log("No se ha podido iniciar el servidor.")

@@ -293,7 +293,41 @@ class DAOEjercicio {
         });
     }
 
-    
+    entregaRetrasada(datos, callback){
+       /* var x = new Date('2013-05-23');
+        var y = new Date('2013-05-23');
+
+        // less than, greater than is fine:
+        x < y; => false
+        x > y; => false
+        x === y; => false, oops!
+
+        // anything involving '=' should use the '+' prefix
+        // it will then compare the dates' millisecond values
+        +x <= +y;  => true
+        +x >= +y;  => true
+        +x === +y; => true*/
+        console.log(datos);
+        this.pool.getConnection((err, con)=>{
+            if(err){
+                callback(err);
+            }else{
+                con.query(`SELECT fin FROM profesor WHERE idEj =?`,[datos.idEjercicio],(err, filas)=>{
+                    if(err){
+                        callback(err);
+                    }else{
+                        if(filas.length === 0){
+                            //if(fechaSubida.
+                            callback(undefined, false);
+                        }else{
+                            callback(undefined, true);
+                        }
+                    }
+                });
+                con.release();
+            }
+        })
+    }
 }
 module.exports = {
     DAOEjercicio: DAOEjercicio
