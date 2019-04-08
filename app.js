@@ -516,6 +516,20 @@ app.post("/eliminarAsignatura",(request, response) =>{
         }
     });
 });
+app.get("/evaluaAlumno", (request, response)=>{
+   
+    daoU.evaluaAlumno(request.query.id, (err, filas)=>{
+        if(err){
+            response.status(400);
+            response.end();
+        }else{
+            console.log(filas);
+            response.json(filas);
+            response.status(201);
+            response.end();
+        }
+    })
+});
 
 app.listen(config.port, function(err) {
     if (err) {
