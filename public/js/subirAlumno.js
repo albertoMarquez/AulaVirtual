@@ -29,10 +29,12 @@ $(document).ready(function() {
         });
         //subirAlumno
         //cargarProblemaAlumno();
-        $("#evaluar").click(function(event) {
+        $("#evaluar").click(function(event) {//Dale al boton y deberia de ejecutarse la funcion 
             ///PROGRAMAR FUNCIONES
             event.preventDefault();
-            entregaRetrasada(19);
+            console.log("boton pulsado");
+            if(entregaRetrasada(19))
+                console.log("Retrasada");
         });
     }else{
         var link = window.location.href;
@@ -40,20 +42,33 @@ $(document).ready(function() {
         window.location = res[1] + "/";
     }
  });
- 
+ /* var x = new Date('2013-05-23');
+        var y = new Date('2013-05-23');
+
+        // less than, greater than is fine:
+        x < y; => false
+        x > y; => false
+        x === y; => false, oops!
+
+        // anything involving '=' should use the '+' prefix
+        // it will then compare the dates' millisecond values
+        +x <= +y;  => true
+        +x >= +y;  => true
+        +x === +y; => true*/
  function entregaRetrasada(idEjercicio){
     let fechaSubida = new Date();
-    info = {fechaSubida: fechaSubida,idEjercicio: idEjercicio};
+    //let idEj = idEjercicio;
+    info = {idEjercicio: idEjercicio};
     $.ajax({
         method: "POST",
         url: "/entregaRetrasada",
         data: JSON.stringify(info),
         dataType:"JSON",
         contentType: "application/json",
-        success: function(retrasada) {
-            if(retrasada)
+        success: function(fechaFin) {
+            if(fechaSubida > fechaFin)
                 alert("Fecha retrasada");
-            return retrasada;
+            return fechaSubida > fechaFin;
         },
         error: function() {
             alert("Error al comprobar la fecha de entrega");
