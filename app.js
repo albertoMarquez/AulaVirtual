@@ -530,7 +530,7 @@ app.get("/evaluaAlumno", (request, response)=>{
     })
 });
 
-app.get("/entregaRetrasada", (request, response)=>{
+app.post("/entregaRetrasada", (request, response)=>{
     console.log("app"+request.idEjercicio);
     daoE.entregaRetrasada(request, (err, filas)=>{
         if(err){
