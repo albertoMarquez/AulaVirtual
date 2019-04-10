@@ -293,21 +293,24 @@ class DAOEjercicio {
         });
     }
 
-    entregaRetrasada(datos, callback){
-        console.log(datos);
+    entregaRetrasada(idEjercicio, callback){
+        console.log("datos"+idEjercicio);
         this.pool.getConnection((err, con)=>{
             if(err){
                 callback(err);
             }else{
-                con.query(`SELECT fin FROM profesor WHERE idEj =?`,[datos.idEjercicio],(err, filas)=>{
+                con.query(`SELECT fin FROM altaejercicio WHERE idEj =?`,[idEjercicio],(err, filas)=>{
                     if(err){
-                        console.log("query");
+                        console.log("err");
                         callback(err);
                     }else{
                         if(filas.length === 0){
+                            console.log("query 0");
                             callback(undefined, false);
                         }else{
-                            callback(undefined, true);
+                            
+                            console.log(filas[0].fin);
+                            callback(undefined, filas[0].fin);
                         }
                     }
                 });

@@ -33,8 +33,7 @@ $(document).ready(function() {
             ///PROGRAMAR FUNCIONES
             event.preventDefault();
             console.log("boton pulsado");
-            if(entregaRetrasada(19))
-                console.log("Retrasada");
+            alert($("solProf").val());
         });
     }else{
         var link = window.location.href;
@@ -42,39 +41,7 @@ $(document).ready(function() {
         window.location = res[1] + "/";
     }
  });
- /* var x = new Date('2013-05-23');
-        var y = new Date('2013-05-23');
-
-        // less than, greater than is fine:
-        x < y; => false
-        x > y; => false
-        x === y; => false, oops!
-
-        // anything involving '=' should use the '+' prefix
-        // it will then compare the dates' millisecond values
-        +x <= +y;  => true
-        +x >= +y;  => true
-        +x === +y; => true*/
- function entregaRetrasada(idEjercicio){
-    let fechaSubida = new Date();
-    //let idEj = idEjercicio;
-    info = {idEjercicio: idEjercicio};
-    $.ajax({
-        method: "POST",
-        url: "/entregaRetrasada",
-        data: JSON.stringify(info),
-        dataType:"JSON",
-        contentType: "application/json",
-        success: function(fechaFin) {
-            if(fechaSubida > fechaFin)
-                alert("Fecha retrasada");
-            return fechaSubida > fechaFin;
-        },
-        error: function() {
-            alert("Error al comprobar la fecha de entrega");
-        } 
-    });
- }
+ 
 
  function subirScriptlumno(user){
     alert("hola");
@@ -85,14 +52,17 @@ $(document).ready(function() {
     let solucion = $("procedimientoAlumno").val();
     //let nota
     //let numOk
-    //let entregaRetrasada = entregaRetrasada(idEjercicio);
-    let correccionProfesor
+    let entregaRetrasada = new Date();
+    console.log(entregaRetrasada);
+    /*$("procedimientoAlumno").val()){
+        let correccionProfesor =
+    }*/
     let idAlumno = user.idAlumno;
     let idGrupo = user.idGrupo;
     //let intentos
     let resultado = NULL; //se tiene que coger del oracledb
     let fechaActual = new Date();
- 
+
     const reader = new FileReader();
     reader = $('input[type=file]')[0].files[0];
     if(reader.EMPTY){
@@ -116,6 +86,8 @@ $(document).ready(function() {
     }else{
         alert("la");
     }
+    
+    
  }
  
  

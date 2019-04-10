@@ -531,13 +531,13 @@ app.get("/evaluaAlumno", (request, response)=>{
 });
 
 app.post("/entregaRetrasada", (request, response)=>{
-    console.log("app"+request.idEjercicio);
-    daoE.entregaRetrasada(request, (err, filas)=>{
+    console.log("app"+request.body.idEjercicio);
+    daoE.entregaRetrasada(request.body.idEjercicio, (err, filas)=>{
         if(err){
             response.status(400);
             response.end();
         }else{
-            console.log(filas);
+            console.log("vuelta"+filas);
             response.json(filas);
             response.status(201);
             response.end();

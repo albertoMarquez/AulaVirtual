@@ -103,4 +103,38 @@ function abrirModal(data){
             modal.style.display = "none";
         }
     }*/
+    /* var x = new Date('2013-05-23');
+        var y = new Date('2013-05-23');
+
+        // less than, greater than is fine:
+        x < y; => false
+        x > y; => false
+        x === y; => false, oops!
+
+        // anything involving '=' should use the '+' prefix
+        // it will then compare the dates' millisecond values
+        +x <= +y;  => true
+        +x >= +y;  => true
+        +x === +y; => true*/
+function entregaRetrasada(idEjercicio){
+    let fechaSubida = new Date();
+    //let idEj = idEjercicio;
+    info = {idEjercicio: idEjercicio};
+    console.log("id" + info.idEjercicio);
+    $.ajax({
+        method: "POST",
+        url: "/entregaRetrasada",
+        data: JSON.stringify(info),
+        dataType:"JSON",
+        contentType: "application/json",
+        success: function(fechaFin) {
+            let fechaF = new Date(fechaFin);
+            if(fechaF > fechaSubida)
+                alert("Fecha retrasada");
+        },
+        error: function() {
+            alert("Error al comprobar la fecha de entrega");
+        } 
+    });
+}
 }
