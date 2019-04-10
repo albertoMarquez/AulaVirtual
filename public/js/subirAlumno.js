@@ -37,7 +37,7 @@ $(document).ready(function() {
             var res = link.split("/");
             let idEjercicio = res[res.length-1];//coger del id
             numeroDeIntentos(idEjercicio, (num)=>{//¿PORQUE NO FUNCIONA EL ALERT?
-                alert("num"+num);
+                console.log("num"+num);
             });
         });
     }else{
@@ -57,7 +57,7 @@ $(document).ready(function() {
             dataType:"JSON",
             contentType: "application/json",
             success: function(numeroDeIntentos){
-                console.log(numeroDeIntentos);
+                //console.log(numeroDeIntentos);
                 return numeroDeIntentos;
             },
             error: function() {
