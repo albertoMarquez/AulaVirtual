@@ -318,6 +318,31 @@ class DAOEjercicio {
             }
         })
     }
+    numeroDeIntentos(idEjercicio, callback){
+        console.log("datos"+idEjercicio);
+        this.pool.getConnection((err, con)=>{
+            if(err){
+                callback(err);
+            }else{
+                con.query(`SELECT numeroIntentos FROM altaejercicio WHERE idEj =?`,[idEjercicio],(err, filas)=>{
+                    if(err){
+                        console.log("err");
+                        callback(err);
+                    }else{
+                        if(filas.length === 0){
+                            console.log("query 0");
+                            callback(undefined, false);
+                        }else{
+                            
+                            console.log(filas[0].numeroIntentos);
+                            callback(undefined, filas[0].numeroIntentos);
+                        }
+                    }
+                });
+                con.release();
+            }
+        })
+    }
 }
 module.exports = {
     DAOEjercicio: DAOEjercicio

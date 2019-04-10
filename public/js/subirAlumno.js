@@ -33,7 +33,12 @@ $(document).ready(function() {
             ///PROGRAMAR FUNCIONES
             event.preventDefault();
             console.log("boton pulsado");
-            alert($("solProf").val());
+            var link = window.location.href;
+            var res = link.split("/");
+            let idEjercicio = res[res.length-1];//coger del id
+            numeroDeIntentos(idEjercicio, (num)=>{//¿PORQUE NO FUNCIONA EL ALERT?
+                alert("num"+num);
+            });
         });
     }else{
         var link = window.location.href;
@@ -42,30 +47,47 @@ $(document).ready(function() {
     }
  });
  
-
- function subirScriptlumno(user){
+ function numeroDeIntentos(idEjercicio){
+        let idEj = idEjercicio;
+        info = {idEjercicio: idEj};
+        $.ajax({
+            method: "POST",
+            url: "/numeroDeIntentos",
+            data: JSON.stringify(info),
+            dataType:"JSON",
+            contentType: "application/json",
+            success: function(numeroDeIntentos){
+                console.log(numeroDeIntentos);
+                return numeroDeIntentos;
+            },
+            error: function() {
+                alert("Error numeroDeIntentos");
+            } 
+        });
+ }
+ function subirScriptAlumno(user){
     alert("hola");
-    var link = window.location.href;
-    var res = link.split("/");
-    let idEjercicio = link[link.length-1];//coger del id
-    alert(idEjercicio);
+    
     let solucion = $("procedimientoAlumno").val();
     //let nota
     //let numOk
     let entregaRetrasada = new Date();
     console.log(entregaRetrasada);
-    /*$("procedimientoAlumno").val()){
-        let correccionProfesor =
-    }*/
+    let correccionProfesor="";
+    if($("#solProf").val() !== undefined)
+        correccionProfesor = $("#solProf").val();
     let idAlumno = user.idAlumno;
     let idGrupo = user.idGrupo;
-    //let intentos
+    let intentos = 0;
+    /*numeroDeIntentos(idEjercicio, (num)=>{
+        
+    });*/
     let resultado = NULL; //se tiene que coger del oracledb
     let fechaActual = new Date();
 
     const reader = new FileReader();
     reader = $('input[type=file]')[0].files[0];
-    if(reader.EMPTY){
+    if(true){//reader.EMPTY){
         info = {scripts: archivosTo64, enun:enun64, tablas: tablas64, solucion: solucion64, titu:titulo, idProfesor:user.idProfesor};
         $.ajax({
             method: "POST",

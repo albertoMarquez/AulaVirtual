@@ -529,10 +529,24 @@ app.get("/evaluaAlumno", (request, response)=>{
         }
     })
 });
-
+//Cambiar a get ya que solo pide datos
 app.post("/entregaRetrasada", (request, response)=>{
     console.log("app"+request.body.idEjercicio);
     daoE.entregaRetrasada(request.body.idEjercicio, (err, filas)=>{
+        if(err){
+            response.status(400);
+            response.end();
+        }else{
+            console.log("vuelta"+filas);
+            response.json(filas);
+            response.status(201);
+            response.end();
+        }
+    })
+});
+app.post("/numeroDeIntentos", (request, response)=>{
+    console.log("app"+request.body.idEjercicio);
+    daoE.numeroDeIntentos(request.body.idEjercicio, (err, filas)=>{
         if(err){
             response.status(400);
             response.end();
