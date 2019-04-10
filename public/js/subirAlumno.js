@@ -37,7 +37,7 @@ $(document).ready(function() {
             var res = link.split("/");
             let idEjercicio = res[res.length-1];//coger del id
             numeroDeIntentos(idEjercicio, (num)=>{//¿PORQUE NO FUNCIONA EL ALERT?
-                console.log("num"+num);
+                console.log("num de intentos"+num);
             });
         });
     }else{
@@ -47,7 +47,7 @@ $(document).ready(function() {
     }
  });
  
- function numeroDeIntentos(idEjercicio){
+ function numeroDeIntentos(idEjercicio, callback){
         let idEj = idEjercicio;
         info = {idEjercicio: idEj};
         $.ajax({
@@ -58,7 +58,7 @@ $(document).ready(function() {
             contentType: "application/json",
             success: function(numeroDeIntentos){
                 //console.log(numeroDeIntentos);
-                return numeroDeIntentos;
+                callback(numeroDeIntentos);
             },
             error: function() {
                 alert("Error numeroDeIntentos");

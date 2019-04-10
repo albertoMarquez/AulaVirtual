@@ -545,7 +545,7 @@ app.post("/entregaRetrasada", (request, response)=>{
     })
 });
 app.post("/numeroDeIntentos", (request, response)=>{
-    console.log("app"+request.body.idEjercicio);
+    console.log("app "+request.body.idEjercicio);
     daoE.numeroDeIntentos(request.body.idEjercicio, (err, filas)=>{
         if(err){
             response.status(400);
