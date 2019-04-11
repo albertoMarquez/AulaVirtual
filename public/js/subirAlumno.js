@@ -36,9 +36,13 @@ $(document).ready(function() {
             var link = window.location.href;
             var res = link.split("/");
             let idEjercicio = res[res.length-1];//coger del id
-            numeroDeIntentos(idEjercicio, (num)=>{//¿PORQUE NO FUNCIONA EL ALERT?
+            /*numeroDeIntentos(idEjercicio, (num)=>{//¿PORQUE NO FUNCIONA EL ALERT?
                 console.log("num de intentos"+num);
-            });
+            });*/
+            //document.getElementById("myTextarea").value;
+            //let solucion = $("#solAlmun").val();
+            console.log(user.idAlumno);
+            subirScriptAlumno(user.idAlumno, idEjercicio);
         });
     }else{
         var link = window.location.href;
@@ -65,12 +69,12 @@ $(document).ready(function() {
             } 
         });
  }
- function subirScriptAlumno(user){
-    alert("hola");
+ function subirScriptAlumno(user, idEjercicio){
+    //alert("hola");
     
-    let solucion = $("procedimientoAlumno").val();
-    //let nota
-    //let numOk
+    let solucion = $("#solAlmun").val();
+    let nota =0;//coger la nota de la BD
+    let numOk = 0;//coger resultado de oracledb
     let entregaRetrasada = new Date();
     console.log(entregaRetrasada);
     let correccionProfesor="";
@@ -82,32 +86,33 @@ $(document).ready(function() {
     /*numeroDeIntentos(idEjercicio, (num)=>{
         
     });*/
-    let resultado = NULL; //se tiene que coger del oracledb
+    let resultado = ""; //se tiene que coger del oracledb
     let fechaActual = new Date();
 
-    const reader = new FileReader();
-    reader = $('input[type=file]')[0].files[0];
-    if(true){//reader.EMPTY){
-        info = {scripts: archivosTo64, enun:enun64, tablas: tablas64, solucion: solucion64, titu:titulo, idProfesor:user.idProfesor};
+    const solucion2 = new FileReader();
+    //solucion2 = $('input[type=file]')[0].files[0];
+    
+    //if(true){//reader.EMPTY){
+        info = {idEjercicio:idEjercicio,user:user.user,solucion: solucion, nota:nota, numOk: numOk, entregaRetrasada: entregaRetrasada, correccionProfesor:correccionProfesor, idAlumno:idAlumno, idGrupo:idGrupo,intentos:intentos,resultado:resultado,fechaActual:fechaActual,solucion2:solucion2};
         $.ajax({
             method: "POST",
-            url: "/subirEjercicio",
+            url: "/subirProcedimientoAlumno",
             data: JSON.stringify(info),
             dataType:"JSON",
             contentType: "application/json",
             success: function() {
                 alert("se ha subido correctamente el ejercicio");
-                var link = window.location.href;
+                /*var link = window.location.href;
                 var res = link.split("/");
-                window.location = res[1] + "/principal.html";
+                window.location = res[1] + "/principal.html";*/
             },
             error: function() {
                 alert("Error al subir un nuevo ejercicio.");
             } 
         });
-    }else{
+    /*}else{
         alert("la");
-    }
+    }*/
     
     
  }

@@ -6,7 +6,7 @@ oracledb.autoCommit= true;
 //https://github.com/oracle/node-oracledb/blob/master/examples/example.js
 //https://oracle.github.io/node-oracledb/
 //NO BORRAR REFERENCIA POR AHORA
-async function connect(funcion, sql,callback){
+async function connect(sql,datos,callback){
   try {
     // Create a connection pool which will later be accessed via the
     // pool cache as the 'default' pool.
@@ -17,11 +17,16 @@ async function connect(funcion, sql,callback){
      
     });
     console.log('Connection pool started');
-    if(funcion)
-      await funcion(sql,(resultado) =>{
+    if(datos.user == 'alumno'){
+      oracledb.altaUsuario(sql,(resultado) =>{//sql son los scripts de prueba
+        //console.log("connect)");
+        callback(resultado);
+      });
+      await oracledb.run(sql,(resultado) =>{
         //console.log("connect)");
         callback(resultado);
       });//la funcion que le pasamos(oracle.run)
+    }
 
   } catch (err) {
     console.error('init() error: ' + err.message);
@@ -107,7 +112,23 @@ async function callProcedures(connection, sql,callback){
  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  //CREARLO EN LA BASE DE DATOS CORRECTAMENTE
  async function altaUsuario(connection,  usuario){
-  var sql = "begin ALTA_USUARIO('"+usuario+"'); end;";
+  let connection;
+  try {
+    /*connection = await oracledb.getConnection();
+    await createTables(connection,sql[0]);
+    await createProcedure(connection,sql[1]);*/
+    connection = await oracledb.getConnection(
+      {
+        user: 'SYS',
+        password: 'SYS',
+        connectString: 'localhost',
+        privilege: oracledb.SYSDBA
+      },
+      async function(err, connection) {
+        if (err)
+          console.error("conection :"+err);
+        else{
+          var sql = "begin ALTA_USUARIO('"+usuario+"'); end;";
    /*CREATE OR REPLACE PROCEDURE ALTA_USUARIO(user_id VARCHAR2) AS
   BEGIN
     EXECUTE IMMEDIATE 'DROP USER '||user_id||' CASCADE';
@@ -121,6 +142,7 @@ async function callProcedures(connection, sql,callback){
     EXECUTE IMMEDIATE 'GRANT CREATE SYNONYM TO '||user_id;
     EXECUTE IMMEDIATE 'GRANT CREATE VIEW TO '||user_id;
     EXECUTE IMMEDIATE 'GRANT debug any procedure, debug connect session TO '||user_id;
+    EXECUTE IMMEDIATE 'GRANT EXECUTE ON sys.write_log TO '||user_id;
   END;
    begin
       ALTA_USUARIO('borja');
@@ -143,6 +165,49 @@ async function closePoolAndExit() {
     process.exit(0);
   }
 }
+/**
+ * Coger los scripts del profesor
+ * Almacenar el procedimiento en la bd
+ * Lanzar los script contra el procedimiento
+ * Devolver el resultado(uno o varios ficheros?)
+ */
+async function corregirProcedimiento(scripts,callback){//sql tiene la cracion de las tablas, el porcedimiento y los scripts
+  let connection;
+    try {
+      /*connection = await oracledb.getConnection();
+      await createTables(connection,sql[0]);
+      await createProcedure(connection,sql[1]);*/
+      connection = await oracledb.getConnection(
+        {
+          user: 'alberto',
+          password: 'alberto',
+          connectString: 'localhost',
+        },
+        async function(err, connection) {
+          if (err)
+            console.error("conection :"+err);
+          else{
+            await createTables(connection,sql[0]);
+            await createProcedure(connection,sql[1]);
+            await callProcedures(connection,sql,(sol)=>{
+              callback(sol);
+            });
+          }
+        }
+      );      
+    } catch (err) {
+      console.error("run :"+err);
+    } finally {
+      if (connection) {
+        try {
+          // Put the connection back in the pool
+          await connection.close();
+        } catch (err) {
+          console.error(" finally run :"+err);
+        }
+      }
+    }
+}
 process
   .on('SIGTERM', closePoolAndExit)
   .on('SIGINT',  closePoolAndExit);
@@ -150,4 +215,4 @@ process
 module.exports = {
 connect:connect,
 run:run
-}
+}//mirar porue da error (quitar de exportar run)

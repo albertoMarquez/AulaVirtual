@@ -558,6 +558,31 @@ app.post("/numeroDeIntentos", (request, response)=>{
         }
     })
 });
+app.post("/subirProcedimientoAlumno", (request, response)=>{
+    console.log("app "+request.body.idEjercicio);
+    daoE.scriptsPorID(request.body.idEjercicio, (err, filas)=>{
+        if(err){
+            response.status(400);
+            response.end();
+        }else{
+            //ORACLEDB
+            oracle.connect(filas,request.body,(sol)=>{
+                daoE.subirProcedimientoAlumno(request.body, (err, filas)=>{
+                    if(err){
+                        response.status(400);
+                        response.end();
+                    }else{
+                        console.log("vuelta"+filas);
+                        response.json(filas);
+                        response.status(201);
+                        response.end();
+                    }
+                })
+            });
+        }
+    });
+});
+
 
 app.listen(config.port, function(err) {
     if (err) {

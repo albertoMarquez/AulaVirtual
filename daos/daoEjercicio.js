@@ -343,6 +343,53 @@ class DAOEjercicio {
             }
         })
     }
+    //  terminar
+    subirProcedimientoAlumno(datos, callback){
+        this.pool.getConnection((err, con) =>{
+            if(err){
+                callback(err);
+            }else{
+                con.query(`INSERT INTO (tabla) (idGrupo, ini, fin, idEj, evaluacion) VALUES(?,?,?,?,?)`,
+                [datos.idGrupo, datos.ini, datos.fin, datos.idEj, datos.evaluacion], (err) =>{
+                    if(err){
+                        callback(err, undefined);
+                    }
+                    else{
+                        callback(null);
+                    }
+                });
+            }
+            con.release();
+        });
+    }
+    //terminar
+    scriptsPorID(idEjercicio,callback){
+        console.log("datos"+idEjercicio);
+        this.pool.getConnection((err, con)=>{
+            if(err){
+                callback(err);
+            }else{
+                con.query(`SELECT script FROM scriptspruebas WHERE idEjercicio =?`,[idEjercicio],(err, filas)=>{
+                    if(err){
+                        console.log("err");
+                        callback(err);
+                    }else{
+                        if(filas.length === 0){
+                            console.log("query 0");
+                            callback(undefined, false);
+                        }else{
+                            /*filas.forEach(e =>{
+                                console.log(e);
+                            });
+                            callback(undefined, filas[0].numeroIntentos);*/
+                            callback(undefined, filas);
+                        }
+                    }
+                });
+                con.release();
+            }
+        })
+    }
 }
 module.exports = {
     DAOEjercicio: DAOEjercicio

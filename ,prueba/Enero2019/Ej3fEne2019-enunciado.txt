@@ -1,0 +1,39 @@
+Ejercicio 3. (6 puntos) IFEMA nos ha encargado el control de tickets
+en las taquillas que tiene distribuidas por sus puertas de
+acceso. Para ello se parte de las siguientes relaciones:
+
+ofertas(oferta, desde, hasta, precio) : Oferta de precio entre dos
+fechas.
+
+accesos(puerta, capacidad) : Capacidad diaria en número de personas
+para la puerta de acceso.
+
+taquillas(taquilla, puerta, ventas) : Ubicación de la taquilla y el
+importe total de sus ventas.
+
+atiende(DNIempleado, taquilla, desde, hasta) : Empleado que atiende
+una taquilla entre dos fechas.
+
+tickets(ticket, DNIcliente, taquilla, fecha, precio, fechaCompra) :
+Ticket que compra un cliente en una taquilla por un precio determinado
+por su fecha de compra ( fechaCompra ) para asistir a un evento en una
+fecha ( fecha ).
+
+Las restricciones de integridad referencial de este esquema son:
+taquillas.puerta -> accesos.puerta
+atiende.taquilla -> taquillas.taquilla
+tickets.taquilla -> taquillas.taquilla
+
+f. (2 puntos) Escribe un procedimiento almacenado que reciba como
+parametro una puerta de acceso. Por cada taquilla de esa puerta de
+acceso se mostrara por pantalla el DNI de todos los clientes que
+compraron tickets, la cantidad de tickets que compraron y la suma
+de sus precios. Para cada taquilla, se mostrara un resumen con el
+numero total de tickets vendidos y la suma de sus precios por
+taquilla, y se actualizara el campo ventas de cada taquilla con
+este total. Se emitira una excepcion si no hay entradas vendidas
+para la puerta recibida por parametro. Si la puerta no existe se
+emitira otra excepcion indicandolo. Escribe como habilitar la
+salida por pantalla y la llamada a este procedimiento con una
+puerta en concreto.
+
