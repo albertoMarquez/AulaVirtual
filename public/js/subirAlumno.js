@@ -1,3 +1,4 @@
+var user;
 $(document).ready(function() { 
     $("#desconectar").removeClass("hidden");
     $("#desconectar").click(function(event) {
@@ -8,7 +9,7 @@ $(document).ready(function() {
     });
     var options={}
     $.galleta(options);
-    var user = $.galleta().getc("usuario");
+    user = $.galleta().getc("usuario");
     if(user !== "undefined"){
         user = JSON.parse(user);
         $("#solProf").attr("disabled", true);
@@ -41,8 +42,8 @@ $(document).ready(function() {
             });*/
             //document.getElementById("myTextarea").value;
             //let solucion = $("#solAlmun").val();
-            console.log(user.idAlumno);
-            subirScriptAlumno(user.idAlumno, idEjercicio);
+            //console.log(user.idAlumno);
+            subirScriptAlumno(user, idEjercicio);
         });
     }else{
         var link = window.location.href;
@@ -76,7 +77,7 @@ $(document).ready(function() {
     let nota =0;//coger la nota de la BD
     let numOk = 0;//coger resultado de oracledb
     let entregaRetrasada = new Date();
-    console.log(entregaRetrasada);
+    //console.log(entregaRetrasada);
     let correccionProfesor="";
     if($("#solProf").val() !== undefined)
         correccionProfesor = $("#solProf").val();
@@ -89,11 +90,14 @@ $(document).ready(function() {
     let resultado = ""; //se tiene que coger del oracledb
     let fechaActual = new Date();
 
+    let nombre = user.nombre;
+    let usuario = user.user;
     const solucion2 = new FileReader();
     //solucion2 = $('input[type=file]')[0].files[0];
-    
+    //console.log(user.user);
     //if(true){//reader.EMPTY){
-        info = {idEjercicio:idEjercicio,user:user.user,solucion: solucion, nota:nota, numOk: numOk, entregaRetrasada: entregaRetrasada, correccionProfesor:correccionProfesor, idAlumno:idAlumno, idGrupo:idGrupo,intentos:intentos,resultado:resultado,fechaActual:fechaActual,solucion2:solucion2};
+        info = {idEjercicio:idEjercicio,nombre:nombre,solucion: solucion,usuario:usuario, nota:nota, numOk: numOk, entregaRetrasada: entregaRetrasada, correccionProfesor:correccionProfesor, idAlumno:idAlumno, idGrupo:idGrupo,intentos:intentos,resultado:resultado,fechaActual:fechaActual,solucion2:solucion2};
+        console.log(info.user);
         $.ajax({
             method: "POST",
             url: "/subirProcedimientoAlumno",

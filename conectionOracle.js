@@ -17,17 +17,14 @@ async function connect(sql,datos,callback){
      
     });
     console.log('Connection pool started');
-    if(datos.user == 'alumno'){
-      oracledb.altaUsuario(sql,(resultado) =>{//sql son los scripts de prueba
-        //console.log("connect)");
-        callback(resultado);
-      });
-      await oracledb.run(sql,(resultado) =>{
+    if(datos.usuario == 'alumno'){
+      await altaUsuario(datos.nombre, datos.idAlumno);//sql son los scripts de prueba
+    }/*else{
+      await run(sql,(resultado) =>{
         //console.log("connect)");
         callback(resultado);
       });//la funcion que le pasamos(oracle.run)
-    }
-
+    }*/
   } catch (err) {
     console.error('init() error: ' + err.message);
   } finally {
@@ -109,15 +106,18 @@ async function callProcedures(connection, sql,callback){
   }
   callback(resultado);
 }
- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  //CREARLO EN LA BASE DE DATOS CORRECTAMENTE
-async function altaUsuario(connection,  usuario){
+ async function altaUsuario(nombre,idAlumno){
+   let user = nombre+idAlumno.toString();
+   console.log(user);
   let connection;
   try {
     /*connection = await oracledb.getConnection();
     await createTables(connection,sql[0]);
     await createProcedure(connection,sql[1]);*/
-    connection = await oracledb.getConnection({
+    connection = await oracledb.getConnection(
+      {
         user: 'SYS',
         password: 'SYS',
         connectString: 'localhost',
@@ -127,13 +127,21 @@ async function altaUsuario(connection,  usuario){
         if (err)
           console.error("conection :"+err);
         else{
-          var sql = "begin ALTA_USUARIO('"+usuario+"'); end;";
+          var sql = "begin ALTA_USUARIO('"+user+"'); end;";
+          await connection.execute(sql);
         }
+    });  
+  } catch (err) {
+    console.error("altaUsuario :"+err);
+  } finally {
+    if (connection) {
+      try {
+        // Put the connection back in the pool
+        await connection.close();
+      } catch (err) {
+        console.error("altaUsuario connection close"+err);
       }
-    )
-  }
-  finally{
-
+    }
   }
    /*CREATE OR REPLACE PROCEDURE ALTA_USUARIO(user_id VARCHAR2) AS
   BEGIN
@@ -153,8 +161,8 @@ async function altaUsuario(connection,  usuario){
    begin
       ALTA_USUARIO('borja');
   end;*/
-}
- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ }
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function closePoolAndExit() {
   console.log('\nTerminating');
@@ -193,11 +201,10 @@ async function corregirProcedimiento(scripts,callback){//sql tiene la cracion de
           if (err)
             console.error("conection :"+err);
           else{
-            await createTables(connection,sql[0]);
-            await createProcedure(connection,sql[1]);
-            await callProcedures(connection,sql,(sol)=>{
+            
+            /*await callProcedures(connection,sql,(sol)=>{
               callback(sol);
-            });
+            });*/
           }
         }
       );      
