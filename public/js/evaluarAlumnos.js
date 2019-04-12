@@ -42,7 +42,7 @@ $(document).ready(function() {
                 elem.find("#titulo").text(e.titulo);
                 elem.find("#numScriptsOK").text(e.numScriptsOK);
                 elem.find("#numsScriptsTotales").text(e.numScriptsTotales);
-                elem.find("#entregaRetrasada").text(e.entregaRetrasada);
+                elem.find("#entregaRetrasada").html(e.entregaRetrasada);
                 elem.find("#cursoGrupo").text(e.cursoGrupo);
                 elem.find("#intentos").text(e.intentos);
                 elem.find("#resultado").text(e.resultado);

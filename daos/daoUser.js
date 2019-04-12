@@ -407,7 +407,11 @@ class DAOUsers {
                             row.titulo = e.titulo;
                             row.numScriptsOK = e.numOK;
                             row.numsScriptsTotales = e.numScriptsSol;
-                            row.entregaRetrasada = e.entregaRetrasada;
+                            if(e.fechaEntrega > e.entregaRetrasada){
+                                row.entregaRetrasada = "<span style='color: red;'>" + e.entregaRetrasada + "</span>"
+                            }else{
+                                row.entregaRetrasada = "<span>" + e.entregaRetrasada + "</span>";
+                            }
                             row.cursoGrupo = e.curso + "º " + e.grupo;
                             row.intentos = e.intentos;
                             row.resultado = e.resultado;
