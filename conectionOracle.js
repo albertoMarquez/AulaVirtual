@@ -111,14 +111,13 @@ async function callProcedures(connection, sql,callback){
 }
  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  //CREARLO EN LA BASE DE DATOS CORRECTAMENTE
- async function altaUsuario(connection,  usuario){
+async function altaUsuario(connection,  usuario){
   let connection;
   try {
     /*connection = await oracledb.getConnection();
     await createTables(connection,sql[0]);
     await createProcedure(connection,sql[1]);*/
-    connection = await oracledb.getConnection(
-      {
+    connection = await oracledb.getConnection({
         user: 'SYS',
         password: 'SYS',
         connectString: 'localhost',
@@ -129,6 +128,13 @@ async function callProcedures(connection, sql,callback){
           console.error("conection :"+err);
         else{
           var sql = "begin ALTA_USUARIO('"+usuario+"'); end;";
+        }
+      }
+    )
+  }
+  finally{
+
+  }
    /*CREATE OR REPLACE PROCEDURE ALTA_USUARIO(user_id VARCHAR2) AS
   BEGIN
     EXECUTE IMMEDIATE 'DROP USER '||user_id||' CASCADE';
@@ -147,7 +153,7 @@ async function callProcedures(connection, sql,callback){
    begin
       ALTA_USUARIO('borja');
   end;*/
- }
+}
  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function closePoolAndExit() {
@@ -210,9 +216,9 @@ async function corregirProcedimiento(scripts,callback){//sql tiene la cracion de
 }
 process
   .on('SIGTERM', closePoolAndExit)
-  .on('SIGINT',  closePoolAndExit);
+  .on('SIGINT',  closePoolAndExit)
 
 module.exports = {
-connect:connect,
-run:run
-}//mirar porue da error (quitar de exportar run)
+  connect:connect,
+  run:run
+}

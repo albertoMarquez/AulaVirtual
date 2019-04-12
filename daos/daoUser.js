@@ -376,7 +376,7 @@ class DAOUsers {
         })
     }
 
-    //falta depurar la query
+    //////////////////////////////////////////falta depurar la query
     evaluaAlumno(idProfesor, callback){
         this.pool.getConnection((err, con)=>{
             if(err){

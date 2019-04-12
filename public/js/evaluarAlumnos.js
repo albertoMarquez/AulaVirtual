@@ -46,6 +46,7 @@ $(document).ready(function() {
                 elem.find("#intentos").text(e.intentos);
                 elem.find("#resultado").text(e.resultado);
                 elem.find("#nota").text(e.nota);
+                elem.data("idAlumno", e.idAlumno);
 
                 elem.removeClass("hidden");
                 elem.attr("id", "elem");
@@ -57,9 +58,8 @@ $(document).ready(function() {
                // el orden de la tabla lo he sacado de aqui https://mdbootstrap.com/docs/jquery/tables/sort/ 
                $('#tablaA').on('click', 'tbody tr', function(){
                   // console.log('TR cell textContent : ', this);
-                  var data = table.row( this ).data();
-                 abrirModal(data);
-                
+                    var data = table.row( this ).data();
+                    abrirModal(data);
                });
             },
             error: function() {
@@ -79,14 +79,12 @@ $(document).ready(function() {
 
 
 
-function abrirModal(data){
+function abrirModal(data, idAlumno){
     // Get the modal
     var modal = document.getElementById('myModal');
 
     // Get the <span> element that closes the modal
     var span = document.getElementsByClassName("close")[0];
-
-   
     modal.style.display = "block";
 
     console.log(data);
@@ -97,25 +95,22 @@ function abrirModal(data){
         modal.style.display = "none";
     }
 
-    // When the user clicks anywhere outside of the modal, close it
-   /* window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }*/
-    /* var x = new Date('2013-05-23');
-        var y = new Date('2013-05-23');
 
-        // less than, greater than is fine:
-        x < y; => false
-        x > y; => false
-        x === y; => false, oops!
+    $("#botonModal").click(function(event) {
+        $.ajax({
+            method: "POST",
+            url: "/actualizaComentarioNota",
+            contentType: "application/json",
+            data: {idEjercicio:data[2], idAlumno: id},
+            success: function(data) {
+            },
+            error: function(){
 
-        // anything involving '=' should use the '+' prefix
-        // it will then compare the dates' millisecond values
-        +x <= +y;  => true
-        +x >= +y;  => true
-        +x === +y; => true*/
+            }
+        });
+    });
+}
+
 function entregaRetrasada(idEjercicio){
     let fechaSubida = new Date();
     //let idEj = idEjercicio;
@@ -136,5 +131,4 @@ function entregaRetrasada(idEjercicio){
             alert("Error al comprobar la fecha de entrega");
         } 
     });
-}
 }
