@@ -129,7 +129,7 @@ class DAOEjercicio {
         });
     }
 
-    solScripts(id,datos,callback){ /// lista los ejercicios dados de alta
+    solScripts(id,datos,callback){ 
         this.pool.getConnection((err, con) =>{
             if(err){
                 callback(err);
@@ -246,6 +246,26 @@ class DAOEjercicio {
         })
     }
 
+    getUltimaEntrega(datos, callback){
+        this.pool.getConnection((err, con)=>{
+            if(err){
+                callback(err);
+            }else{
+
+                con.query(`SELECT * FROM ejercicioalumno WHERE idAlumno = ? AND idEjercicio = ?`,
+                [datos.idAlumno, datos.idEjercicio], (err, filas)=>{
+                    if(err){
+                        callback(err, undefined);
+                    }else{
+                        var codigoAlumno = filas[0].solucion;
+                        callback(undefined, codigoAlumno);
+                    }
+                });
+                con.release();
+            }
+        })
+    }
+
     listarEjerciciosNoAlta(callback){
         this.pool.getConnection((err, con)=>{
             if(err){
@@ -318,6 +338,7 @@ class DAOEjercicio {
             }
         })
     }
+
     numeroDeIntentos(idEjercicio, callback){
         console.log("datos"+idEjercicio);
         this.pool.getConnection((err, con)=>{
@@ -342,6 +363,24 @@ class DAOEjercicio {
                 con.release();
             }
         })
+    }
+
+    actualizaEjercicioAlumno(datos, callback){
+        this.pool.getConnection((err, con)=>{
+            if(err){
+                callback(err);
+            }else{
+                var sql = `UPDATE ejercicioalumno SET correccionProfesor =?, nota=? WHERE idEjercicio = ? AND idAlumno = ?;`
+                con.query(sql, [datos.comentario, Number(datos.nota), datos.idEjercicio, datos.idAlumno], (err, filas)=>{
+                    if(err){
+                        callback(err, undefined);
+                    }else{
+                        callback(undefined, true);
+                    }
+                });
+                con.release();
+            }
+        });
     }
     //  terminar
     subirProcedimientoAlumno(datos, callback){

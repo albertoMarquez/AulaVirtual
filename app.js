@@ -529,6 +529,33 @@ app.get("/evaluaAlumno", (request, response)=>{
         }
     })
 });
+
+app.post("/actualizaComentarioNota", (request, response)=>{
+    daoE.actualizaEjercicioAlumno(request.body, (err, filas)=>{
+        if(err){
+            response.status(400);
+            response.end();
+        }else{
+            response.status(201);
+            response.end();
+        }
+    })
+    
+});
+
+app.get("/getUltimaEntrega", (request, response)=>{
+    console.log(request.query);
+    daoE.getUltimaEntrega(request.query, (err, filas)=>{
+        if(err){
+            response.status(400);
+            response.end();
+        }else{
+            response.json(filas);
+            response.status(201);
+            response.end();
+        }
+    })
+})
 //Cambiar a get ya que solo pide datos
 app.post("/entregaRetrasada", (request, response)=>{
     console.log("app"+request.body.idEjercicio);
@@ -544,6 +571,7 @@ app.post("/entregaRetrasada", (request, response)=>{
         }
     })
 });
+
 app.post("/numeroDeIntentos", (request, response)=>{
     console.log("app "+request.body.idEjercicio);
     daoE.numeroDeIntentos(request.body.idEjercicio, (err, filas)=>{
@@ -558,6 +586,7 @@ app.post("/numeroDeIntentos", (request, response)=>{
         }
     })
 });
+
 app.post("/subirProcedimientoAlumno", (request, response)=>{
     console.log("app "+request.body.idEjercicio);
     daoE.scriptsPorID(request.body.idEjercicio, (err, filas)=>{

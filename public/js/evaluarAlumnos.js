@@ -36,6 +36,7 @@ $(document).ready(function() {
                    
                 var elem = $("#template").clone();
                 elem.find("#nombre").text(e.nombre);
+                elem.find("#idAlumno").text(e.idAlumno);
                 elem.find("#apellidos").text(e.apellidos);
                 elem.find("#idEjer").text(e.idEjer);
                 elem.find("#titulo").text(e.titulo);
@@ -72,43 +73,54 @@ $(document).ready(function() {
         var res = link.split("/");
         window.location = res[1] + "/";
     }
-
-   
-    
 });
 
 
 
-function abrirModal(data, idAlumno){
+function abrirModal(info){
     // Get the modal
-    var modal = document.getElementById('myModal');
 
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
-    modal.style.display = "block";
-
-    console.log(data);
-    $("#nombreModal").text(data[0] + " " + data[1]);
-    $("#notaModal").val(data[10]);
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function() {
-        modal.style.display = "none";
-    }
-
-
-    $("#botonModal").click(function(event) {
-        $.ajax({
-            method: "POST",
-            url: "/actualizaComentarioNota",
-            contentType: "application/json",
-            data: {idEjercicio:data[2], idAlumno: id},
-            success: function(data) {
-            },
-            error: function(){
-
+    $.ajax({
+        method: "GET",
+        url: "/getUltimaEntrega",
+        data:{idEjercicio:info[3], idAlumno: info[0]},
+        dataType:"JSON",
+        contentType: "application/json",
+        success: function(ultimaEntrega) {
+            var modal = document.getElementById('myModal');
+            var span = document.getElementsByClassName("close")[0];
+            modal.style.display = "block";
+            console.log(info);
+            $("#nombreModal").text(info[1] + " " + info[2]);
+            $("#notaModal").val(info[11]);
+            // When the user clicks on <span> (x), close the modal
+            $("#solucionAlumnoModal").val(ultimaEntrega);
+            span.onclick = function() {
+                modal.style.display = "none";
             }
-        });
-    });
+
+            $("#botonModal").click(function(event) {
+                event.preventDefault();
+                $.ajax({
+                    method: "POST",
+                    url: "/actualizaComentarioNota",
+                    contentType: "application/json",
+                    data: JSON.stringify({idEjercicio:info[3], idAlumno: info[0], nota: $("#notaModal").val(), comentario: $("#solucionAlumnoModal").val()}),
+                    success: function() {
+                        alert("Actualizado correctamente");
+                        modal.style.display = "none";
+                        location.reload();
+                    },
+                    error: function(){
+                        alert("Error al actualizar");
+                    }
+                });
+            });
+        },
+        error: function(){
+            alert("Error al recuperar entrega");
+        }
+    })
 }
 
 function entregaRetrasada(idEjercicio){
