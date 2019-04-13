@@ -111,7 +111,7 @@ $(document).ready(function() {
                 window.location = res[1] + "/principal.html";*/
             },
             error: function() {
-                alert("Error al subir un nuevo ejercicio.");
+                console.log("Error al subir un nuevo ejercicio.");
             } 
         });
     /*}else{

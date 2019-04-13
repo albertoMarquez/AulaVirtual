@@ -418,17 +418,13 @@ class DAOEjercicio {
                             callback(undefined, false);
                         }else{
                             let res = [];
-                            res[0] = resultado[0].creacionTablas.split(",");
-                            res[0] = new Buffer.from(res[0][1], 'base64').toString('ascii');
-                            res[1] = resultado[0].solucionProfesor.split(",");
-                            res[1] = new Buffer.from(res[1][1], 'base64').toString('ascii');
-                            var  i, j, aux;
-                            for(i = 2, j=0, aux=0; aux < resultado.length; i++, j++,aux++){
-                                res[i] = resultado[j].script.split(",");
+                            let i;
+                            for(i = 0; i < filas.length; i++){
+                                res[i] = filas[i].script.split(",");
                                 res[i] = new Buffer.from(res[i][1], 'base64').toString('ascii');
                             }
                             /*callback(undefined, filas[0].numeroIntentos);*/
-                            callback(undefined, filas);
+                            callback(undefined, res);
                         }
                     }
                 });

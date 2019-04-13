@@ -110,9 +110,9 @@ async function callProcedures(connection, sql,callback){
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  //CREARLO EN LA BASE DE DATOS CORRECTAMENTE
- async function altaUsuario(nombre,idAlumno){
+async function altaUsuario(nombre,idAlumno){
    
-   console.log(user);
+  console.log(user);
   let connection;
   try {
     /*connection = await oracledb.getConnection();
@@ -145,7 +145,26 @@ async function callProcedures(connection, sql,callback){
       }
     }
   }
-   /*CREATE OR REPLACE PROCEDURE ALTA_USUARIO(user_id VARCHAR2) AS
+}
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+async function closePoolAndExit() {
+  console.log('\nTerminating');
+  try {
+    // get the pool from the pool cache and close it when no
+    // connections are in use, or force it closed after 10 seconds
+    let pool = oracledb.getPool();
+    await pool.close(10);
+    console.log('Pool closed');
+    //process.exit(0);
+  } catch(err) {
+    // Ignore getPool() error, which may occur if multiple signals
+    // sent and the pool has already been removed from the cache.
+    process.exit(0);
+  }
+}
+ /*CREATE OR REPLACE PROCEDURE ALTA_USUARIO(user_id VARCHAR2) AS
   BEGIN
     EXECUTE IMMEDIATE 'DROP USER '||user_id||' CASCADE';
     EXCEPTION WHEN OTHERS THEN IF SQLCODE NOT IN (-01918) THEN RAISE; END IF;
@@ -163,64 +182,6 @@ async function callProcedures(connection, sql,callback){
    begin
       ALTA_USUARIO('borja');
   end;*/
- }
- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-async function closePoolAndExit() {
-  console.log('\nTerminating');
-  try {
-    // get the pool from the pool cache and close it when no
-    // connections are in use, or force it closed after 10 seconds
-    let pool = oracledb.getPool();
-    await pool.close(10);
-    console.log('Pool closed');
-    //process.exit(0);
-  } catch(err) {
-    // Ignore getPool() error, which may occur if multiple signals
-    // sent and the pool has already been removed from the cache.
-    process.exit(0);
-  }
-}
-/**
- * Coger los scripts del profesor
- * Almacenar el procedimiento en la bd
- * Lanzar los script contra el procedimiento
- * Devolver el resultado(uno o varios ficheros?)
- */
-async function corregirProcedimiento(user,solucion,scripts){//sql tiene la cracion de las tablas, el porcedimiento y los scripts
-  let connection;
-  console.log("scripts:"+script);
-  console.log("user:"+user);
-  console.log("solucion:"+solucion);
-  try {
-    connection = await oracledb.getConnection({
-        user: "'"+user+"'",
-        password: "'"+user+"'",
-        connectString: 'localhost',
-      },
-      async function(err, connection) {
-        if (err)
-          console.error("conection :"+err);
-        else{
-          await almacenarProcedimineto(user,solucion,scripts,connection);
-        }
-    });      
-  } catch (err) {
-    console.error("run :"+err);
-  } finally {
-    if (connection) {
-      try {
-        // Put the connection back in the pool
-        await connection.close();
-      } catch (err) {
-        console.error(" finally run :"+err);
-      }
-    }
-  }
-}
-async function almacenarProcedimineto(user,solucion,sql,connection){
-
-}
 process
   .on('SIGTERM', closePoolAndExit)
   .on('SIGINT',  closePoolAndExit)
