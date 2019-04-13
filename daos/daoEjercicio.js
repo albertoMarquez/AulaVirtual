@@ -298,13 +298,13 @@ class DAOEjercicio {
             if(err){
                 callback(err);
             }else{
-                con.query(`INSERT INTO altaejercicio (idGrupo, ini, fin, idEj, evaluacion) VALUES(?,?,?,?,?)`,
-                [datos.idGrupo, datos.ini, datos.fin, datos.idEj, datos.evaluacion], (err) =>{
+                con.query(`INSERT INTO altaejercicio (idGrupo, ini, fin, idEj, evaluacion, numeroIntentos) VALUES(?,?,?,?,?, ?)`,
+                [datos.idGrupo, datos.ini, datos.fin, datos.idEj, datos.evaluacion, datos.numIntentos], (err) =>{
                     if(err){
                         callback(err, undefined);
                     }
                     else{
-                        callback(null);
+                        callback(undefined, true);
                     }
                 });
                
@@ -370,7 +370,7 @@ class DAOEjercicio {
             if(err){
                 callback(err);
             }else{
-                var sql = `UPDATE ejercicioalumno SET correccionProfesor =?, nota=? WHERE idEjercicio = ? AND idAlumno = ?;`
+                var sql = `UPDATE ejercicioalumno SET correccionProfesor =?, nota=?WHERE idEjercicio = ? AND idAlumno = ?;`
                 con.query(sql, [datos.comentario, Number(datos.nota), datos.idEjercicio, datos.idAlumno], (err, filas)=>{
                     if(err){
                         callback(err, undefined);

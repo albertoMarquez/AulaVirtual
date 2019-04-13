@@ -76,7 +76,6 @@ function listarEjercicios(){
     });
 }
 
-
 function listarAsignaturas(){
     
     $.ajax({
@@ -139,6 +138,7 @@ function alta(){
     info.idGrupo = $("#curso").find(':selected').data('idGrupo');
     info.ini = $("#ini").val();
     info.fin = $("#fin").val();
+    info.numIntentos= $("#intentos").val();
 
 
     $.ajax({
@@ -147,7 +147,8 @@ function alta(){
         contentType: "application/json",
         data:JSON.stringify({ejer:info}),
         success: function() {
-           
+           alert("Ejercicio dado de alta correctamente");
+           location.reload();
         },
         error: function() {
             alert("Error al mostrar los ejercicios");

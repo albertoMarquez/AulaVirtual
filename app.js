@@ -228,13 +228,14 @@ app.post("/eliminarCursoYGrupo",(request, response) =>{
     datos.idGrupo = request.body.ejer.idGrupo;
     datos.idEj = request.body.ejer.idEjercicio;
     datos.evaluacion = Number(request.body.ejer.examen);
+    datos.numIntentos = request.body.ejer.numIntentos;
 
     daoE.altaEjercicio(datos, (err, filas) =>{
         if(err){
             response.status(400);
             response.end();
         }else{
-            response.status(200);
+            response.status(201);
             response.end();
         }
     })     

@@ -31,10 +31,19 @@
                     <div class="panel-heading">Dar Alta un ejercicio</div>
                     <div class="panel-body">
                         <div class="panel-group">
-                            <label>Selecciona el ejercicio </label>
-                            <select id ="ejercicio" class="autocomplete">
-                                    <option value="0"class="templateEjercicio">-- Selecciona un ejercicio --</option>
-                            </select>
+                            <div id="ejerIntentos">
+                                <div id="seleccionEjercicio">
+                                    <label>Selecciona el ejercicio </label>
+                                    <select id ="ejercicio" class="autocomplete">
+                                            <option value="0"class="templateEjercicio">-- Selecciona un ejercicio --</option>
+                                    </select>
+                                </div>
+                                <div id="numeroIntentos">
+                                    <label>Numero de intentos: </label>
+                                    <input type="text" id="intentos">
+                                </div>
+                            </div>
+                           
                             <div class="panel panel-default">
                                 <div class="panel-heading">Evaluación</div>
                                 <div class="panel-body">
