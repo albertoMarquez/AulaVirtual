@@ -417,10 +417,17 @@ class DAOEjercicio {
                             console.log("query 0");
                             callback(undefined, false);
                         }else{
-                            /*filas.forEach(e =>{
-                                console.log(e);
-                            });
-                            callback(undefined, filas[0].numeroIntentos);*/
+                            let res = [];
+                            res[0] = resultado[0].creacionTablas.split(",");
+                            res[0] = new Buffer.from(res[0][1], 'base64').toString('ascii');
+                            res[1] = resultado[0].solucionProfesor.split(",");
+                            res[1] = new Buffer.from(res[1][1], 'base64').toString('ascii');
+                            var  i, j, aux;
+                            for(i = 2, j=0, aux=0; aux < resultado.length; i++, j++,aux++){
+                                res[i] = resultado[j].script.split(",");
+                                res[i] = new Buffer.from(res[i][1], 'base64').toString('ascii');
+                            }
+                            /*callback(undefined, filas[0].numeroIntentos);*/
                             callback(undefined, filas);
                         }
                     }

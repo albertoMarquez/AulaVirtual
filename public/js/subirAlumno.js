@@ -87,54 +87,59 @@ $(document).ready(function() {
     numeroDeIntentos(idEjercicio, (num)=>{
         //get intentos alumno, comparar y si es menor, sumar 1 y
         //actualizar tabla
-        var sol = {};
-        sol.idEjercicio = idEjercicio;
-        sol.idA = idAlumno;
-        $.ajax({
-            method: "GET",
-            url: "/getIntentosAlumno",
-            data: sol,
-            dataType:"JSON",
-            contentType: "application/json",
-            success: function(numIntentos) {
-                console.log(numIntentos);
-                console.log(num);
-                if(numIntentos < num){
-                    let resultado = ""; //se tiene que coger del oracledb
-                    let fechaActual = new Date();
-                    let nombre = user.nombre;
-                    let usuario = user.user;
-                    const solucion2 = new FileReader();
-                    intentos = numIntentos + 1;
-                    //solucion2 = $('input[type=file]')[0].files[0];
-                    //console.log(user.user);
-                    //if(true){//reader.EMPTY){
-                        info = {idEjercicio:idEjercicio,nombre:nombre,solucion: solucion,usuario:usuario, numOk: numOk, entregaRetrasada: entregaRetrasada, idAlumno:idAlumno, idGrupo:idGrupo,intentos:intentos,resultado:resultado,fechaActual:fechaActual,solucion2:solucion2};
-                        console.log(info);
-                        $.ajax({
-                            method: "POST",
-                            url: "/subirProcedimientoAlumno",
-                            data: JSON.stringify(info),
-                            dataType:"JSON",
-                            contentType: "application/json",
-                            success: function() {
-                                alert("se ha subido correctamente el ejercicio");
-                                location.reload();
-                            },
-                            error: function() {
-                                alert("Error al subir un nuevo ejercicio.");
-                            } 
-                        });
-                }else{
-                    alert("Numero de intentos superado");
-                }
-            },
-            error: function() {
-                alert("Error al subir un nuevo ejercicio.");
-            } 
+        getIntentosAlumno(idEjercicio, idAlumno, (numIntentos)=>{
+            console.log(numIntentos);
+            console.log(num);
+            if(numIntentos < num){
+                let resultado = ""; //se tiene que coger del oracledb
+                let fechaActual = new Date();
+                let nombre = user.nombre;
+                let usuario = user.user;
+                const solucion2 = new FileReader();
+                intentos = numIntentos + 1;
+                //solucion2 = $('input[type=file]')[0].files[0];
+                //console.log(user.user);
+                //if(true){//reader.EMPTY){
+                    info = {idEjercicio:idEjercicio,nombre:nombre,solucion: solucion,usuario:usuario, numOk: numOk, entregaRetrasada: entregaRetrasada, idAlumno:idAlumno, idGrupo:idGrupo,intentos:intentos,resultado:resultado,fechaActual:fechaActual,solucion2:solucion2};
+                    console.log(info);
+                    $.ajax({
+                        method: "POST",
+                        url: "/subirProcedimientoAlumno",
+                        data: JSON.stringify(info),
+                        dataType:"JSON",
+                        contentType: "application/json",
+                        success: function() {
+                            alert("se ha subido correctamente el ejercicio");
+                            location.reload();
+                        },
+                        error: function() {
+                            alert("Error al subir un nuevo ejercicio.");
+                        } 
+                    });
+            }else{
+                alert("Numero de intentos superado");
+            }
+            
         });
 
     });
  }
  
- 
+function getIntentosAlumno(idEjercicio, idAlumno, callback){
+    var sol = {};
+    sol.idEjercicio = idEjercicio;
+    sol.idA = idAlumno;
+    $.ajax({
+        method: "GET",
+        url: "/getIntentosAlumno",
+        data: sol,
+        dataType:"JSON",
+        contentType: "application/json",
+        success: function(numIntentos) {
+            callback(numIntentos);
+        },
+        error: function(){
+            alert("error al cargar el numero de intentos del alumno");
+        }
+    });
+}

@@ -18,10 +18,7 @@ const expressValidator = require("express-validator");
 
 var fs = require("fs");
 const app = express();
-
-
 //const upload = multer({ storage: multer.memoryStorage() });
-
 let pool = mysql.createPool({
     database: config.mysqlConfig.database,
     host: config.mysqlConfig.host,
@@ -110,15 +107,15 @@ app.post("/cambiarpass", (request, response) =>{
     console.log("request.body.pass2");
     console.log(request.body.pass2);
    if(request.body.pass1 === request.body.pass2){
-      daoU.cambiarpass(request.body.user, request.body.pass1, request.body.date, (err) =>{
+        daoU.cambiarpass(request.body.user, request.body.pass1, request.body.date, (err) =>{
            if(!err){
                response.status(200);
                response.end();
            }else{
                response.status(400);
                response.end();
-           }
-       });
+            }    
+        });
    }else{
        response.status(400);
        response.end();
@@ -181,33 +178,32 @@ app.post("/crearCursoYGrupo",(request, response) =>{
 });
 
 app.post("/eliminarCursoYGrupo",(request, response) =>{
-     daoU.eliminarCursoYGrupo(request.body,(err, op) =>{
-         if (err){
-             response.status(400); //mal introducido
-             response.end();
-         }
-         else {
-             response.status(201);
-             response.end();
-         }
-     });
+    daoU.eliminarCursoYGrupo(request.body,(err, op) =>{
+        if (err){
+            response.status(400); //mal introducido
+            response.end();
+        }
+        else {
+            response.status(201);
+            response.end();
+        }
+    });
  });
 
  app.get("/cargarCursoYGrupo",(request, response) =>{
-     daoU.cargarCursoYGrupo(request.query,(err, op) =>{
-         if (err){
-             response.status(400); //mal introducido
-             response.end();
-         }
-         else {
+    daoU.cargarCursoYGrupo(request.query,(err, op) =>{
+        if (err){
+            response.status(400); //mal introducido
+            response.end();
+        }else {
             if(op !== undefined){
                 //console.log(op);
                 response.json(op);
                 response.status(201);
                 response.end();
             }
-         }
-     });
+        }
+    });
  });
 
  app.post("/altaEjercicio", (request, response) =>{
@@ -215,9 +211,9 @@ app.post("/eliminarCursoYGrupo",(request, response) =>{
     var fechaIni = request.body.ejer.ini.split("/");
     var fechaFin = request.body.ejer.fin.split("/");
 
-   var dia = Number(fechaIni[1]);
-   var mes = Number(fechaIni[0]) - 1;
-   var año = Number(fechaIni[2]);
+    var dia = Number(fechaIni[1]);
+    var mes = Number(fechaIni[0]) - 1;
+    var año = Number(fechaIni[2]);
 
     var datos={};
     datos.ini = new Date(año, mes, dia);
