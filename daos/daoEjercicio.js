@@ -382,13 +382,13 @@ class DAOEjercicio {
             }
         });
     }
-    //  terminar
+    //  terminar no funcionaaaaaaaaaaaaaaa
     subirProcedimientoAlumno(datos, callback){
         this.pool.getConnection((err, con) =>{
             if(err){
                 callback(err);
             }else{
-                con.query(`INSERT INTO (tabla) (idGrupo, ini, fin, idEj, evaluacion) VALUES(?,?,?,?,?)`,
+                con.query(`INSERT INTO ejercicioalumno (idGrupo, ini, fin, idEj, evaluacion) VALUES(?,?,?,?,?)`,
                 [datos.idGrupo, datos.ini, datos.fin, datos.idEj, datos.evaluacion], (err) =>{
                     if(err){
                         callback(err, undefined);
@@ -426,6 +426,33 @@ class DAOEjercicio {
                             /*callback(undefined, filas[0].numeroIntentos);*/
                             callback(undefined, res);
                         }
+                    }
+                });
+                con.release();
+            }
+        })
+    }
+
+    getIntentosAlumno(datos, callback){
+        this.pool.getConnection((err, con)=>{
+            if(err){
+                callback(err);
+            }else{
+                var sql=`SELECT intentos FROM ejercicioalumno WHERE idAlumno = ? AND idEjercicio=?`;
+                con.query(sql, [datos.idA, datos.idEjercicio], (err, filas)=>{
+                    if(err){
+                        callback(err, undefined);
+                    }
+                    else{
+                        console.log(filas);
+                        var sol = 0;
+                        if(filas.length === 0){
+                            sol = 0;
+                        }else{
+                            sol = filas[0]
+                        }
+                       
+                        callback(undefined, sol);
                     }
                 });
                 con.release();

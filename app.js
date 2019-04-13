@@ -568,6 +568,20 @@ app.post("/entregaRetrasada", (request, response)=>{
         }
     })
 });
+app.get("/getIntentosAlumno", (request, response)=>{
+    console.log(request.query);
+    daoE.getIntentosAlumno(request.query, (err, filas)=>{
+        if(err){
+            response.status(400);
+            response.end();
+        }else{
+            response.json(filas);
+            response.status(201);
+            response.end();
+        }
+    });
+})
+
 
 app.post("/numeroDeIntentos", (request, response)=>{
     console.log("app "+request.body.idEjercicio);
@@ -576,7 +590,7 @@ app.post("/numeroDeIntentos", (request, response)=>{
             response.status(400);
             response.end();
         }else{
-            console.log("vuelta"+filas);
+            console.log("vuelta "+filas);
             response.json(filas);
             response.status(201);
             response.end();
@@ -598,7 +612,6 @@ app.post("/subirProcedimientoAlumno", (request, response)=>{
                         response.status(400);
                         response.end();
                     }else{
-                        console.log("vuelta"+filas);
                         response.json(filas);
                         response.status(201);
                         response.end();
