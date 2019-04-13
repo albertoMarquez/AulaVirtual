@@ -52,73 +52,89 @@ $(document).ready(function() {
     }
  });
  
+ //coge el numero de intentos totales de altaEjercicio
  function numeroDeIntentos(idEjercicio, callback){
         let idEj = idEjercicio;
-        info = {idEjercicio: idEj};
         $.ajax({
             method: "POST",
             url: "/numeroDeIntentos",
-            data: JSON.stringify(info),
+            data: JSON.stringify({idEjercicio: idEj}),
             dataType:"JSON",
             contentType: "application/json",
-            success: function(numeroDeIntentos){
+            success: function(nIntentos){
                 //console.log(numeroDeIntentos);
-                callback(numeroDeIntentos);
+                callback(nIntentos);
             },
             error: function() {
                 alert("Error numeroDeIntentos");
             } 
         });
  }
+
  function subirScriptAlumno(user, idEjercicio){
     //alert("hola");
     
     let solucion = $("#solAlmun").val();
-    let nota =0;//coger la nota de la BD
     let numOk = 0;//coger resultado de oracledb
     let entregaRetrasada = new Date();
     //console.log(entregaRetrasada);
-    let correccionProfesor="";
+    /*let correccionProfesor="";
     if($("#solProf").val() !== undefined)
-        correccionProfesor = $("#solProf").val();
+        correccionProfesor = $("#solProf").val();*/
     let idAlumno = user.idAlumno;
     let idGrupo = user.idGrupo;
     let intentos = 0;
-    /*numeroDeIntentos(idEjercicio, (num)=>{
-        
-    });*/
-    let resultado = ""; //se tiene que coger del oracledb
-    let fechaActual = new Date();
-
-    let nombre = user.nombre;
-    let usuario = user.user;
-    const solucion2 = new FileReader();
-    //solucion2 = $('input[type=file]')[0].files[0];
-    //console.log(user.user);
-    //if(true){//reader.EMPTY){
-        info = {idEjercicio:idEjercicio,nombre:nombre,solucion: solucion,usuario:usuario, nota:nota, numOk: numOk, entregaRetrasada: entregaRetrasada, correccionProfesor:correccionProfesor, idAlumno:idAlumno, idGrupo:idGrupo,intentos:intentos,resultado:resultado,fechaActual:fechaActual,solucion2:solucion2};
-        console.log(info.user);
+    numeroDeIntentos(idEjercicio, (num)=>{
+        //get intentos alumno, comparar y si es menor, sumar 1 y
+        //actualizar tabla
+        var sol = {};
+        sol.idEjercicio = idEjercicio;
+        sol.idA = idAlumno;
         $.ajax({
-            method: "POST",
-            url: "/subirProcedimientoAlumno",
-            data: JSON.stringify(info),
+            method: "GET",
+            url: "/getIntentosAlumno",
+            data: sol,
             dataType:"JSON",
             contentType: "application/json",
-            success: function() {
-                alert("se ha subido correctamente el ejercicio");
-                /*var link = window.location.href;
-                var res = link.split("/");
-                window.location = res[1] + "/principal.html";*/
+            success: function(numIntentos) {
+                console.log(numIntentos);
+                console.log(num);
+                if(numIntentos < num){
+                    let resultado = ""; //se tiene que coger del oracledb
+                    let fechaActual = new Date();
+                    let nombre = user.nombre;
+                    let usuario = user.user;
+                    const solucion2 = new FileReader();
+                    intentos = numIntentos + 1;
+                    //solucion2 = $('input[type=file]')[0].files[0];
+                    //console.log(user.user);
+                    //if(true){//reader.EMPTY){
+                        info = {idEjercicio:idEjercicio,nombre:nombre,solucion: solucion,usuario:usuario, numOk: numOk, entregaRetrasada: entregaRetrasada, idAlumno:idAlumno, idGrupo:idGrupo,intentos:intentos,resultado:resultado,fechaActual:fechaActual,solucion2:solucion2};
+                        console.log(info);
+                        $.ajax({
+                            method: "POST",
+                            url: "/subirProcedimientoAlumno",
+                            data: JSON.stringify(info),
+                            dataType:"JSON",
+                            contentType: "application/json",
+                            success: function() {
+                                alert("se ha subido correctamente el ejercicio");
+                                location.reload();
+                            },
+                            error: function() {
+                                alert("Error al subir un nuevo ejercicio.");
+                            } 
+                        });
+                }else{
+                    alert("Numero de intentos superado");
+                }
             },
             error: function() {
                 alert("Error al subir un nuevo ejercicio.");
             } 
         });
-    /*}else{
-        alert("la");
-    }*/
-    
-    
+
+    });
  }
  
  
