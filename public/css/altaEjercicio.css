@@ -1,3 +1,17 @@
+#ejerIntentos{
+    display: flex;
+    justify-content: space-around;
+    align-items: baseline;
+}
+
+input[type=text]{
+    font-size: 22px;
+    width: 15%;
+    font-weight: bold;
+    color: #5a8651;
+    text-align: center;
+}
+
 
 .panel-default > .panel-heading {
     color: white;
