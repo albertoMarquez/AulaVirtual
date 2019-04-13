@@ -18,7 +18,9 @@ async function connect(sql,datos,callback){
     });
     console.log('Connection pool started');
     if(datos.usuario == 'alumno'){
-      await altaUsuario(datos.nombre, datos.idAlumno);//sql son los scripts de prueba
+      let user = datos.nombre + datos.idAlumno.toString();
+      await altaUsuario(user);//sql son los scripts de prueba
+      await corregirProcedimiento(user,datos.solucion,sql);
     }/*else{
       await run(sql,(resultado) =>{
         //console.log("connect)");
@@ -109,7 +111,7 @@ async function callProcedures(connection, sql,callback){
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  //CREARLO EN LA BASE DE DATOS CORRECTAMENTE
  async function altaUsuario(nombre,idAlumno){
-   let user = nombre+idAlumno.toString();
+   
    console.log(user);
   let connection;
   try {
@@ -185,41 +187,39 @@ async function closePoolAndExit() {
  * Lanzar los script contra el procedimiento
  * Devolver el resultado(uno o varios ficheros?)
  */
-async function corregirProcedimiento(scripts,callback){//sql tiene la cracion de las tablas, el porcedimiento y los scripts
+async function corregirProcedimiento(user,solucion,scripts){//sql tiene la cracion de las tablas, el porcedimiento y los scripts
   let connection;
-    try {
-      /*connection = await oracledb.getConnection();
-      await createTables(connection,sql[0]);
-      await createProcedure(connection,sql[1]);*/
-      connection = await oracledb.getConnection(
-        {
-          user: 'alberto',
-          password: 'alberto',
-          connectString: 'localhost',
-        },
-        async function(err, connection) {
-          if (err)
-            console.error("conection :"+err);
-          else{
-            
-            /*await callProcedures(connection,sql,(sol)=>{
-              callback(sol);
-            });*/
-          }
+  console.log("scripts:"+script);
+  console.log("user:"+user);
+  console.log("solucion:"+solucion);
+  try {
+    connection = await oracledb.getConnection({
+        user: "'"+user+"'",
+        password: "'"+user+"'",
+        connectString: 'localhost',
+      },
+      async function(err, connection) {
+        if (err)
+          console.error("conection :"+err);
+        else{
+          await almacenarProcedimineto(user,solucion,scripts,connection);
         }
-      );      
-    } catch (err) {
-      console.error("run :"+err);
-    } finally {
-      if (connection) {
-        try {
-          // Put the connection back in the pool
-          await connection.close();
-        } catch (err) {
-          console.error(" finally run :"+err);
-        }
+    });      
+  } catch (err) {
+    console.error("run :"+err);
+  } finally {
+    if (connection) {
+      try {
+        // Put the connection back in the pool
+        await connection.close();
+      } catch (err) {
+        console.error(" finally run :"+err);
       }
     }
+  }
+}
+async function almacenarProcedimineto(user,solucion,sql,connection){
+
 }
 process
   .on('SIGTERM', closePoolAndExit)

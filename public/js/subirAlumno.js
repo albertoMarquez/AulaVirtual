@@ -96,7 +96,7 @@ $(document).ready(function() {
     //solucion2 = $('input[type=file]')[0].files[0];
     //console.log(user.user);
     //if(true){//reader.EMPTY){
-        info = {idEjercicio:idEjercicio,nombre:nombre,solucion: solucion,usuario:usuario, nota:nota, numOk: numOk, entregaRetrasada: entregaRetrasada, correccionProfesor:correccionProfesor, idAlumno:idAlumno, idGrupo:idGrupo,intentos:intentos,resultado:resultado,fechaActual:fechaActual,solucion2:solucion2};
+        info = {nombre:nombre,solucion: solucion,usuario:usuario,idEjercicio:idEjercicio, nota:nota, numOk: numOk, entregaRetrasada: entregaRetrasada, correccionProfesor:correccionProfesor, idAlumno:idAlumno, idGrupo:idGrupo,intentos:intentos,resultado:resultado,fechaActual:fechaActual,solucion2:solucion2};
         console.log(info.user);
         $.ajax({
             method: "POST",
