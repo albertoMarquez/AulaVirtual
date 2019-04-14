@@ -205,7 +205,7 @@ app.post("/eliminarCursoYGrupo",(request, response) =>{
     });
  });
 
- app.post("/altaEjercicio", (request, response) =>{
+app.post("/altaEjercicio", (request, response) =>{
 
     var fechaIni = request.body.ejer.ini.split("/");
     var fechaFin = request.body.ejer.fin.split("/");
@@ -234,56 +234,6 @@ app.post("/eliminarCursoYGrupo",(request, response) =>{
             response.end();
         }
     })     
- })
-
- app.post("/subirEjercicio", (request, response) =>{
-    var data = {};
-    data.enun = request.body.enun;
-    data.sol = request.body.solucion;
-    data.tablas = request.body.tablas;
-    data.titulo = request.body.titu;
-    data.idProfesor = request.body.idProfesor;
-    data.numScripts = request.body.scripts.length;
-
-    daoE.createEjercicio(data, (err, id) =>{
-        if(err){
-            response.status(400);
-            response.end();
-        }else{
-            daoE.subirScripts(request.body.scripts, id, (err) =>{
-                if(err){
-                    response.status(400);
-                    response.end();
-                }else{
-                    daoE.descargarProfesor(id, (err, op) =>{
-                        if(err){
-                            response.status(400);
-                            response.end();
-                        }else{
-                            if(op !== undefined){
-                                response.json(op);
-                                oracle.connect(oracle.run,op,(sol)=>{
-                                    daoE.solScripts(id,sol,(err, op)=>{
-                                        if(err){
-                                            response.status(400);
-                                            response.end();
-                                        }else {
-                                            if(op !== undefined){
-                                                response.status(201);
-                                                response.end();
-                                            }
-                                        }
-                                    });
-                                });
-                                response.status(201);
-                                response.end();
-                            }
-                        }
-                    });
-                }
-            });
-        }
-    });
 });
 
 app.post("/principal", (request, response) =>{
@@ -352,6 +302,7 @@ app.get("/getAsignaturas", (request, response) =>{
         }
     })
 });
+
 app.post("/subirEjercicio", (request, response) =>{
     var data = {};
     data.enun = request.body.enun;
@@ -598,8 +549,8 @@ app.post("/numeroDeIntentos", (request, response)=>{
 });
 
 app.post("/subirProcedimientoAlumno", (request, response)=>{
-    console.log("subirProcedimientoAlumno");
-    console.log(request.body);
+   // console.log("subirProcedimientoAlumno");
+   // console.log(request.body);
     daoE.scriptsPorID(request.body.idEjercicio, (err, filas)=>{
         if(err){
             response.status(400);
@@ -609,7 +560,9 @@ app.post("/subirProcedimientoAlumno", (request, response)=>{
            
             //ORACLEDB
             oracleProfesor.connect(filas,request.body,(sol)=>{
-                oracleAlumno.connect(filas,request.body,(sol)=>{
+                console.log(sol);
+                oracleAlumno.connect(filas,request.body,(alumno)=>{
+                    console.log(alumno);
                     daoE.subirProcedimientoAlumno(request.body, (err, filas)=>{
                         if(err){
                             response.status(400);

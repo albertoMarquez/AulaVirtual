@@ -1,11 +1,11 @@
 //https://github.com/oracle/node-oracledb/blob/master/examples/dbconfig.js
 module.exports = {
-    user          : process.env.NODE_ORACLEDB_USER || "alberto",
+    user          : process.env.NODE_ORACLEDB_USER || "SYS",
   
     // Instead of hard coding the password, consider prompting for it,
     // passing it in an environment variable via process.env, or using
     // External Authentication.
-    password      : process.env.NODE_ORACLEDB_PASSWORD || "alberto",
+    password      : process.env.NODE_ORACLEDB_PASSWORD || "SYS",
   
     // For information on connection strings see:
     // https://oracle.github.io/node-oracledb/doc/api.html#connectionstrings

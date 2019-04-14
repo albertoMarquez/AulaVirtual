@@ -6,20 +6,16 @@ oracledb.autoCommit= true;
 //https://github.com/oracle/node-oracledb/blob/master/examples/example.js
 //https://oracle.github.io/node-oracledb/
 //NO BORRAR REFERENCIA POR AHORA
-async function connect(sql,datos,callback){
+function connect(sql,datos,callback){
   try {
     // Create a connection pool which will later be accessed via the
     // pool cache as the 'default' pool.
-    await oracledb.createPool({
-      user: dbConfig.user,
-      password: dbConfig.password,
-      connectString: dbConfig.connectString,
-     
-    });
-    console.log('Connection pool started');
+    
     if(datos.usuario == 'alumno'){
       let user = datos.nombre + datos.idAlumno.toString();
-      await altaUsuario(user);//sql son los scripts de prueba
+      console.log(user);
+      callback("Hola");
+      altaUsuario(user);//sql son los scripts de prueba
     }/*else{
       await run(sql,(resultado) =>{
         //console.log("connect)");
@@ -28,8 +24,6 @@ async function connect(sql,datos,callback){
     }*/
   } catch (err) {
     console.error('init() error: ' + err.message);
-  } finally {
-    await closePoolAndExit();
   }
 }
 async function run(sql,callback){//sql tiene la cracion de las tablas, el porcedimiento y los scripts
@@ -109,9 +103,8 @@ async function callProcedures(connection, sql,callback){
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  //CREARLO EN LA BASE DE DATOS CORRECTAMENTE
-async function altaUsuario(nombre,idAlumno){
+async function altaUsuario(user){
    
-  console.log(user);
   let connection;
   try {
     /*connection = await oracledb.getConnection();
@@ -130,6 +123,7 @@ async function altaUsuario(nombre,idAlumno){
         else{
           var sql = "begin ALTA_USUARIO('"+user+"'); end;";
           await connection.execute(sql);
+          await connection.close();
         }
     });  
   } catch (err) {
@@ -148,7 +142,7 @@ async function altaUsuario(nombre,idAlumno){
  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-async function closePoolAndExit() {
+/*async function closePoolAndExit() {
   console.log('\nTerminating');
   try {
     // get the pool from the pool cache and close it when no
@@ -162,7 +156,7 @@ async function closePoolAndExit() {
     // sent and the pool has already been removed from the cache.
     process.exit(0);
   }
-}
+}*/
  /*CREATE OR REPLACE PROCEDURE ALTA_USUARIO(user_id VARCHAR2) AS
   BEGIN
     EXECUTE IMMEDIATE 'DROP USER '||user_id||' CASCADE';
@@ -181,9 +175,9 @@ async function closePoolAndExit() {
    begin
       ALTA_USUARIO('borja');
   end;*/
-process
+/*process
   .on('SIGTERM', closePoolAndExit)
-  .on('SIGINT',  closePoolAndExit)
+  .on('SIGINT',  closePoolAndExit)*/
 
 module.exports = {
   connect:connect,
