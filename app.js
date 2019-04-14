@@ -554,7 +554,7 @@ app.get("/getUltimaEntrega", (request, response)=>{
 })
 //Cambiar a get ya que solo pide datos
 app.post("/entregaRetrasada", (request, response)=>{
-    console.log("app"+request.body.idEjercicio);
+    console.log("entregaRetrasada "+request.body.idEjercicio);
     daoE.entregaRetrasada(request.body.idEjercicio, (err, filas)=>{
         if(err){
             response.status(400);
@@ -567,8 +567,9 @@ app.post("/entregaRetrasada", (request, response)=>{
         }
     })
 });
+
 app.get("/getIntentosAlumno", (request, response)=>{
-    console.log(request.query);
+    console.log("getIntentosAlumno " + request.query);
     daoE.getIntentosAlumno(request.query, (err, filas)=>{
         if(err){
             response.status(400);
@@ -579,17 +580,16 @@ app.get("/getIntentosAlumno", (request, response)=>{
             response.end();
         }
     });
-})
-
+});
 
 app.post("/numeroDeIntentos", (request, response)=>{
-    console.log("app "+request.body.idEjercicio);
+    console.log("numeroDeIntentos "+request.body.idEjercicio);
     daoE.numeroDeIntentos(request.body.idEjercicio, (err, filas)=>{
         if(err){
             response.status(400);
             response.end();
         }else{
-            console.log("vuelta "+filas);
+            //console.log("vuelta "+filas);
             response.json(filas);
             response.status(201);
             response.end();
@@ -598,12 +598,15 @@ app.post("/numeroDeIntentos", (request, response)=>{
 });
 
 app.post("/subirProcedimientoAlumno", (request, response)=>{
-    console.log("app "+request.body.idEjercicio);
+    console.log("subirProcedimientoAlumno");
+    console.log(request.body);
     daoE.scriptsPorID(request.body.idEjercicio, (err, filas)=>{
         if(err){
             response.status(400);
             response.end();
         }else{
+            
+           
             //ORACLEDB
             oracleProfesor.connect(filas,request.body,(sol)=>{
                 oracleAlumno.connect(filas,request.body,(sol)=>{
