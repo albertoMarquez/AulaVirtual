@@ -19,7 +19,6 @@ async function connect(sql,datos,callback){
     console.log('Connection pool started');
     if(datos.usuario == 'alumno'){
       let user = datos.nombre + datos.idAlumno.toString();
-      await altaUsuario(user);//sql son los scripts de prueba
       await corregirProcedimiento(user,datos.solucion,sql);
     }/*else{
       await run(sql,(resultado) =>{

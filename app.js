@@ -1,10 +1,9 @@
 const express = require("express");
 const path = require("path");
 const mysql = require("mysql");
-const oracle = require("./oracleProfesor.js/index.js");
+const oracleProfesor = require("./oracleProfesor");
+const oracleAlumno = require("./oracleAlumno");
 //const oracleProcedure = require("./conectionOracleProcedure.js");
-const PDFDocument = require('pdfkit');
-const blobStream  = require('blob-stream');
 const config = require("./config");
 const bodyParser = require("body-parser");
 
@@ -606,17 +605,19 @@ app.post("/subirProcedimientoAlumno", (request, response)=>{
             response.end();
         }else{
             //ORACLEDB
-            oracle.connect(filas,request.body,(sol)=>{
-                daoE.subirProcedimientoAlumno(request.body, (err, filas)=>{
-                    if(err){
-                        response.status(400);
-                        response.end();
-                    }else{
-                        response.json(filas);
-                        response.status(201);
-                        response.end();
-                    }
-                })
+            oracleProfesor.connect(filas,request.body,(sol)=>{
+                oracleAlumno.connect(filas,request.body,(sol)=>{
+                    daoE.subirProcedimientoAlumno(request.body, (err, filas)=>{
+                        if(err){
+                            response.status(400);
+                            response.end();
+                        }else{
+                            response.json(filas);
+                            response.status(201);
+                            response.end();
+                        }
+                    })
+                });
             });
         }
     });
