@@ -90,7 +90,7 @@ $(document).ready(function() {
         getIntentosAlumno(idEjercicio, idAlumno, (numIntentos)=>{
            // console.log("numIntentos del alumno " + numIntentos.intentos);
            // console.log("numTotales " + num);
-            if(numIntentos.intentos < num){
+            if(/*numIntentos.intentos < num*/true){
                 let resultado = ""; //se tiene que coger del oracledb
                 let fechaActual = new Date();
                 let nombre = user.nombre;
