@@ -595,8 +595,6 @@ app.post("/subirProcedimientoAlumno", (request, response)=>{
              response.status(400);
              response.end();
          }else{
-             
-            
              //ORACLEDB
              oracleProfesor.connect(filas,request.body,(sol)=>{
                  console.log(sol);
