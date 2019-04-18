@@ -3,6 +3,7 @@ var oracledb = require('oracledb');
 var dbConfig = require('./dbconfig.js');
 var fs = require("fs");
 oracledb.autoCommit= true;
+
 //https://github.com/oracle/node-oracledb/blob/master/examples/example.js
 //https://oracle.github.io/node-oracledb/
 //NO BORRAR REFERENCIA POR AHORA
@@ -29,9 +30,6 @@ function connect(sql,datos,callback){
 async function run(sql,callback){//sql tiene la cracion de las tablas, el porcedimiento y los scripts
   let connection;
     try {
-      /*connection = await oracledb.getConnection();
-      await createTables(connection,sql[0]);
-      await createProcedure(connection,sql[1]);*/
       connection = await oracledb.getConnection(
         {
           user: 'SYS',
@@ -104,34 +102,28 @@ async function callProcedures(connection, sql,callback){
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  //CREARLO EN LA BASE DE DATOS CORRECTAMENTE
 async function altaUsuario(user){
-   
   let connection;
   try {
-    // Create a connection pool which will later be accessed via the
-    // pool cache as the 'default' pool.
     await oracledb.createPool({
       user: dbConfig.user,
       password: dbConfig.password,
       connectString: dbConfig.connectString
-      // edition: 'ORA$BASE', // used for Edition Based Redefintion
-      // events: false, // whether to handle Oracle Database FAN and RLB events or support CQN
-      // externalAuth: false, // whether connections should be established using External Authentication
-      // homogeneous: true, // all connections in the pool have the same credentials
-      // poolAlias: 'default', // set an alias to allow access to the pool via a name.
-      // poolIncrement: 1, // only grow the pool by one connection at a time
-      // poolMax: 4, // maximum size of the pool. Increase UV_THREADPOOL_SIZE if you increase poolMax
-      // poolMin: 0, // start with no connections; let the pool shrink completely
-      // poolPingInterval: 60, // check aliveness of connection if idle in the pool for 60 seconds
-      // poolTimeout: 60, // terminate connections that are idle in the pool for 60 seconds
-      // queueTimeout: 60000, // terminate getConnection() calls in the queue longer than 60000 milliseconds
-      // sessionCallback: myFunction, // function invoked for brand new connections or by a connection tag mismatch
-      // stmtCacheSize: 30 // number of statements that are cached in the statement cache of each connection
     });
+    //oracledb. = 2;
     console.log('Connection pool started');
     connection = await oracledb.getConnection();
-    var sql = "begin ALTA_USUARIO('"+user+"'); end;";
+    connection.execute(
+      `begin ALTA_USUARIO(:u); END;`,
+      {
+        u:  user
+      },
+      function (err, result) {
+        if (err) { console.error(err.message); return; }
+        console.log(result.outBinds);
+    });
+    /*var sql = "begin ALTA_USUARIO('"+user+"'); end;";
     let result = await connection.execute(sql);
-    console.log(result);
+    console.log(result);*/
   } catch (err) {
     console.error("altaUsuario :"+err);
   } finally {
@@ -141,13 +133,13 @@ async function altaUsuario(user){
  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-async function closePoolAndExit() {
+/*async function closePoolAndExit() {
   console.log('\nTerminating');
   try {
     // get the pool from the pool cache and close it when no
     // connections are in use, or force it closed after 10 seconds
     let pool = oracledb.getPool();
-    await pool.close(10);
+    await pool.close({drop: true});
     console.log('Pool closed');
     //process.exit(0);
   } catch(err) {
@@ -155,7 +147,7 @@ async function closePoolAndExit() {
     // sent and the pool has already been removed from the cache.
     process.exit(0);
   }
-}
+}*/
  /*CREATE OR REPLACE PROCEDURE ALTA_USUARIO(user_id VARCHAR2) AS
   BEGIN
     EXECUTE IMMEDIATE 'DROP USER '||user_id||' CASCADE';
@@ -179,6 +171,5 @@ async function closePoolAndExit() {
   .on('SIGINT',  closePoolAndExit)*/
 
 module.exports = {
-  connect:connect,
-  run:run
+  connect:connect
 }

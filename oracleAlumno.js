@@ -57,8 +57,6 @@ async function corregirProcedimiento(user,solucion,scripts){//sql tiene la craci
 function almacenarProcedimineto(user,solucion,sql,connection){
   console.log("Hola, estas dentro de almacenar Procedimiento");
 }
-
-
 module.exports = {
   connect:connect
  

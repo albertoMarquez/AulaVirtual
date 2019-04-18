@@ -556,8 +556,6 @@ app.post("/subirProcedimientoAlumno", (request, response)=>{
             response.status(400);
             response.end();
         }else{
-            
-           
             //ORACLEDB
             oracleProfesor.connect(filas,request.body,(sol)=>{
                 console.log(sol);
@@ -578,7 +576,36 @@ app.post("/subirProcedimientoAlumno", (request, response)=>{
         }
     });
 });
-
+app.post("/subirProcedimientoAlumno", (request, response)=>{
+    // console.log("subirProcedimientoAlumno");
+    // console.log(request.body);
+     daoE.scriptsPorID(request.body.idEjercicio, (err, filas)=>{
+         if(err){
+             response.status(400);
+             response.end();
+         }else{
+             
+            
+             //ORACLEDB
+             oracleProfesor.connect(filas,request.body,(sol)=>{
+                 console.log(sol);
+                 oracleAlumno.connect(filas,request.body,(alumno)=>{
+                     console.log(alumno);
+                     daoE.subirProcedimientoAlumno(request.body, (err, filas)=>{
+                         if(err){
+                             response.status(400);
+                             response.end();
+                         }else{
+                             response.json(filas);
+                             response.status(201);
+                             response.end();
+                         }
+                     })
+                 });
+             });
+         }
+     });
+ });
 
 app.listen(config.port, function(err) {
     if (err) {
