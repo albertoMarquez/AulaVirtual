@@ -548,9 +548,9 @@ app.post("/numeroDeIntentos", (request, response)=>{
     })
 });
 
-app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
+app.post("/subirProcedimientoAlumno", (request, response)=>{
    // console.log("subirProcedimientoAlumno");
-    console.log("ejecutarProcedimientoAlumno");
+   // console.log(request.body);
     daoE.scriptsPorID(request.body.idEjercicio, (err, filas)=>{
         if(err){
             response.status(400);
@@ -571,19 +571,19 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
         }
     });
 });
-app.post("/crearAlumno", (request, response)=>{
+
+app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
     // console.log("subirProcedimientoAlumno");
     // console.log(request.body);
-    //console.log(request.body);
-    oracleProfesor.connect(undefined, request.body,(err, sol)=>{
+    oracleProfesor.connect(filas,request.body,(con)=>{
+        console.log("Estoy en el app mostrando la conection");
+        console.log(con);
         if(err){
             response.status(400);
             response.end();
         }else{
-            console.log("Alumno creado correctamente");
-            var res = "hola";
-           // response.json(res);
-            response.status(200);
+            response.json(filas);
+            response.status(201);
             response.end();
         }
     });
@@ -597,4 +597,3 @@ app.listen(config.port, function(err) {
         console.log(`Servidor escuchando en puerto ${config.port}.`);
     }
 });
-
