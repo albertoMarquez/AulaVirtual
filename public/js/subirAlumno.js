@@ -133,7 +133,7 @@ $(document).ready(function() {
                             })
                         },
                         error: function() {
-                            alert("Error al subir un nuevo ejercicio.");
+                            alert("Error al subir un nuevo ejercicio. :(");
                         } 
                     });
                 });
