@@ -557,25 +557,36 @@ app.post("/subirProcedimientoAlumno", (request, response)=>{
             response.end();
         }else{
             //ORACLEDB
-            oracleProfesor.connect(filas,request.body,(con)=>{
-                console.log("Estoy en el app mostrando la conection");
-                console.log(con);
-                oracleAlumno.connect(filas,request.body,con,(alumno)=>{
-                   
-                   /* daoE.subirProcedimientoAlumno(request.body, (err, filas)=>{
-                        if(err){
-                            response.status(400);
-                            response.end();
-                        }else{
-                            response.json(filas);
-                            response.status(201);
-                            response.end();
-                        }/                    })*/
-                });
+            oracleAlumno.connect(filas,request.body,con,(alumno)=>{
+            /* daoE.subirProcedimientoAlumno(request.body, (err, filas)=>{
+                if(err){
+                    response.status(400);
+                    response.end();
+                }else{
+                    response.json(filas);
+                    response.status(201);
+                    response.end();
+                }/                    })*/
             });
         }
     });
 });
+app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
+    // console.log("subirProcedimientoAlumno");
+    // console.log(request.body);
+    oracleProfesor.connect(filas,request.body,(con)=>{
+        console.log("Estoy en el app mostrando la conection");
+        console.log(con);
+        if(err){
+            response.status(400);
+            response.end();
+        }else{
+            response.json(filas);
+            response.status(201);
+            response.end();
+        }
+    });
+ });
 app.post("/subirProcedimientoAlumno", (request, response)=>{
     // console.log("subirProcedimientoAlumno");
     // console.log(request.body);
