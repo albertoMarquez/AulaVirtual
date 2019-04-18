@@ -111,15 +111,17 @@ $(document).ready(function() {
                         info = {idEjercicio:idEjercicio, nombre:nombre, usuario:usuario, numOk: numOk, entregaRetrasada: entregaRetrasada, idAlumno:idAlumno, idGrupo:idGrupo,intentos:intentos,resultado:resultado,fechaActual:fechaActual,solucion:solucion};
                     }
                     
-                    //   console.log("info");
+                       console.log("info");
                        //console.log(info);
                     $.ajax({
                         method: "POST",
-                        url: "/subirProcedimientoAlumno",
+                        url: "/crearAlumno",
                         data: JSON.stringify(info),
                         dataType:"JSON",
                         contentType: "application/json",
-                        success: function() {
+                        success: function(res) {
+                            alert("ajax 2 ejecutar procedimiento");
+                            console.log(res);
                             $.ajax({
                                 method: "POST",
                                 url: "/ejecutarProcedimientoAlumno",

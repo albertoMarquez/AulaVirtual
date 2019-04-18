@@ -548,9 +548,9 @@ app.post("/numeroDeIntentos", (request, response)=>{
     })
 });
 
-app.post("/subirProcedimientoAlumno", (request, response)=>{
+app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
    // console.log("subirProcedimientoAlumno");
-   // console.log(request.body);
+    console.log("ejecutarProcedimientoAlumno");
     daoE.scriptsPorID(request.body.idEjercicio, (err, filas)=>{
         if(err){
             response.status(400);
@@ -571,50 +571,23 @@ app.post("/subirProcedimientoAlumno", (request, response)=>{
         }
     });
 });
-app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
+app.post("/crearAlumno", (request, response)=>{
     // console.log("subirProcedimientoAlumno");
     // console.log(request.body);
-    oracleProfesor.connect(filas,request.body,(con)=>{
-        console.log("Estoy en el app mostrando la conection");
-        console.log(con);
+    //console.log(request.body);
+    oracleProfesor.connect(undefined, request.body,(err, sol)=>{
         if(err){
             response.status(400);
             response.end();
         }else{
-            response.json(filas);
-            response.status(201);
+            console.log("Alumno creado correctamente");
+            var res = "hola";
+           // response.json(res);
+            response.status(200);
             response.end();
         }
     });
 });
-app.post("/subirProcedimientoAlumno", (request, response)=>{
-    // console.log("subirProcedimientoAlumno");
-    // console.log(request.body);
-     daoE.scriptsPorID(request.body.idEjercicio, (err, filas)=>{
-         if(err){
-             response.status(400);
-             response.end();
-         }else{
-             //ORACLEDB
-             oracleProfesor.connect(filas,request.body,(sol)=>{
-                 console.log(sol);
-                 oracleAlumno.connect(filas,request.body,(alumno)=>{
-                     console.log(alumno);
-                     daoE.subirProcedimientoAlumno(request.body, (err, filas)=>{
-                         if(err){
-                             response.status(400);
-                             response.end();
-                         }else{
-                             response.json(filas);
-                             response.status(201);
-                             response.end();
-                         }
-                     })
-                 });
-             });
-         }
-     });
- });
 
 app.listen(config.port, function(err) {
     if (err) {

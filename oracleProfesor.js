@@ -16,13 +16,13 @@ async function connect(sql,datos,callback){
       let user = datos.nombre + datos.idAlumno.toString();
       console.log(user);
       callback("Hola");
-      await altaUsuario(user, (err, ok, conn)=>{
+      await altaUsuario(user, (err, ok)=>{
         if(err){
           console.log("ha habido un error al crear el usuario");
+          callback(err, undefined);
         }else{
           console.log("todo OK");
-          console.log(conn);
-          callback(conn);
+          callback(undefined, true);
         }
       });//sql son los scripts de prueba
     }/*else{
@@ -133,7 +133,7 @@ async function altaUsuario(usuario, callback){
                callback(err, undefined);
              }else{
                console.log("se ha dado de alta satisfactoriamente");
-               callback(undefined, true, connection);
+               callback(undefined, true);
              }
            });
         }
