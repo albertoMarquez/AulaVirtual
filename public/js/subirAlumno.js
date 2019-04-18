@@ -118,9 +118,8 @@ $(document).ready(function() {
                         data: JSON.stringify(info),
                         dataType:"JSON",
                         contentType: "application/json",
-                        success: function(res) {
+                        success: function() {
                             alert("ajax 2 ejecutar procedimiento");
-                            console.log(res);
                             $.ajax({
                                 method: "POST",
                                 url: "/ejecutarProcedimientoAlumno",

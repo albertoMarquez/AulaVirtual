@@ -15,7 +15,7 @@ async function connect(sql,datos){
     if(datos.usuario == 'alumno'){
       let user = datos.nombre + datos.idAlumno.toString();
       console.log(user);
-      await altaUsuario(user);
+      await altaUsuario(user);    
       //sql son los scripts de prueba
     }/*else{
       await run(sql,(resultado) =>{
@@ -103,7 +103,7 @@ async function callProcedures(connection, sql,callback){
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  //CREARLO EN LA BASE DE DATOS CORRECTAMENTE
 async function altaUsuario(usuario){
-   console.log("altra");
+   console.log("alta");
   let connection;
   try {
     connection = await oracledb.getConnection(
@@ -120,7 +120,6 @@ async function altaUsuario(usuario){
           connection.execute("begin ALTA_USUARIO(:user); end;",
            {user:usuario},
           );
-           console.log("se ha dado de alta satisfactoriamente");
         }
       }
     );      
