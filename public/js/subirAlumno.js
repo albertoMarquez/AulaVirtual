@@ -123,6 +123,13 @@ $(document).ready(function() {
                             $.ajax({
                                 method: "POST",
                                 url: "/ejecutarProcedimientoAlumno",
+                                contentType: "application/json",
+                                success: function(){
+                                    alert("el procedimiento del alumno se ha ejecutado correctamente");
+                                },
+                                error: function(){
+                                    alert("error en ejecutar el procedimiento del alumno");
+                                }
                             })
                         },
                         error: function() {
