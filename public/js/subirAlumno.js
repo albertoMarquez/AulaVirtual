@@ -110,7 +110,6 @@ $(document).ready(function() {
                     }else{
                         info = {idEjercicio:idEjercicio, nombre:nombre, usuario:usuario, numOk: numOk, entregaRetrasada: entregaRetrasada, idAlumno:idAlumno, idGrupo:idGrupo,intentos:intentos,resultado:resultado,fechaActual:fechaActual,solucion:solucion};
                     }
-                    
                        console.log("info");
                        //console.log(info);
                     $.ajax({

@@ -7,7 +7,7 @@ oracledb.autoCommit= true;
 //https://github.com/oracle/node-oracledb/blob/master/examples/example.js
 //https://oracle.github.io/node-oracledb/
 //NO BORRAR REFERENCIA POR AHORA
-async function connect(sql,datos,callback){
+async function connect(sql,datos){
   try {
     // Create a connection pool which will later be accessed via the
     // pool cache as the 'default' pool.
@@ -15,16 +15,8 @@ async function connect(sql,datos,callback){
     if(datos.usuario == 'alumno'){
       let user = datos.nombre + datos.idAlumno.toString();
       console.log(user);
-      callback("Hola");
-      await altaUsuario(user, (err, ok)=>{
-        if(err){
-          console.log("ha habido un error al crear el usuario");
-          callback(err, undefined);
-        }else{
-          console.log("todo OK");
-          callback(undefined, true);
-        }
-      });//sql son los scripts de prueba
+      await altaUsuario(user);
+      //sql son los scripts de prueba
     }/*else{
       await run(sql,(resultado) =>{
         //console.log("connect)");
@@ -110,8 +102,8 @@ async function callProcedures(connection, sql,callback){
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  //CREARLO EN LA BASE DE DATOS CORRECTAMENTE
-async function altaUsuario(usuario, callback){
-   
+async function altaUsuario(usuario){
+   console.log("altra");
   let connection;
   try {
     connection = await oracledb.getConnection(
@@ -126,16 +118,9 @@ async function altaUsuario(usuario, callback){
           console.error("conection :"+err);
         else{
           connection.execute("begin ALTA_USUARIO(:user); end;",
-           {user:usuario},
-           (err, result)=>{
-             if(err){
-               //return;
-               callback(err, undefined);
-             }else{
-               console.log("se ha dado de alta satisfactoriamente");
-               callback(undefined, true);
-             }
-           });
+           {user:usuario}
+          );
+          console.log("se ha dado de alta satisfactoriamente");
         }
       }
     );      
