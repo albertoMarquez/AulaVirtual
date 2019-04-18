@@ -118,9 +118,9 @@ async function altaUsuario(usuario){
           console.error("conection :"+err);
         else{
           connection.execute("begin ALTA_USUARIO(:user); end;",
-           {user:usuario}
+           {user:usuario},
           );
-          console.log("se ha dado de alta satisfactoriamente");
+           console.log("se ha dado de alta satisfactoriamente");
         }
       }
     );      
