@@ -586,7 +586,7 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
             response.end();
         }
     });
- });
+});
 app.post("/subirProcedimientoAlumno", (request, response)=>{
     // console.log("subirProcedimientoAlumno");
     // console.log(request.body);
