@@ -578,12 +578,10 @@ app.post("/crearAlumno", (request, response)=>{
     var oP = oracleProfesor.connect(undefined,request.body);
     if(oP){
         console.log("Estoy en el app mostrando la conection");
-        
         response.status(201);
         response.end();
-        
     }else{
-        response.status(400);
+        response.status(200);
         response.end();
     }
 });
