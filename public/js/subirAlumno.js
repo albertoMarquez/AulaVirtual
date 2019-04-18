@@ -120,8 +120,10 @@ $(document).ready(function() {
                         dataType:"JSON",
                         contentType: "application/json",
                         success: function() {
-                            alert("se ha subido correctamente el ejercicio");
-                            location.reload();
+                            $.ajax({
+                                method: "POST",
+                                url: "/ejecutarProcedimientoAlumno",
+                            })
                         },
                         error: function() {
                             alert("Error al subir un nuevo ejercicio.");

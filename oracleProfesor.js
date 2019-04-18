@@ -6,7 +6,7 @@ oracledb.autoCommit= true;
 //https://github.com/oracle/node-oracledb/blob/master/examples/example.js
 //https://oracle.github.io/node-oracledb/
 //NO BORRAR REFERENCIA POR AHORA
-function connect(sql,datos,callback){
+async function connect(sql,datos,callback){
   try {
     // Create a connection pool which will later be accessed via the
     // pool cache as the 'default' pool.
@@ -15,7 +15,15 @@ function connect(sql,datos,callback){
       let user = datos.nombre + datos.idAlumno.toString();
       console.log(user);
       callback("Hola");
-      altaUsuario(user);//sql son los scripts de prueba
+      await altaUsuario(user, (err, ok, conn)=>{
+        if(err){
+          console.log("ha habido un error al crear el usuario");
+        }else{
+          console.log("todo OK");
+          console.log(conn);
+          callback(conn);
+        }
+      });//sql son los scripts de prueba
     }/*else{
       await run(sql,(resultado) =>{
         //console.log("connect)");
@@ -64,6 +72,7 @@ async function run(sql,callback){//sql tiene la cracion de las tablas, el porced
       }
     }
 }
+
 async function createTables(connection,sql) {
   sql = sql.replace(/\r|\n|\t|#|COMMIT;|/g, '');
   sql=sql.split(";");
@@ -103,39 +112,46 @@ async function callProcedures(connection, sql,callback){
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  //CREARLO EN LA BASE DE DATOS CORRECTAMENTE
-async function altaUsuario(user){
+async function altaUsuario(usuario, callback){
    
   let connection;
   try {
-    // Create a connection pool which will later be accessed via the
-    // pool cache as the 'default' pool.
-    await oracledb.createPool({
-      user: dbConfig.user,
-      password: dbConfig.password,
-      connectString: dbConfig.connectString
-      // edition: 'ORA$BASE', // used for Edition Based Redefintion
-      // events: false, // whether to handle Oracle Database FAN and RLB events or support CQN
-      // externalAuth: false, // whether connections should be established using External Authentication
-      // homogeneous: true, // all connections in the pool have the same credentials
-      // poolAlias: 'default', // set an alias to allow access to the pool via a name.
-      // poolIncrement: 1, // only grow the pool by one connection at a time
-      // poolMax: 4, // maximum size of the pool. Increase UV_THREADPOOL_SIZE if you increase poolMax
-      // poolMin: 0, // start with no connections; let the pool shrink completely
-      // poolPingInterval: 60, // check aliveness of connection if idle in the pool for 60 seconds
-      // poolTimeout: 60, // terminate connections that are idle in the pool for 60 seconds
-      // queueTimeout: 60000, // terminate getConnection() calls in the queue longer than 60000 milliseconds
-      // sessionCallback: myFunction, // function invoked for brand new connections or by a connection tag mismatch
-      // stmtCacheSize: 30 // number of statements that are cached in the statement cache of each connection
-    });
-    console.log('Connection pool started');
-    connection = await oracledb.getConnection();
-    var sql = "begin ALTA_USUARIO('"+user+"'); end;";
-    let result = await connection.execute(sql);
-    console.log(result);
+    connection = await oracledb.getConnection(
+      {
+        user: 'SYS',
+        password: 'SYS',
+        connectString: 'localhost',
+        privilege: oracledb.SYSDBA
+      },
+      async function(err, connection) {
+        if (err)
+          console.error("conection :"+err);
+        else{
+          connection.execute("begin ALTA_USUARIO(:user); end;",
+           {user:usuario},
+           (err, result)=>{
+             if(err){
+               //return;
+               callback(err, undefined);
+             }else{
+               console.log("se ha dado de alta satisfactoriamente");
+               callback(undefined, true, connection);
+             }
+           });
+        }
+      }
+    );      
   } catch (err) {
-    console.error("altaUsuario :"+err);
+    console.error("run :"+err);
   } finally {
-    await closePoolAndExit();
+    if (connection) {
+      try {
+        // Put the connection back in the pool
+        await connection.close();
+      } catch (err) {
+        console.error(" finally run :"+err);
+      }
+    }
   }
 }
  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
