@@ -6,11 +6,16 @@ oracledb.autoCommit= true;
 //https://github.com/oracle/node-oracledb/blob/master/examples/example.js
 //https://oracle.github.io/node-oracledb/
 //NO BORRAR REFERENCIA POR AHORA
-function connect(sql,datos,callback){
+async function connect(sql,datos, conection, callback){
   try {
     let user = datos.nombre + datos.idAlumno.toString();
-    callback("oracleAlumno");
-   corregirProcedimiento(user,datos.solucion,sql);
+   await corregirProcedimiento(user,datos.solucion,sql, conection, (err, ok) =>{
+     if(err){
+       callback(err, undefined);
+     }else{
+       callback(undefined, ok);
+     }
+   });
   } catch (err) {
     console.error('init() error: ' + err.message);
   } 
@@ -21,32 +26,32 @@ function connect(sql,datos,callback){
  * Lanzar los script contra el procedimiento
  * Devolver el resultado(uno o varios ficheros?)
  */
-async function corregirProcedimiento(user,solucion,scripts){//sql tiene la cracion de las tablas, el porcedimiento y los scripts
-    let connection;
+async function corregirProcedimiento(user,solucion,scripts, conection, callback){//sql tiene la cracion de las tablas, el porcedimiento y los scripts
+ 
     console.log("scripts:"+scripts);
     console.log("user:"+user);
     console.log("solucion:"+solucion);
+
     try {
-      connection = await oracledb.getConnection({
+      conection = await oracledb.getConnection({
           user: "'" + user + "'",
           password: "'" + user + "'",
           connectString: 'localhost',
         },
-        async function(err, connection) {
+        async function(err, conection) {
           if (err)
             console.error("conection :"+err);
           else{
-            almacenarProcedimineto(user,solucion,scripts,connection);
-            await connection.close();
+            await almacenarProcedimineto(user,solucion,scripts,conection);
           }
       });      
     } catch (err) {
       console.error("run :"+err);
     } finally {
-      if (connection) {
+      if (conection) {
         try {
           // Put the connection back in the pool
-          await onnection.close();
+          await conection.close();
         } catch (err) {
           console.error(" finally run :"+err);
         }
@@ -54,7 +59,7 @@ async function corregirProcedimiento(user,solucion,scripts){//sql tiene la craci
     }
 }
 
-function almacenarProcedimineto(user,solucion,sql,connection){
+async function almacenarProcedimineto(user,solucion,sql,connection){
   console.log("Hola, estas dentro de almacenar Procedimiento");
 }
 module.exports = {
