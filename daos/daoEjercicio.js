@@ -68,8 +68,9 @@ class DAOEjercicio {
     }
 
     listarEjerciciosAlta(datos, callback){ /// lista los ejercicios dados de alta
-      
         this.pool.getConnection((err, con) =>{
+            var fecha = new Date();
+            console.log(fecha);
             if(err){
                 callback(err);
             }else{//MYSQL:SELECT Titulo FROM `altaejercicio` INNER JOIN `ejercicio` ON altaejercicio.IdEj = ejercicio.IdEjercicio where evaluacion=1
