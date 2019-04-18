@@ -571,19 +571,30 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
         }
     });
 });
-
+async function crearAlumno(request,callback){
+    var oP = await oracleProfesor.connect(undefined,request.body);
+    console.log(oP);
+    if(oP){
+        console.log(oP);
+        callback(true);
+    }
+}
 app.post("/crearAlumno", (request, response)=>{
     // console.log("subirProcedimientoAlumno");
     // console.log(request.body);
-    var oP = oracleProfesor.connect(undefined,request.body);
-    if(oP){
-        console.log("Estoy en el app mostrando la conection");
-        response.status(201);
+        crearAlumno(request,(cA)=>{
+            if(cA===true){
+                //console.log(oP);
+                console.log("Estoy en el app mostrando la conection");
+                response.status(201);
+                response.end();
+            }
+        });
+        
+    /*else{
+        response.status(400);
         response.end();
-    }else{
-        response.status(200);
-        response.end();
-    }
+    }*/
 });
 
 app.listen(config.port, function(err) {

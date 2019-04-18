@@ -11,13 +11,15 @@ async function connect(sql,datos){
   try {
     // Create a connection pool which will later be accessed via the
     // pool cache as the 'default' pool.
-    
     if(datos.usuario == 'alumno'){
       let user = datos.nombre + datos.idAlumno.toString();
       console.log(user);
-      await altaUsuario(user);    
+      await altaUsuario(user);   
+      return true; 
       //sql son los scripts de prueba
-    }/*else{
+    }
+    return false;
+    /*else{
       await run(sql,(resultado) =>{
         //console.log("connect)");
         callback(resultado);
@@ -62,7 +64,6 @@ async function run(sql,callback){//sql tiene la cracion de las tablas, el porced
       }
     }
 }
-
 async function createTables(connection,sql) {
   sql = sql.replace(/\r|\n|\t|#|COMMIT;|/g, '');
   sql=sql.split(";");
@@ -103,7 +104,7 @@ async function callProcedures(connection, sql,callback){
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  //CREARLO EN LA BASE DE DATOS CORRECTAMENTE
 async function altaUsuario(usuario){
-   console.log("alta");
+  console.log("alta");
   let connection;
   try {
     connection = await oracledb.getConnection(
