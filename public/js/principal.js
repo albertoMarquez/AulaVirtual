@@ -26,8 +26,6 @@ $(document).ready(function() {
     user = $.galleta().getc("usuario");
     if(user !== "undefined"){
         user = JSON.parse(user);
-
-        alert(user);
         if( user.user.localeCompare("profesor")===0){
             $("#menu").load("menuProfesor.html");
             $(".ejs_ex").addClass("hidden");
@@ -57,13 +55,14 @@ $(document).ready(function() {
             $("#tablaEjercicios").hide();
             cargarTabla(1);
         });
+
+        console.log(user);
     }else{
         var link = window.location.href;
         var res = link.split("/");
         window.location = res[1] + "/";
     }   
-
-    cargarTabla(2);
+    
 });
 
 

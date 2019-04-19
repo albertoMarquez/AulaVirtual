@@ -154,7 +154,8 @@ class DAOEjercicio {
         })
     }
 
-    seleccionarEjercicio(id, callback){
+    seleccionarEjercicio(id, idAlumno, callback){
+       
         this.pool.getConnection((err, con) =>{
             if(err){
                 callback(err, undefined);
@@ -164,8 +165,8 @@ class DAOEjercicio {
                     if(err){
                         callback(err, undefined);
                     }else{
-                        con.query(`select * from ejercicioalumno where idEjercicio = ?`,
-                        [id], (err, filas) =>{
+                        con.query(`select * from ejercicioalumno where idEjercicio = ? and idAlumno = ?`,
+                        [id, idAlumno], (err, filas) =>{
                             if(err){
                                 callback(err, undefined);
                             }else{
@@ -251,14 +252,19 @@ class DAOEjercicio {
             if(err){
                 callback(err);
             }else{
-
+                //console.log(datos);
                 con.query(`SELECT * FROM ejercicioalumno WHERE idAlumno = ? AND idEjercicio = ?`,
                 [datos.idAlumno, datos.idEjercicio], (err, filas)=>{
                     if(err){
                         callback(err, undefined);
                     }else{
-                        var codigoAlumno = filas[0].solucion;
-                        callback(undefined, codigoAlumno);
+                        var sol = {};
+                       // console.log(filas);
+                       /* sol.solAlumno = filas[0].solucion;
+                        sol.comentarioProfe = filas[0].correccionProfesor;
+                        console.log(filas);
+                        console.log(sol);*/
+                        callback(undefined, sol);
                     }
                 });
                 con.release();
@@ -401,14 +407,16 @@ class DAOEjercicio {
             con.release();
         });
     }
-    //terminar
+
+    
+    
     scriptsPorID(idEjercicio,callback){
         console.log("datos"+idEjercicio);
         this.pool.getConnection((err, con)=>{
             if(err){
                 callback(err);
             }else{
-                con.query(`SELECT script FROM scriptspruebas WHERE idEjercicio =?`,[idEjercicio],(err, filas)=>{
+                con.query(`SELECT * FROM scriptspruebas WHERE idEjercicio =?`,[idEjercicio],(err, filas)=>{
                     if(err){
                         console.log("err");
                         callback(err);
@@ -419,10 +427,23 @@ class DAOEjercicio {
                         }else{
                             let res = [];
                             let i;
-                            for(i = 0; i < filas.length; i++){
+                            var sol = {};
+                          /*  for(i = 0; i < filas.length; i++){
                                 res[i] = filas[i].script.split(",");
                                 res[i] = new Buffer.from(res[i][1], 'base64').toString('ascii');
-                            }
+                              //  res.push(filas.solucionPrueba);
+
+                            }*/
+
+                            filas.forEach(e=>{
+                                var script = e.script.split(",");
+                                script = new Buffer.from(script[1], 'base64').toString('ascii');
+                                sol.script = script;
+                                sol.solucionPrueba = e.solucionPrueba;
+                                res.push(sol);
+                                sol = {};
+                            })
+                            
                             /*callback(undefined, filas[0].numeroIntentos);*/
                             callback(undefined, res);
                         }

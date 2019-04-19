@@ -28,8 +28,7 @@ $(document).ready(function() {
             detailWindow.document.write(htmlText);
             detailWindow.document.close();
         });
-        //subirAlumno
-        //cargarProblemaAlumno();
+        
         $("#evaluar").click(function(event) {//Dale al boton y deberia de ejecutarse la funcion 
             ///PROGRAMAR FUNCIONES
             event.preventDefault();
@@ -45,11 +44,28 @@ $(document).ready(function() {
             //console.log(user.idAlumno);
             subirScriptAlumno(user, idEjercicio);
         });
+      
+        $.ajax({
+            method: "GET",
+            url: "/subirAlumno/:id",
+            data: {idAlumno: user.idAlumno, idProfesor: user.idProfesor},
+            contentType: "application/json",
+            success: function(){
+               console.log("ok");
+            },
+            error: function() {
+               console.log("error al cargar el id del usuario");
+            } 
+        });
+
     }else{
         var link = window.location.href;
         var res = link.split("/");
         window.location = res[1] + "/";
     }
+
+
+
  });
  
  //coge el numero de intentos totales de altaEjercicio

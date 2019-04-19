@@ -9,6 +9,7 @@ oracledb.autoCommit= true;
 async function connect(sql,datos, conection, callback){
   try {
     let user = datos.nombre + datos.idAlumno.toString();
+
    await corregirProcedimiento(user,datos.solucion,sql, conection, (err, ok) =>{
      if(err){
        callback(err, undefined);

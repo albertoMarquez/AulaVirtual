@@ -38,6 +38,8 @@ app.set("views", path.join(__dirname, "views"));
 app.use(passport.initialize());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json());
+let usuario;
+
 
 app.get("/", (request, response) => {
     response.status(200);
@@ -236,9 +238,11 @@ app.post("/altaEjercicio", (request, response) =>{
     })     
 });
 
+
 app.post("/principal", (request, response) =>{
     //console.log(request.body); terminal code
     // oracle.alerta();
+    
     daoE.listarEjerciciosAlta(request.body.tipo, (err, op) =>{
         if(err) {
             response.status(400);
@@ -246,6 +250,7 @@ app.post("/principal", (request, response) =>{
         }
         else {
             if(op !== undefined){
+               
                 response.json(op);
                 response.status(201);
                 response.end();
@@ -352,12 +357,20 @@ app.post("/subirEjercicio", (request, response) =>{
         }
     });
 });
+
+
+
+
+
 app.get("/subirAlumno/:id", (request, response) => {
     var data = {};
     data.idEjercicio = Number(request.params.id);
-    //  console.log(data);
+   if(request.query.idAlumno !== undefined){
+    var id = Number(request.query.idAlumno);
+    console.log(id);
+   }
     if(!isNaN(data.idEjercicio)){
-        daoE.seleccionarEjercicio(data.idEjercicio, (error, res) =>{
+        daoE.seleccionarEjercicio(data.idEjercicio, id, (error, res) =>{
             if(error){
                 response.status(404);
                 response.end();
@@ -369,9 +382,7 @@ app.get("/subirAlumno/:id", (request, response) => {
                     sol.solucion = res.ejAlumno.solucion;
                     sol.solucionProfe = res.ejAlumno.correccionProfesor;
                     sol.nota = res.ejAlumno.nota;
-                    oracle.connect(oracle.run,op,(sol)=>{
-
-                    });
+                  
                 }else{
                     sol.nota = " -";
                     sol.solucion = "";
@@ -379,6 +390,23 @@ app.get("/subirAlumno/:id", (request, response) => {
                     
                 }
                 response.render("subirAlumno", {data:sol});
+               /* daoE.scriptsPorID(data.idEjercicio, (err, res)=>{
+                    if(err){
+                        console.log(err);
+                    }else{*/
+                        var datos = {};
+                      //  datos.idAlumno = id;
+                        datos.idEjercicio = data.idEjercicio;
+                       /* daoE.getUltimaEntrega(datos, (err, sol)=>{
+                            if(err){
+                                console.log(err);
+                            }else{
+                                console.log(sol);
+                            }
+                        });*/
+                        
+                   // }
+              //  })
             }
         })      
     }
@@ -560,7 +588,13 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
             response.end();
         }else{
             //ORACLEDB
-            oracleAlumno.connect(filas,request.body,con,(alumno)=>{
+            var scripts = [];
+            filas.forEach(e =>{
+                scripts.push(e.script);
+            });
+            console.log("scripts por id en ejecutarProcedimientoAlumno");
+            console.log(scripts);
+            oracleAlumno.connect(scripts,request.body,con,(alumno)=>{
             /* daoE.subirProcedimientoAlumno(request.body, (err, filas)=>{
                 if(err){
                     response.status(400);
