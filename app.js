@@ -369,6 +369,9 @@ app.get("/subirAlumno/:id", (request, response) => {
                     sol.solucion = res.ejAlumno.solucion;
                     sol.solucionProfe = res.ejAlumno.correccionProfesor;
                     sol.nota = res.ejAlumno.nota;
+                    oracle.connect(oracle.run,op,(sol)=>{
+
+                    });
                 }else{
                     sol.nota = " -";
                     sol.solucion = "";
@@ -571,26 +574,18 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
         }
     });
 });
-async function crearAlumno(request,callback){
+/*async function crearAlumno(request,callback){
     var oP = await oracleProfesor.connect(undefined,request.body);
     console.log(oP);
     if(oP){
         console.log(oP);
         callback(true);
     }
-}
+}*/
 app.post("/crearAlumno", (request, response)=>{
     // console.log("subirProcedimientoAlumno");
     // console.log(request.body);
-        crearAlumno(request,(cA)=>{
-            if(cA===true){
-                //console.log(oP);
-                console.log("Estoy en el app mostrando la conection");
-                response.status(201);
-                response.end();
-            }
-        });
-        
+   
     /*else{
         response.status(400);
         response.end();
