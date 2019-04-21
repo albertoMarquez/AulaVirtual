@@ -80,8 +80,10 @@ function cargarTabla(type) {
                 var hilera = document.createElement("tr");
                 var celda = document.createElement("td");
                 var link = document.createElement('a');
-                var url = "/subirAlumno/" + data[i].id;
+                var url = "/subirAlumno/" + data[i].id + "/" + user.idAlumno;
                 link.setAttribute('href', url);
+                link.setAttribute('class',"linkEjercicio");
+               
                 var textoCelda = document.createTextNode(data[i].titulo +" "+"ID:"+ " "+data[i].id);
                 link.appendChild(textoCelda)
                 celda.appendChild(link);
@@ -89,7 +91,6 @@ function cargarTabla(type) {
                 tblBody.appendChild(hilera);
             }
             tabla.appendChild(tblBody);
-           
         },
         error: function() {
             alert("Error al cargar tabla.");

@@ -362,15 +362,14 @@ app.post("/subirEjercicio", (request, response) =>{
 
 
 
-app.get("/subirAlumno/:id", (request, response) => {
+app.get("/subirAlumno/:id/:idAlumno", (request, response) => {
     var data = {};
+    console.log(request.params);
     data.idEjercicio = Number(request.params.id);
-   if(request.query.idAlumno !== undefined){
-    var id = Number(request.query.idAlumno);
-    console.log(id);
-   }
+    data.idAlumno = Number(request.params.idAlumno);
+  
     if(!isNaN(data.idEjercicio)){
-        daoE.seleccionarEjercicio(data.idEjercicio, id, (error, res) =>{
+        daoE.seleccionarEjercicio(data.idEjercicio,  data.idAlumno, (error, res) =>{
             if(error){
                 response.status(404);
                 response.end();
@@ -390,23 +389,23 @@ app.get("/subirAlumno/:id", (request, response) => {
                     
                 }
                 response.render("subirAlumno", {data:sol});
-               /* daoE.scriptsPorID(data.idEjercicio, (err, res)=>{
+                daoE.scriptsPorID(data.idEjercicio, (err, res)=>{
                     if(err){
                         console.log(err);
-                    }else{*/
+                    }else{
                         var datos = {};
-                      //  datos.idAlumno = id;
+                        datos.idAlumno = data.idAlumno;
                         datos.idEjercicio = data.idEjercicio;
-                       /* daoE.getUltimaEntrega(datos, (err, sol)=>{
+                        daoE.getUltimaEntrega(datos, (err, sol)=>{
                             if(err){
                                 console.log(err);
                             }else{
                                 console.log(sol);
                             }
-                        });*/
+                        });
                         
-                   // }
-              //  })
+                    }
+                })
             }
         })      
     }

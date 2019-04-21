@@ -260,10 +260,9 @@ class DAOEjercicio {
                     }else{
                         var sol = {};
                        // console.log(filas);
-                       /* sol.solAlumno = filas[0].solucion;
+                        sol.solAlumno = filas[0].solucion;
                         sol.comentarioProfe = filas[0].correccionProfesor;
-                        console.log(filas);
-                        console.log(sol);*/
+                      
                         callback(undefined, sol);
                     }
                 });
@@ -411,7 +410,7 @@ class DAOEjercicio {
     
     
     scriptsPorID(idEjercicio,callback){
-        console.log("datos"+idEjercicio);
+        console.log("datos "+idEjercicio);
         this.pool.getConnection((err, con)=>{
             if(err){
                 callback(err);
@@ -428,13 +427,7 @@ class DAOEjercicio {
                             let res = [];
                             let i;
                             var sol = {};
-                          /*  for(i = 0; i < filas.length; i++){
-                                res[i] = filas[i].script.split(",");
-                                res[i] = new Buffer.from(res[i][1], 'base64').toString('ascii');
-                              //  res.push(filas.solucionPrueba);
-
-                            }*/
-
+                          
                             filas.forEach(e=>{
                                 var script = e.script.split(",");
                                 script = new Buffer.from(script[1], 'base64').toString('ascii');
