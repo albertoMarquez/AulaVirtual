@@ -152,7 +152,6 @@ async function altaUsuario(usuario, callback){
       } finally {
         if (connection) {
           try {
-            // Put the connection back in the pool
             await connection.close();
           } catch (err) {
             console.error(" finally run :"+err);

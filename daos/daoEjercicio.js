@@ -412,8 +412,6 @@ class DAOEjercicio {
         });
     }
 
-    
-    
     scriptsPorID(idEjercicio,callback){
         //console.log("datos "+idEjercicio);
         this.pool.getConnection((err, con)=>{
@@ -441,7 +439,6 @@ class DAOEjercicio {
                                 res.push(sol);
                                 sol = {};
                             })
-                            
                             /*callback(undefined, filas[0].numeroIntentos);*/
                             callback(undefined, res);
                         }
