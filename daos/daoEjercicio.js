@@ -260,10 +260,15 @@ class DAOEjercicio {
                     }else{
                         var sol = {};
                        // console.log(filas);
+                       if(filas.length === 0){
+                           callback(undefined, undefined);
+                       }else{
                         sol.solAlumno = filas[0].solucion;
                         sol.comentarioProfe = filas[0].correccionProfesor;
                       
                         callback(undefined, sol);
+                       }
+                    
                     }
                 });
                 con.release();
