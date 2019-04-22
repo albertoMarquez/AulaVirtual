@@ -457,7 +457,6 @@ class DAOEjercicio {
                                 res.push(sol);
                                 sol = {};
                             })
-                            
                             /*callback(undefined, filas[0].numeroIntentos);*/
                             callback(undefined, res);
                         }
