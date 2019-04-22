@@ -6,12 +6,12 @@ oracledb.autoCommit= true;
 //https://github.com/oracle/node-oracledb/blob/master/examples/example.js
 //https://oracle.github.io/node-oracledb/
 //NO BORRAR REFERENCIA POR AHORA
-async function connect(sql,datos, callback){
+async function connect(tablas,sql,datos, callback){
   try {
     //console.log(datos);
     let user = datos.nombre + datos.idAlumno;
     //console.log(user);
-   await comprobarProcedimineto(user,datos.solucion,sql, (err, ok) =>{
+   await comprobarProcedimineto(tablas,user,datos.solucion,sql, (err, ok) =>{
      if(err){
        callback(err, undefined);
        return;
@@ -31,7 +31,7 @@ async function connect(sql,datos, callback){
  * Lanzar los script contra el procedimiento
  * Devolver el resultado(uno o varios ficheros?)
  */
-async function comprobarProcedimineto(user,solucion,scripts, callback){//sql tiene la cracion de las tablas, el porcedimiento y los scripts
+async function comprobarProcedimineto(tablas, user,solucion,scripts, callback){//sql tiene la cracion de las tablas, el porcedimiento y los scripts
  
   let conection;
     /*console.log("scripts:"+scripts);

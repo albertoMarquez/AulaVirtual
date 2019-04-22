@@ -603,8 +603,8 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
                     response.end();
                 }else{
                     console.log("solID");
-                    console.log(sol);
-                    oracleAlumno.connect(scripts,request.body.info,(err, alumno)=>{
+                    //console.log(sol);
+                    oracleAlumno.connect(sol,scripts,request.body.info,(err, alumno)=>{
                         if(err){
                             //console.log("APP connect error:"+err);
                             response.status(400);
