@@ -596,16 +596,29 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
             });
             //console.log("scripts por id en ejecutarProcedimientoAlumno");
            // console.log(scripts);
-            oracleAlumno.connect(scripts,request.body.info,(err, alumno)=>{
+           
+            daoE.getCreacionTablasPorID(request.body.info.idEjercicio, (err, sol)=>{
                 if(err){
-                    //console.log("APP connect error:"+err);
-                    response.status(400);
+                    response.status(400); 
                     response.end();
                 }else{
-                    //console.log(alumno);
-                    response.status(201);
-                    response.end();
+                    console.log("solID");
+                    console.log(sol);
+                    oracleAlumno.connect(scripts,request.body.info,(err, alumno)=>{
+                        if(err){
+                            //console.log("APP connect error:"+err);
+                            response.status(400);
+                            response.end();
+                        }else{
+                            //console.log(alumno);
+                            response.status(201);
+                            response.end();
+                        }
+                    });
                 }
+            })
+
+           
             /* daoE.subirProcedimientoAlumno(request.body, (err, filas)=>{
                 if(err){
                     response.status(400);
@@ -615,7 +628,7 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
                     response.status(201);
                     response.end();
                 }/                    })*/
-            });
+           // });
         }
     });
 });

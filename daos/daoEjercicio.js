@@ -105,7 +105,7 @@ class DAOEjercicio {
                 [datos], (err, resultado) =>{ 
                     if (!err) {
                         if (resultado.length === 0) 
-                            callback(undefined, undefined)
+                            callback(undefined, undefined);
                         else {
                             let res = [];
                             res[0] = resultado[0].creacionTablas.split(",");
@@ -412,7 +412,23 @@ class DAOEjercicio {
         });
     }
 
-    
+    getCreacionTablasPorID(idEjercicio, callback){
+        this.pool.getConnection((err, con) =>{
+            if(err){
+                callback(err);
+            }else{
+                con.query(`select * from ejercicio where idEjercicio = ?`, [idEjercicio], (err, sol) =>{
+                    if(err){
+                        callback(err, undefined);
+                    }else{
+                        var script = sol[0].creacionTablas.split(",");
+                        script = new Buffer.from(script[1], 'base64').toString('ascii');
+                        callback(undefined, script);
+                    }
+                })
+            }
+        })
+    }
     
     scriptsPorID(idEjercicio,callback){
         //console.log("datos "+idEjercicio);

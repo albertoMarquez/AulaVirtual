@@ -45,19 +45,6 @@ $(document).ready(function() {
             //console.log(user.idAlumno);
             subirScriptAlumno(user, idEjercicio);
         });
-      
-        $.ajax({
-            method: "GET",
-            url: "/subirAlumno/:id",
-            data: {idAlumno: user.idAlumno, idProfesor: user.idProfesor},
-            contentType: "application/json",
-            success: function(){
-               console.log("ok");
-            },
-            error: function() {
-               console.log("error al cargar el id del usuario");
-            } 
-        });
 
     }else{
         var link = window.location.href;
