@@ -415,18 +415,18 @@ class DAOEjercicio {
     
     
     scriptsPorID(idEjercicio,callback){
-        console.log("datos "+idEjercicio);
+        //console.log("datos "+idEjercicio);
         this.pool.getConnection((err, con)=>{
             if(err){
                 callback(err);
             }else{
                 con.query(`SELECT * FROM scriptspruebas WHERE idEjercicio =?`,[idEjercicio],(err, filas)=>{
                     if(err){
-                        console.log("err");
+                        console.log("scriptsPorID err");
                         callback(err);
                     }else{
                         if(filas.length === 0){
-                            console.log("query 0");
+                            //console.log("query 0");
                             callback(undefined, false);
                         }else{
                             let res = [];
@@ -463,7 +463,7 @@ class DAOEjercicio {
                         callback(err, undefined);
                     }
                     else{
-                        console.log(filas);
+                        //console.log(filas);
                         var sol = 0;
                         if(filas.length === 0){
                             sol = 0;
