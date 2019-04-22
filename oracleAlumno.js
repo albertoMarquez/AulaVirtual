@@ -8,13 +8,16 @@ oracledb.autoCommit= true;
 //NO BORRAR REFERENCIA POR AHORA
 async function connect(sql,datos, conection, callback){
   try {
+    
     let user = datos.nombre + datos.idAlumno.toString();
-
+    console.log(user);
    await corregirProcedimiento(user,datos.solucion,sql, conection, (err, ok) =>{
      if(err){
        callback(err, undefined);
+       return;
      }else{
        callback(undefined, ok);
+       return;
      }
    });
   } catch (err) {

@@ -273,7 +273,7 @@ class DAOEjercicio {
                 });
                 con.release();
             }
-        })
+        });
     }
 
     listarEjerciciosNoAlta(callback){
