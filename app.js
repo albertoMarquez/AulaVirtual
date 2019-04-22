@@ -616,13 +616,21 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
     }
 }*/
 app.post("/crearAlumno", (request, response)=>{
-    // console.log("subirProcedimientoAlumno");
-    // console.log(request.body);
-   
-    /*else{
-        response.status(400);
-        response.end();
-    }*/
+    console.log("crearAlumno");
+    console.log(request.body);
+
+        oracleProfesor.connect(undefined,request.body,(err,sol) =>{
+            if(sol){
+                console.log(sol);
+                response.status(201);
+                response.end();
+            }else{
+                console.log(err);
+                response.status(400);
+                response.end();
+            }
+        });
+  
 });
 
 app.listen(config.port, function(err) {

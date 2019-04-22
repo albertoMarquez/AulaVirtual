@@ -7,18 +7,28 @@ oracledb.autoCommit= true;
 //https://github.com/oracle/node-oracledb/blob/master/examples/example.js
 //https://oracle.github.io/node-oracledb/
 //NO BORRAR REFERENCIA POR AHORA
-async function connect(sql,datos){
+async function connect(sql,datos,callback){//sql son los scripts de prueba
   try {
     // Create a connection pool which will later be accessed via the
     // pool cache as the 'default' pool.
-    if(datos.usuario == 'alumno'){
+    datos = datos.alumnoAux;
+    console.log(datos);
+    if(datos.usuario === 'alumno'){
       let user = datos.nombre + datos.idAlumno.toString();
       console.log(user);
-      await altaUsuario(user);   
-      return true; 
-      //sql son los scripts de prueba
+      await altaUsuario(user,(err, sol) =>{
+        //console.log("connect)");
+        console.log("User creado"); 
+        if(err){
+          callback(err, undefined);
+          return;
+        }else{
+          callback(undefined, sol);
+          return;
+        }        
+      });
+          
     }
-    return false;
     /*else{
       await run(sql,(resultado) =>{
         //console.log("connect)");
@@ -29,81 +39,9 @@ async function connect(sql,datos){
     console.error('init() error: ' + err.message);
   }
 }
-async function run(sql,callback){//sql tiene la cracion de las tablas, el porcedimiento y los scripts
-  let connection;
-    try {
-      connection = await oracledb.getConnection(
-        {
-          user: 'SYS',
-          password: 'SYS',
-          connectString: 'localhost',
-          privilege: oracledb.SYSDBA
-        },
-        async function(err, connection) {
-          if (err)
-            console.error("conection :"+err);
-          else{
-            await createTables(connection,sql[0]);
-            await createProcedure(connection,sql[1]);
-            await callProcedures(connection,sql,(sol)=>{
-              callback(sol);
-            });
-          }
-        }
-      );      
-    } catch (err) {
-      console.error("run :"+err);
-    } finally {
-      if (connection) {
-        try {
-          // Put the connection back in the pool
-          await connection.close();
-        } catch (err) {
-          console.error(" finally run :"+err);
-        }
-      }
-    }
-}
-async function createTables(connection,sql) {
-  sql = sql.replace(/\r|\n|\t|#|COMMIT;|/g, '');
-  sql=sql.split(";");
-  var i, aux;
-
-  for( i=0; i<sql.length-1;i++){
-    aux = sql[i];
-    if(aux.indexOf("drop") > -1){
-      aux=  "BEGIN EXECUTE IMMEDIATE '"+sql[i]+"'; EXCEPTION WHEN OTHERS THEN IF SQLCODE NOT IN (-00942) THEN RAISE; END IF; END;";
-    }
-    //console.log(aux);
-    //else if(aux.indexOf("insert") > -1 || aux.indexOf("INSERT") > -1){
-    await connection.execute(aux);
-  }
-}
-async function createProcedure(connection,sql){
-  //var sq = sql.replace(/\r|\n|\t|#|COMMIT;|/g, '');
-  //console.log(sql);
-  try {
-    // Put the connection back in the pool
-    await connection.execute(sql);
-  } catch (err) {
-    console.error("createProcedure : "+err);
-  }
-}
-async function callProcedures(connection, sql,callback){
-  let resultado =[];
-  let sq;
-  for(let i = 2; i < sql.length; i++){
-    //console.log(sql[i].toString());
-    sq = sql[i].toString();
-    await connection.execute(sq);
-    resultado[i-2] = fs.readFileSync('C:/tmp/resultado.log');
-    //console.log(resultado[i-2].toString());
-  }
-  callback(resultado);
-}
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  //CREARLO EN LA BASE DE DATOS CORRECTAMENTE
-async function altaUsuario(usuario){
+async function altaUsuario(usuario, callback){
   console.log("alta");
   let connection;
   try {
@@ -114,25 +52,36 @@ async function altaUsuario(usuario){
         connectString: 'localhost',
         privilege: oracledb.SYSDBA
       },
-      async function(err, connection) {
-        if (err)
+      function(err, connection) {
+        if (err){
           console.error("conection :"+err);
-        else{
+          callback(err);
+          return;
+        }else{
           connection.execute("begin ALTA_USUARIO(:user); end;",
-           {user:usuario},
+           {user:usuario}, function(err, sol){
+             if(err){
+               callback(err, undefined);
+               return;
+             }else{
+               sol = true;
+               callback(undefined, sol);
+               return;
+             }
+           }
           );
         }
       }
     );      
   } catch (err) {
-    console.error("run :"+err);
+    console.error("altaUsuario :"+err);
   } finally {
     if (connection) {
       try {
         // Put the connection back in the pool
         await connection.close();
       } catch (err) {
-        console.error(" finally run :"+err);
+        console.error(" finally altaUsuario :"+err);
       }
     }
   }
@@ -176,7 +125,78 @@ async function altaUsuario(usuario){
 /*process
   .on('SIGTERM', closePoolAndExit)
   .on('SIGINT',  closePoolAndExit)*/
-
+  async function run(sql,callback){//sql tiene la cracion de las tablas, el porcedimiento y los scripts
+    let connection;
+      try {
+        connection = await oracledb.getConnection(
+          {
+            user: 'SYS',
+            password: 'SYS',
+            connectString: 'localhost',
+            privilege: oracledb.SYSDBA
+          },
+          async function(err, connection) {
+            if (err)
+              console.error("conection :"+err);
+            else{
+              await createTables(connection,sql[0]);
+              await createProcedure(connection,sql[1]);
+              await callProcedures(connection,sql,(sol)=>{
+                callback(sol);
+              });
+            }
+          }
+        );      
+      } catch (err) {
+        console.error("run :"+err);
+      } finally {
+        if (connection) {
+          try {
+            // Put the connection back in the pool
+            await connection.close();
+          } catch (err) {
+            console.error(" finally run :"+err);
+          }
+        }
+      }
+  }
+  async function createTables(connection,sql) {
+    sql = sql.replace(/\r|\n|\t|#|COMMIT;|/g, '');
+    sql=sql.split(";");
+    var i, aux;
+  
+    for( i=0; i<sql.length-1;i++){
+      aux = sql[i];
+      if(aux.indexOf("drop") > -1){
+        aux=  "BEGIN EXECUTE IMMEDIATE '"+sql[i]+"'; EXCEPTION WHEN OTHERS THEN IF SQLCODE NOT IN (-00942) THEN RAISE; END IF; END;";
+      }
+      //console.log(aux);
+      //else if(aux.indexOf("insert") > -1 || aux.indexOf("INSERT") > -1){
+      await connection.execute(aux);
+    }
+  }
+  async function createProcedure(connection,sql){
+    //var sq = sql.replace(/\r|\n|\t|#|COMMIT;|/g, '');
+    //console.log(sql);
+    try {
+      // Put the connection back in the pool
+      await connection.execute(sql);
+    } catch (err) {
+      console.error("createProcedure : "+err);
+    }
+  }
+  async function callProcedures(connection, sql,callback){
+    let resultado =[];
+    let sq;
+    for(let i = 2; i < sql.length; i++){
+      //console.log(sql[i].toString());
+      sq = sql[i].toString();
+      await connection.execute(sq);
+      resultado[i-2] = fs.readFileSync('C:/tmp/resultado.log');
+      //console.log(resultado[i-2].toString());
+    }
+    callback(resultado);
+  }
 module.exports = {
   connect:connect
 }
