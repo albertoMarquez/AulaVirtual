@@ -105,7 +105,7 @@ class DAOEjercicio {
                 [datos], (err, resultado) =>{ 
                     if (!err) {
                         if (resultado.length === 0) 
-                            callback(undefined, undefined)
+                            callback(undefined, undefined);
                         else {
                             let res = [];
                             res[0] = resultado[0].creacionTablas.split(",");
@@ -154,7 +154,8 @@ class DAOEjercicio {
         })
     }
 
-    seleccionarEjercicio(id, callback){
+    seleccionarEjercicio(id, idAlumno, callback){
+       
         this.pool.getConnection((err, con) =>{
             if(err){
                 callback(err, undefined);
@@ -164,8 +165,8 @@ class DAOEjercicio {
                     if(err){
                         callback(err, undefined);
                     }else{
-                        con.query(`select * from ejercicioalumno where idEjercicio = ?`,
-                        [id], (err, filas) =>{
+                        con.query(`select * from ejercicioalumno where idEjercicio = ? and idAlumno = ?`,
+                        [id, idAlumno], (err, filas) =>{
                             if(err){
                                 callback(err, undefined);
                             }else{
@@ -251,19 +252,28 @@ class DAOEjercicio {
             if(err){
                 callback(err);
             }else{
-
+                //console.log(datos);
                 con.query(`SELECT * FROM ejercicioalumno WHERE idAlumno = ? AND idEjercicio = ?`,
                 [datos.idAlumno, datos.idEjercicio], (err, filas)=>{
                     if(err){
                         callback(err, undefined);
                     }else{
-                        var codigoAlumno = filas[0].solucion;
-                        callback(undefined, codigoAlumno);
+                        var sol = {};
+                       // console.log(filas);
+                       if(filas.length === 0){
+                           callback(undefined, undefined);
+                       }else{
+                        sol.solAlumno = filas[0].solucion;
+                        sol.comentarioProfe = filas[0].correccionProfesor;
+                      
+                        callback(undefined, sol);
+                       }
+                    
                     }
                 });
                 con.release();
             }
-        })
+        });
     }
 
     listarEjerciciosNoAlta(callback){
@@ -401,28 +411,52 @@ class DAOEjercicio {
             con.release();
         });
     }
-    //terminar
+
+    getCreacionTablasPorID(idEjercicio, callback){
+        this.pool.getConnection((err, con) =>{
+            if(err){
+                callback(err);
+            }else{
+                con.query(`select * from ejercicio where idEjercicio = ?`, [idEjercicio], (err, sol) =>{
+                    if(err){
+                        callback(err, undefined);
+                    }else{
+                        var script = sol[0].creacionTablas.split(",");
+                        script = new Buffer.from(script[1], 'base64').toString('ascii');
+                        callback(undefined, script);
+                    }
+                })
+            }
+        })
+    }
+    
     scriptsPorID(idEjercicio,callback){
-        console.log("datos"+idEjercicio);
+        //console.log("datos "+idEjercicio);
         this.pool.getConnection((err, con)=>{
             if(err){
                 callback(err);
             }else{
-                con.query(`SELECT script FROM scriptspruebas WHERE idEjercicio =?`,[idEjercicio],(err, filas)=>{
+                con.query(`SELECT * FROM scriptspruebas WHERE idEjercicio =?`,[idEjercicio],(err, filas)=>{
                     if(err){
-                        console.log("err");
+                        console.log("scriptsPorID err");
                         callback(err);
                     }else{
                         if(filas.length === 0){
-                            console.log("query 0");
+                            //console.log("query 0");
                             callback(undefined, false);
                         }else{
                             let res = [];
                             let i;
-                            for(i = 0; i < filas.length; i++){
-                                res[i] = filas[i].script.split(",");
-                                res[i] = new Buffer.from(res[i][1], 'base64').toString('ascii');
-                            }
+                            var sol = {};
+                          
+                            filas.forEach(e=>{
+                                var script = e.script.split(",");
+                                script = new Buffer.from(script[1], 'base64').toString('ascii');
+                                sol.script = script;
+                                sol.solucionPrueba = e.solucionPrueba;
+                                res.push(sol);
+                                sol = {};
+                            })
                             /*callback(undefined, filas[0].numeroIntentos);*/
                             callback(undefined, res);
                         }
@@ -444,7 +478,7 @@ class DAOEjercicio {
                         callback(err, undefined);
                     }
                     else{
-                        console.log(filas);
+                        //console.log(filas);
                         var sol = 0;
                         if(filas.length === 0){
                             sol = 0;

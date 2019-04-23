@@ -17,7 +17,6 @@ $(document).ready(function() {
                 var res = link.split("/");
                 window.location = res[1] + "/";
             });
-            
         }  
     });
     //alert(getCookie("usuario").toString());
@@ -26,8 +25,6 @@ $(document).ready(function() {
     user = $.galleta().getc("usuario");
     if(user !== "undefined"){
         user = JSON.parse(user);
-
-        //alert(user);
         if( user.user.localeCompare("profesor")===0){
             $("#menu").load("menuProfesor.html");
             $(".ejs_ex").addClass("hidden");
@@ -57,14 +54,34 @@ $(document).ready(function() {
             $("#tablaEjercicios").hide();
             cargarTabla(1);
         });
+
+        crearAlumno(user);
     }else{
         var link = window.location.href;
         var res = link.split("/");
         window.location = res[1] + "/";
-    }
-    cargarTabla(2);
-    crearAlumno();   
+    }   
+    
 });
+function crearAlumno(alumno) {
+    let alumnoAux={};
+    alumnoAux.nombre= alumno.nombre;
+    alumnoAux.idAlumno= alumno.idAlumno;
+    alumnoAux.usuario = alumno.user;
+    console.log(alumnoAux);
+    $.ajax({
+        method: "POST",
+        url: "/crearAlumno",
+        contentType: "application/json",
+        data: JSON.stringify({alumnoAux:alumnoAux}),
+        success: function() {
+            alert("Alumno creado correctamente.");
+        },
+        error: function() {
+            alert("Error al crear el alumno ORACLEDB.");
+        }
+    })
+}
 
 function crearAlumno(){
     let nombre = user.nombre;
@@ -97,8 +114,10 @@ function cargarTabla(type) {
                 var hilera = document.createElement("tr");
                 var celda = document.createElement("td");
                 var link = document.createElement('a');
-                var url = "//" + data[i].id;
+                var url = "/subirAlumno/" + data[i].id + "/" + user.idAlumno;
                 link.setAttribute('href', url);
+                link.setAttribute('class',"linkEjercicio");
+               
                 var textoCelda = document.createTextNode(data[i].titulo +" "+"ID:"+ " "+data[i].id);
                 link.appendChild(textoCelda)
                 celda.appendChild(link);
@@ -106,7 +125,6 @@ function cargarTabla(type) {
                 tblBody.appendChild(hilera);
             }
             tabla.appendChild(tblBody);
-           
         },
         error: function() {
             alert("Error al cargar tabla.");

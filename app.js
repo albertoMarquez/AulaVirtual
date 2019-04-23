@@ -38,6 +38,8 @@ app.set("views", path.join(__dirname, "views"));
 app.use(passport.initialize());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json());
+let usuario;
+
 
 app.get("/", (request, response) => {
     response.status(200);
@@ -236,9 +238,11 @@ app.post("/altaEjercicio", (request, response) =>{
     })     
 });
 
+
 app.post("/principal", (request, response) =>{
     //console.log(request.body); terminal code
     // oracle.alerta();
+    
     daoE.listarEjerciciosAlta(request.body.tipo, (err, op) =>{
         if(err) {
             response.status(400);
@@ -246,6 +250,7 @@ app.post("/principal", (request, response) =>{
         }
         else {
             if(op !== undefined){
+               
                 response.json(op);
                 response.status(201);
                 response.end();
@@ -352,12 +357,19 @@ app.post("/subirEjercicio", (request, response) =>{
         }
     });
 });
-app.get("/subirAlumno/:id", (request, response) => {
+
+
+
+
+
+app.get("/subirAlumno/:id/:idAlumno", (request, response) => {
     var data = {};
+    //console.log(request.params);
     data.idEjercicio = Number(request.params.id);
-    //  console.log(data);
+    data.idAlumno = Number(request.params.idAlumno);
+  
     if(!isNaN(data.idEjercicio)){
-        daoE.seleccionarEjercicio(data.idEjercicio, (error, res) =>{
+        daoE.seleccionarEjercicio(data.idEjercicio,  data.idAlumno, (error, res) =>{
             if(error){
                 response.status(404);
                 response.end();
@@ -369,12 +381,30 @@ app.get("/subirAlumno/:id", (request, response) => {
                     sol.solucion = res.ejAlumno.solucion;
                     sol.solucionProfe = res.ejAlumno.correccionProfesor;
                     sol.nota = res.ejAlumno.nota;
+                  
                 }else{
                     sol.nota = " -";
                     sol.solucion = "";
                     sol.solucionProfe = ""; 
                 }
                 response.render("subirAlumno", {data:sol});
+                daoE.scriptsPorID(data.idEjercicio, (err, res)=>{
+                    if(err){
+                        console.log(err);
+                    }else{
+                        var datos = {};
+                        datos.idAlumno = data.idAlumno;
+                        datos.idEjercicio = data.idEjercicio;
+                        daoE.getUltimaEntrega(datos, (err, sol)=>{
+                            if(err){
+                                //console.log(err);
+                            }else{
+                                //console.log(sol);
+                            }
+                        });
+                        
+                    }
+                })
             }
         })      
     }
@@ -407,7 +437,7 @@ app.get("/mostrarListaEjer", (request, response)=>{
 });
 
 app.get("/getCursoGrupo/:id", (request, response) =>{
-   let id = Number(request.params.id);
+    let id = Number(request.params.id);
     daoA.listarCursoGrupo(id, (err, filas) =>{
         if(err){
             response.status(400);
@@ -418,7 +448,6 @@ app.get("/getCursoGrupo/:id", (request, response) =>{
             response.end();
         }
     })
-
 });
 
 app.post("/crearAsignatura",(request, response) =>{
@@ -504,13 +533,13 @@ app.get("/getUltimaEntrega", (request, response)=>{
 })
 //Cambiar a get ya que solo pide datos
 app.post("/entregaRetrasada", (request, response)=>{
-    console.log("entregaRetrasada "+request.body.idEjercicio);
+    //console.log("entregaRetrasada "+request.body.idEjercicio);
     daoE.entregaRetrasada(request.body.idEjercicio, (err, filas)=>{
         if(err){
             response.status(400);
             response.end();
         }else{
-            console.log("vuelta"+filas);
+            //console.log("vuelta"+filas);
             response.json(filas);
             response.status(201);
             response.end();
@@ -519,7 +548,7 @@ app.post("/entregaRetrasada", (request, response)=>{
 });
 
 app.get("/getIntentosAlumno", (request, response)=>{
-    console.log("getIntentosAlumno " + request.query);
+    //console.log(request.query);
     daoE.getIntentosAlumno(request.query, (err, filas)=>{
         if(err){
             response.status(400);
@@ -533,7 +562,7 @@ app.get("/getIntentosAlumno", (request, response)=>{
 });
 
 app.post("/numeroDeIntentos", (request, response)=>{
-    console.log("numeroDeIntentos "+request.body.idEjercicio);
+    //console.log("numeroDeIntentos "+request.body.idEjercicio);
     daoE.numeroDeIntentos(request.body.idEjercicio, (err, filas)=>{
         if(err){
             response.status(400);
@@ -548,15 +577,47 @@ app.post("/numeroDeIntentos", (request, response)=>{
 });
 
 app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
-   // console.log("subirProcedimientoAlumno");
-   // console.log(request.body);
-    daoE.scriptsPorID(request.body.idEjercicio, (err, filas)=>{
+    //console.log("subirProcedimientoAlumno");
+    //console.log(request.body);
+   //console.log("idEjercicio:");
+   //console.log(request.body.idEjercicio);
+    daoE.scriptsPorID(request.body.info.idEjercicio, (err, filas)=>{
         if(err){
             response.status(400);
             response.end();
         }else{
             //ORACLEDB
-            oracleAlumno.connect(filas,request.body,con,(alumno)=>{
+            var scripts = [];
+            //console.log("scriptsPorID");
+            //console.log(filas);
+            filas.forEach(e =>{
+                scripts.push(e.script);
+            });
+            //console.log("scripts por id en ejecutarProcedimientoAlumno");
+           // console.log(scripts);
+           
+            daoE.getCreacionTablasPorID(request.body.info.idEjercicio, (err, sol)=>{
+                if(err){
+                    response.status(400); 
+                    response.end();
+                }else{
+                    console.log("solID");
+                    //console.log(sol);
+                    oracleAlumno.connect(sol,scripts,request.body.info,(err, alumno)=>{
+                        if(err){
+                            //console.log("APP connect error:"+err);
+                            response.status(400);
+                            response.end();
+                        }else{
+                            //console.log(alumno);
+                            response.status(201);
+                            response.end();
+                        }
+                    });
+                }
+            })
+
+           
             /* daoE.subirProcedimientoAlumno(request.body, (err, filas)=>{
                 if(err){
                     response.status(400);
@@ -566,7 +627,7 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
                     response.status(201);
                     response.end();
                 }/                    })*/
-            });
+           // });
         }
     });
 });
@@ -579,22 +640,21 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
     }
 }*/
 app.post("/crearAlumno", (request, response)=>{
-     console.log("crearAlumno");
-    // console.log(request.body);
-    oracleProfesor.connect(undefined,request.body,(sol)=>{
-        if(sol){
-            //response.json(sol);
-            response.status(201);
-            response.end();
-        }else{
-            response.status(400);
-            response.end();      
-        }   
-    });
-    /*else{
-        response.status(400);
-        response.end();
-    }*/
+    //console.log("crearAlumno");
+    //console.log(request.body);
+
+        oracleProfesor.connect(undefined,request.body,(err,sol) =>{
+            if(sol){
+                //console.log(sol);
+                response.status(201);
+                response.end();
+            }else{
+                //console.log(err);
+                response.status(400);
+                response.end();
+            }
+        });
+  
 });
 
 app.listen(config.port, function(err) {

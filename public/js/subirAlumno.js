@@ -28,15 +28,15 @@ $(document).ready(function() {
             detailWindow.document.write(htmlText);
             detailWindow.document.close();
         });
-        //subirAlumno
-        //cargarProblemaAlumno();
+        
         $("#evaluar").click(function(event) {//Dale al boton y deberia de ejecutarse la funcion 
             ///PROGRAMAR FUNCIONES
             event.preventDefault();
             console.log("boton pulsado");
             var link = window.location.href;
             var res = link.split("/");
-            let idEjercicio = res[res.length-1];//coger del id
+            console.log(res);
+            let idEjercicio = res[4];//coger del id
             /*numeroDeIntentos(idEjercicio, (num)=>{//¿PORQUE NO FUNCIONA EL ALERT?
                 console.log("num de intentos"+num);
             });*/
@@ -45,11 +45,15 @@ $(document).ready(function() {
             //console.log(user.idAlumno);
             subirScriptAlumno(user, idEjercicio);
         });
+
     }else{
         var link = window.location.href;
         var res = link.split("/");
         window.location = res[1] + "/";
     }
+
+
+
  });
  
  //coge el numero de intentos totales de altaEjercicio
@@ -110,32 +114,21 @@ $(document).ready(function() {
                     }else{
                         info = {idEjercicio:idEjercicio, nombre:nombre, usuario:usuario, numOk: numOk, entregaRetrasada: entregaRetrasada, idAlumno:idAlumno, idGrupo:idGrupo,intentos:intentos,resultado:resultado,fechaActual:fechaActual,solucion:solucion};
                     }
-                       console.log("info");
-                       //console.log(info);
+                    console.log("info");
+                    //console.log(info);
+                    alert("ajax 2 ejecutar procedimiento");
                     $.ajax({
                         method: "POST",
-                        url: "/crearAlumno",
-                        data: JSON.stringify(info),
-                        dataType:"JSON",
+                        data:JSON.stringify({info:info}),
+                        url: "/ejecutarProcedimientoAlumno",
                         contentType: "application/json",
-                        success: function() {
-                            alert("ajax 2 ejecutar procedimiento");
-                            $.ajax({
-                                method: "POST",
-                                url: "/ejecutarProcedimientoAlumno",
-                                contentType: "application/json",
-                                success: function(){
-                                    alert("el procedimiento del alumno se ha ejecutado correctamente");
-                                },
-                                error: function(){
-                                    alert("error en ejecutar el procedimiento del alumno");
-                                }
-                            })
+                        success: function(){
+                            alert("el procedimiento del alumno se ha ejecutado correctamente");
                         },
-                        error: function() {
-                            alert("Error al subir un nuevo ejercicio. :(");
-                        } 
-                    });
+                        error: function(){
+                            alert("error en ejecutar el procedimiento del alumno");
+                        }
+                    })
                 });
             }else{
                 alert("Numero de intentos superado");
