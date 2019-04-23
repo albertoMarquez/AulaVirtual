@@ -66,6 +66,7 @@ async function altaUsuario(usuario, callback){
                return;
              }else{
                sol = true;
+               console.log(sol);
                callback(undefined, sol);
                return;
              }

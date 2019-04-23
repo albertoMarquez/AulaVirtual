@@ -63,6 +63,7 @@ $(document).ready(function() {
     }   
     
 });
+
 function crearAlumno(alumno) {
     let alumnoAux={};
     alumnoAux.nombre= alumno.nombre;
@@ -83,23 +84,6 @@ function crearAlumno(alumno) {
     })
 }
 
-function crearAlumno(){
-    let nombre = user.nombre;
-    let idAlumno = user.idAlumno;
-    console.log(" crearAlumno();   ");
-    $.ajax({
-        method: "POST",
-        url: "/crearAlumno",
-        contentType: "application/json",
-        data: JSON.stringify({nombre:nombre,idAlumno:idAlumno}),
-        success: function(data) {
-            alert("Usuario creado corectamente.");
-        },
-        error: function() {
-            alert("Error al crear usuario.");
-        }
-    })
-}
 function cargarTabla(type) {
     $.ajax({
         method: "POST",

@@ -397,7 +397,7 @@ app.get("/subirAlumno/:id/:idAlumno", (request, response) => {
                         datos.idEjercicio = data.idEjercicio;
                         daoE.getUltimaEntrega(datos, (err, sol)=>{
                             if(err){
-                                //console.log(err);
+                                console.log(err);
                             }else{
                                 //console.log(sol);
                             }
@@ -601,11 +601,9 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
                     response.status(400); 
                     response.end();
                 }else{
-                    console.log("solID");
-                    //console.log(sol);
                     oracleAlumno.connect(sol,scripts,request.body.info,(err, alumno)=>{
                         if(err){
-                            //console.log("APP connect error:"+err);
+                            console.log("APP connect error:"+err);
                             response.status(400);
                             response.end();
                         }else{
@@ -649,7 +647,7 @@ app.post("/crearAlumno", (request, response)=>{
                 response.status(201);
                 response.end();
             }else{
-                //console.log(err);
+                console.log(err);
                 response.status(400);
                 response.end();
             }
