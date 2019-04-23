@@ -369,14 +369,10 @@ app.get("/subirAlumno/:id", (request, response) => {
                     sol.solucion = res.ejAlumno.solucion;
                     sol.solucionProfe = res.ejAlumno.correccionProfesor;
                     sol.nota = res.ejAlumno.nota;
-                    oracle.connect(oracle.run,op,(sol)=>{
-
-                    });
                 }else{
                     sol.nota = " -";
                     sol.solucion = "";
-                    sol.solucionProfe = "";
-                    
+                    sol.solucionProfe = ""; 
                 }
                 response.render("subirAlumno", {data:sol});
             }
@@ -583,9 +579,18 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
     }
 }*/
 app.post("/crearAlumno", (request, response)=>{
-    // console.log("subirProcedimientoAlumno");
+     console.log("crearAlumno");
     // console.log(request.body);
-   
+    oracleProfesor.connect(undefined,request.body,(sol)=>{
+        if(sol){
+            //response.json(sol);
+            response.status(201);
+            response.end();
+        }else{
+            response.status(400);
+            response.end();      
+        }   
+    });
     /*else{
         response.status(400);
         response.end();

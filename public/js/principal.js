@@ -27,7 +27,7 @@ $(document).ready(function() {
     if(user !== "undefined"){
         user = JSON.parse(user);
 
-        alert(user);
+        //alert(user);
         if( user.user.localeCompare("profesor")===0){
             $("#menu").load("menuProfesor.html");
             $(".ejs_ex").addClass("hidden");
@@ -61,12 +61,28 @@ $(document).ready(function() {
         var link = window.location.href;
         var res = link.split("/");
         window.location = res[1] + "/";
-    }   
-
+    }
     cargarTabla(2);
+    crearAlumno();   
 });
 
-
+function crearAlumno(){
+    let nombre = user.nombre;
+    let idAlumno = user.idAlumno;
+    console.log(" crearAlumno();   ");
+    $.ajax({
+        method: "POST",
+        url: "/crearAlumno",
+        contentType: "application/json",
+        data: JSON.stringify({nombre:nombre,idAlumno:idAlumno}),
+        success: function(data) {
+            alert("Usuario creado corectamente.");
+        },
+        error: function() {
+            alert("Error al crear usuario.");
+        }
+    })
+}
 function cargarTabla(type) {
     $.ajax({
         method: "POST",
@@ -81,7 +97,7 @@ function cargarTabla(type) {
                 var hilera = document.createElement("tr");
                 var celda = document.createElement("td");
                 var link = document.createElement('a');
-                var url = "/subirAlumno/" + data[i].id;
+                var url = "//" + data[i].id;
                 link.setAttribute('href', url);
                 var textoCelda = document.createTextNode(data[i].titulo +" "+"ID:"+ " "+data[i].id);
                 link.appendChild(textoCelda)

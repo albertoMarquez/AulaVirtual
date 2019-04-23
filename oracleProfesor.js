@@ -7,20 +7,20 @@ oracledb.autoCommit= true;
 //https://github.com/oracle/node-oracledb/blob/master/examples/example.js
 //https://oracle.github.io/node-oracledb/
 //NO BORRAR REFERENCIA POR AHORA
-async function connect(sql,datos){
+async function connect(sql,datos,callback){
   try {
     // Create a connection pool which will later be accessed via the
     // pool cache as the 'default' pool.
     if(datos.usuario == 'alumno'){
       let user = datos.nombre + datos.idAlumno.toString();
       console.log(user);
-      await altaUsuario(user);   
-      return true; 
+      await altaUsuario(user);
+      callback(resultado);
       //sql son los scripts de prueba
     }
-    return false;
     /*else{
-      await run(sql,(resultado) =>{
+      if(funcion)
+        await funcion(sql,(resultado) =>{
         //console.log("connect)");
         callback(resultado);
       });//la funcion que le pasamos(oracle.run)
