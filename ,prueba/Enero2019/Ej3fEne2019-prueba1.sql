@@ -1,5 +1,5 @@
 
-SET SERVEROUTPUT ON;
+--SET SERVEROUTPUT ON;
 
 DECLARE
   v_acceso VARCHAR2(10) := 'Este';
@@ -54,7 +54,7 @@ EXCEPTION
     DBMS_OUTPUT.PUT_LINE('ERROR: SE HA PRODUCIDO UNA EXCEPCION NO CAPTURADA: ' || SQLCODE || ' - ' || SQLERRM);   
     write_log('PROC_alumno.log');
 END;
-/
+
 
 
 create or replace PROCEDURE write_log (p_file VARCHAR2) AS
@@ -71,4 +71,4 @@ BEGIN
     utl_file.fflush(l_file);
     utl_file.fclose(l_file);
 END write_log;
-/
+

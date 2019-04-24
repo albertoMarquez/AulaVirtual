@@ -2,7 +2,7 @@
 -- Bases de Datos.  Examen de enero de 2019. Ejercicio 3f.
 -- -------------------------------------------------------------
 
-ALTER SESSION SET nls_date_format='DD/MM/YYYY';
+--ALTER SESSION SET nls_date_format='DD/MM/YYYY';
 
 -- f. (2 puntos) Escribe un procedimiento almacenado que reciba como
 -- parametro una puerta de acceso. Por cada taquilla de esa puerta de
@@ -71,6 +71,3 @@ EXCEPTION
   WHEN e_sin_venta THEN
     DBMS_OUTPUT.PUT_LINE('La puerta ' || p_puerta || ' no tiene entradas vendidas.');
 END;
-/
-
-

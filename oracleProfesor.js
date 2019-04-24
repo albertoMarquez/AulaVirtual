@@ -61,15 +61,16 @@ async function altaUsuario(usuario, callback){
         }else{
           connection.execute("begin ALTA_USUARIO(:user); end;",
            {user:usuario}, function(err, sol){
-             if(err){
-               callback(err, undefined);
-               return;
-             }else{
-               sol = true;
-               console.log(sol);
-               callback(undefined, sol);
-               return;
-             }
+            sol = false;
+            if(err){
+              callback(err, sol);
+              return;
+            }else{
+              sol = true;
+              console.log(sol);
+              callback(undefined, sol);
+              return;
+            }
            }
           );
         }
@@ -89,8 +90,6 @@ async function altaUsuario(usuario, callback){
   }
 }
  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 /*async function closePoolAndExit() {
   console.log('\nTerminating');
   try {
@@ -200,4 +199,5 @@ async function altaUsuario(usuario, callback){
   }
 module.exports = {
   connect:connect
+  
 }

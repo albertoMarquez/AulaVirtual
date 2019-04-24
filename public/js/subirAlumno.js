@@ -51,11 +51,7 @@ $(document).ready(function() {
         var res = link.split("/");
         window.location = res[1] + "/";
     }
-
-
-
  });
- 
  //coge el numero de intentos totales de altaEjercicio
  function numeroDeIntentos(idEjercicio, callback){
         let idEj = idEjercicio;
@@ -74,10 +70,8 @@ $(document).ready(function() {
             } 
         });
  }
-
  function subirScriptAlumno(user, idEjercicio){
     //alert("hola");
-    
     let solucion = $("#solAlmun").val();
     let numOk = 0;//coger resultado de oracledb
     let entregaRetrasada = new Date();

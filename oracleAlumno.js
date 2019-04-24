@@ -109,13 +109,18 @@ async function almacenarProcedimineto(conection,solucion){
     console.error("almacenarProcedimineto : "+err);
   }
 }
-async function corregirProcedimiento(conection,sql,callback){
-  var sol = "Hola, estas dentro de almacenar Procedimiento";
-  callback(undefined, sol);
-  return;
+async function corregirProcedimiento(connection, sql,callback){
+  let resultado =[];
+  let sq;
+  for(let i = 2; i < sql.length; i++){
+    //console.log(sql[i].toString());
+    sq = sql[i].toString();
+    await connection.execute(sq);
+    resultado[i-2] = fs.readFileSync('C:/tmp/resultado.log');
+    //console.log(resultado[i-2].toString());
+  }
+  callback(resultado);
 }
-
 module.exports = {
   connect:connect
- 
 }
