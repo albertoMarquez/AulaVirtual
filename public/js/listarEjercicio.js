@@ -42,6 +42,8 @@ $(document).ready(function() {
                 elem.attr("id", "elem");
                 $("#template").before(elem);
                });
+               $('#tablaEjercicios').DataTable();
+               $('.dataTables_length').addClass('bs-select');
             },
             error: function() {
                 alert("Error al mostrar los ejercicios");
