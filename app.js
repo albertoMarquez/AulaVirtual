@@ -478,7 +478,7 @@ app.post("/cargarAsignaturas",(request, response) =>{
 });
  
 app.post("/eliminarAsignatura",(request, response) =>{
-    console.log(request.body);
+   // console.log(request.body);
     daoU.eliminarAsignatura(request.body,(err, op) =>{
         if (err){
             response.status(400); //mal introducido
@@ -506,8 +506,12 @@ app.get("/evaluaAlumno", (request, response)=>{
 });
 
 app.post("/actualizaComentarioNota", (request, response)=>{
+
+    console.log(request.body);
+
     daoE.actualizaEjercicioAlumno(request.body, (err, filas)=>{
         if(err){
+            console.log("err");
             response.status(400);
             response.end();
         }else{
@@ -519,6 +523,7 @@ app.post("/actualizaComentarioNota", (request, response)=>{
 });
 
 app.get("/getUltimaEntrega", (request, response)=>{
+    console.log("getUltimaEntrega");
     console.log(request.query);
     daoE.getUltimaEntrega(request.query, (err, filas)=>{
         if(err){

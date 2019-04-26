@@ -60,6 +60,7 @@ $(document).ready(function() {
                $('#tablaA').on('click', 'tbody tr', function(){
                   // console.log('TR cell textContent : ', this);
                     var data = table.row( this ).data();
+                    console.log(data);
                     abrirModal(data);
                });
             },
@@ -90,11 +91,11 @@ function abrirModal(info){
             var modal = document.getElementById('myModal');
             var span = document.getElementsByClassName("close")[0];
             modal.style.display = "block";
-            console.log(info);
+           // console.log(info);
             $("#nombreModal").text(info[1] + " " + info[2]);
             $("#notaModal").val(info[11]);
             // When the user clicks on <span> (x), close the modal
-            $("#solucionAlumnoModal").val(ultimaEntrega);
+            $("#solucionAlumnoModal").val(ultimaEntrega.solAlumno);
             span.onclick = function() {
                 modal.style.display = "none";
             }

@@ -265,7 +265,9 @@ class DAOEjercicio {
                        }else{
                         sol.solAlumno = filas[0].solucion;
                         sol.comentarioProfe = filas[0].correccionProfesor;
-                      
+
+                       // console.log("DAOE getUltimaEntrega");
+                       // console.log(sol);
                         callback(undefined, sol);
                        }
                     
@@ -380,7 +382,7 @@ class DAOEjercicio {
             if(err){
                 callback(err);
             }else{
-                var sql = `UPDATE ejercicioalumno SET correccionProfesor =?, nota=?WHERE idEjercicio = ? AND idAlumno = ?;`
+                var sql = `UPDATE ejercicioalumno SET correccionProfesor =?, nota=? WHERE idEjercicio = ? AND idAlumno = ?;`
                 con.query(sql, [datos.comentario, Number(datos.nota), datos.idEjercicio, datos.idAlumno], (err, filas)=>{
                     if(err){
                         callback(err, undefined);
