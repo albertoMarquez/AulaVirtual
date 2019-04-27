@@ -43,7 +43,10 @@ $(document).ready(function() {
             //document.getElementById("myTextarea").value;
             //let solucion = $("#solAlmun").val();
             //console.log(user.idAlumno);
-            subirScriptAlumno(user, idEjercicio);
+            crearAlumno(user,function () {
+                subirScriptAlumno(user, idEjercicio);
+            });
+            
         });
 
     }else{
@@ -52,6 +55,28 @@ $(document).ready(function() {
         window.location = res[1] + "/";
     }
  });
+
+function crearAlumno(alumno) {
+    let alumnoAux={};
+    alumnoAux.nombre= alumno.nombre.toUpperCase();
+    //console.log(alumnoAux.nombre);
+    alumnoAux.idAlumno= alumno.idAlumno;
+    alumnoAux.usuario = alumno.user;
+    //console.log(alumnoAux);
+    $.ajax({
+        method: "POST",
+        url: "/crearAlumno",
+        contentType: "application/json",
+        data: JSON.stringify({alumnoAux:alumnoAux}),
+        success: function() {
+            alert("Alumno creado correctamente.");
+        },
+        error: function() {
+            alert("Error al crear el alumno ORACLEDB.");
+        }
+    })
+}
+
  //coge el numero de intentos totales de altaEjercicio
  function numeroDeIntentos(idEjercicio, callback){
         let idEj = idEjercicio;
@@ -110,7 +135,7 @@ $(document).ready(function() {
                     }
                     console.log("info");
                     //console.log(info);
-                    alert("ajax 2 ejecutar procedimiento");
+                    //alert("ajax 2 ejecutar procedimiento");
                     $.ajax({
                         method: "POST",
                         data:JSON.stringify({info:info}),

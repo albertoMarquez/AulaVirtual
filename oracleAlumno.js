@@ -51,7 +51,7 @@ async function comprobarProcedimineto(tablas, user,solucion,sql, callback){//sql
           callback(err, undefined);
         else{
           await createTables(conection,tablas);
-          await almacenarProcedimineto(conection,solucion);
+          await almacenarProcedimineto(conection,solucion, err);
           await corregirProcedimiento(conection,sql, (err, sol)=>{//sql son los scripts para comprobar la solucion
             if(err){
               callback(err, undefined);
@@ -62,15 +62,6 @@ async function comprobarProcedimineto(tablas, user,solucion,sql, callback){//sql
               return;
             }
           });
-          /*await almacenarProcedimineto(conection,user,solucion,scripts, (err, sol)=>{
-            if(err){
-              callback(err, undefined);
-              return;
-            }else{
-              callback(undefined, sol);
-              return;
-            }
-          });*/
         }
       });      
     } catch (err) {

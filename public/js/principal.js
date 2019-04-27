@@ -55,7 +55,7 @@ $(document).ready(function() {
             cargarTabla(1);
         });
 
-        crearAlumno(user);
+        
     }else{
         var link = window.location.href;
         var res = link.split("/");
@@ -63,26 +63,6 @@ $(document).ready(function() {
     }   
     
 });
-
-function crearAlumno(alumno) {
-    let alumnoAux={};
-    alumnoAux.nombre= alumno.nombre;
-    alumnoAux.idAlumno= alumno.idAlumno;
-    alumnoAux.usuario = alumno.user;
-    console.log(alumnoAux);
-    $.ajax({
-        method: "POST",
-        url: "/crearAlumno",
-        contentType: "application/json",
-        data: JSON.stringify({alumnoAux:alumnoAux}),
-        success: function() {
-            alert("Alumno creado correctamente.");
-        },
-        error: function() {
-            alert("Error al crear el alumno ORACLEDB.");
-        }
-    })
-}
 
 function cargarTabla(type) {
     $.ajax({
