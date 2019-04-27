@@ -43,7 +43,8 @@ $(document).ready(function() {
             //document.getElementById("myTextarea").value;
             //let solucion = $("#solAlmun").val();
             //console.log(user.idAlumno);
-            crearAlumno(user,function () {
+            crearAlumno(user,function (err) {
+                console.log("entra en subirScriptAlumno subirScriptAlumno");
                 subirScriptAlumno(user, idEjercicio);
             });
             
@@ -56,7 +57,7 @@ $(document).ready(function() {
     }
  });
 
-function crearAlumno(alumno) {
+function crearAlumno(alumno, callback) {
     let alumnoAux={};
     alumnoAux.nombre= alumno.nombre.toUpperCase();
     //console.log(alumnoAux.nombre);
@@ -69,10 +70,12 @@ function crearAlumno(alumno) {
         contentType: "application/json",
         data: JSON.stringify({alumnoAux:alumnoAux}),
         success: function() {
-            alert("Alumno creado correctamente.");
+            //alert("Alumno creado correctamente.");
+            callback(undefined);
         },
         error: function() {
             alert("Error al crear el alumno ORACLEDB.");
+            callback(err);
         }
     })
 }

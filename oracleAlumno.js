@@ -32,13 +32,13 @@ async function connect(tablas,sql,datos, callback){
  * Devolver el resultado(uno o varios ficheros?)
  */
 async function comprobarProcedimineto(tablas, user,solucion,sql, callback){//sql tiene la cracion de las tablas, el porcedimiento y los scripts
- 
-  let conection;
-    /*console.log("scripts:"+scripts);
+    let allErr;
+    let conection;
+    console.log("scripts:"+scripts);
     console.log("user:"+user);
-    console.log("solucion:"+solucion);*/
-    console.log("tablas");
-    console.log(tablas);
+    console.log("solucion:"+solucion);
+    //console.log("tablas");
+    //console.log(tablas);
     try {
       conection = await oracledb.getConnection({
         user:  user,
@@ -47,14 +47,14 @@ async function comprobarProcedimineto(tablas, user,solucion,sql, callback){//sql
       },
       async function(err, conection) {
         if (err)
-          //console.error("conection :"+err);
           callback(err, undefined);
         else{
-          await createTables(conection,tablas);
-          await almacenarProcedimineto(conection,solucion, err);
+          await createTables(conection,tablas,allErr);
+          await almacenarProcedimineto(conection,solucion,allErr);
+          console.log(allErr);
           await corregirProcedimiento(conection,sql, (err, sol)=>{//sql son los scripts para comprobar la solucion
             if(err){
-              callback(err, undefined);
+              callback(allErr+err, undefined);
               return;
             }else{
               console.log(sol);
@@ -69,7 +69,6 @@ async function comprobarProcedimineto(tablas, user,solucion,sql, callback){//sql
     } finally {
       if (conection) {
         try {
-          // Put the connection back in the pool
           await conection.close();
         } catch (err) {
           console.error(" finally run :"+err);
@@ -77,27 +76,28 @@ async function comprobarProcedimineto(tablas, user,solucion,sql, callback){//sql
       }
     }
 }
-async function createTables(conection,sql) {
+async function createTables(conection,sql,allErr) {
   sql = sql.replace(/\r|\n|\t|#|COMMIT;|/g, '');
   sql=sql.split(";");
   var i, aux;
-
-  for( i=0; i<sql.length-1;i++){
-    aux = sql[i];
-    if(aux.indexOf("drop") > -1){
-      aux=  "BEGIN EXECUTE IMMEDIATE '"+sql[i]+"'; EXCEPTION WHEN OTHERS THEN IF SQLCODE NOT IN (-00942) THEN RAISE; END IF; END;";
+  try {
+    for( i=0; i<sql.length-1;i++){
+      aux = sql[i];
+      if(aux.indexOf("drop") > -1){
+        aux=  "BEGIN EXECUTE IMMEDIATE '"+sql[i]+"'; EXCEPTION WHEN OTHERS THEN IF SQLCODE NOT IN (-00942) THEN RAISE; END IF; END;";
+      }
+      await conection.execute(aux);
     }
-    //console.log(aux);
-    //else if(aux.indexOf("insert") > -1 || aux.indexOf("INSERT") > -1){
-    await conection.execute(aux);
+  } catch (err) {
+    allErr = allErr+err;
   }
 }
-async function almacenarProcedimineto(conection,solucion){
+async function almacenarProcedimineto(conection,solucion, allErr){
   console.log(solucion);
   try {
     await conection.execute(solucion);
   } catch (err) {
-    console.error("almacenarProcedimineto : "+err);
+    allErr = allErr+err;
   }
 }
 async function corregirProcedimiento(connection, sql,callback){
