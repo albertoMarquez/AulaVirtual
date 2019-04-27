@@ -74,7 +74,7 @@ class DAOEjercicio {
                 callback(err);
             }else{//MYSQL:SELECT Titulo FROM `altaejercicio` INNER JOIN `ejercicio` ON altaejercicio.IdEj = ejercicio.IdEjercicio where evaluacion=1
             con.query(`SELECT Titulo,idEjercicio FROM altaejercicio a, ejercicio e where a.idEj = e.idEjercicio  
-                and evaluacion = ? and DATE(fin) >= DATE(?)`,
+                and evaluacion = ? and DATE(ini) <= DATE(?)`,
                 [datos, fecha], (err, resultado) =>{ 
                     if (!err) {
                         if (resultado.length === 0) 

@@ -96,7 +96,7 @@ function cargarTabla(type) {
     })
 }
 
-
+/*
 function addID(id){
     $.ajax({
         method: "GET",
@@ -109,7 +109,7 @@ function addID(id){
         }
     })
 }
-
+*/
 
 
 
