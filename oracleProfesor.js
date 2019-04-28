@@ -26,16 +26,13 @@ async function connect(sql,datos,callback){//sql son los scripts de prueba
           callback(undefined, sol);
           return;
         }        
-      });
-          
-    }
-    /*else{
-      if(funcion)
-        await funcion(sql,(resultado) =>{
+      });   
+    }else{
+        await run(sql,(resultado) =>{
         //console.log("connect)");
         callback(resultado);
       });//la funcion que le pasamos(oracle.run)
-    }*/
+    }
   } catch (err) {
     console.error('init() error: ' + err.message);
   }
@@ -79,11 +76,10 @@ async function altaUsuario(usuario, callback){
   } catch (err) {
     console.error("altaUsuario :"+err);
   } finally {
-    if (connection) {
+    if(connection){
       try {
-        // Put the connection back in the pool
         await connection.close();
-      } catch (err) {
+      }catch(err){
         console.error(" finally altaUsuario :"+err);
       }
     }
@@ -128,37 +124,37 @@ async function altaUsuario(usuario, callback){
   .on('SIGINT',  closePoolAndExit)*/
   async function run(sql,callback){//sql tiene la cracion de las tablas, el porcedimiento y los scripts
     let connection;
-      try {
-        connection = await oracledb.getConnection(
-          {
-            user: 'SYS',
-            password: 'SYS',
-            connectString: 'localhost',
-            privilege: oracledb.SYSDBA
-          },
-          async function(err, connection) {
-            if (err)
-              console.error("conection :"+err);
-            else{
-              await createTables(connection,sql[0]);
-              await createProcedure(connection,sql[1]);
-              await callProcedures(connection,sql,(sol)=>{
-                callback(sol);
-              });
-            }
-          }
-        );      
-      } catch (err) {
-        console.error("run :"+err);
-      } finally {
-        if (connection) {
-          try {
-            await connection.close();
-          } catch (err) {
-            console.error(" finally run :"+err);
+    try {
+      connection = await oracledb.getConnection(
+        {
+          user: 'SYS',
+          password: 'SYS',
+          connectString: 'localhost',
+          privilege: oracledb.SYSDBA
+        },
+        async function(err,connection){
+          if (err)
+            console.error("conection :"+err);
+          else{
+            await createTables(connection,sql[0]);
+            await createProcedure(connection,sql[1]);
+            await callProcedures(connection,sql,(sol)=>{
+              callback(sol);
+            });
           }
         }
+      );      
+    }catch(err){
+      console.error("run :"+err);
+    } finally {
+      if (connection) {
+        try {
+          await connection.close();
+        } catch (err) {
+          console.error(" finally run :"+err);
+        }
       }
+    }
   }
   async function createTables(connection,sql) {
     sql = sql.replace(/\r|\n|\t|#|COMMIT;|/g, '');
@@ -198,6 +194,5 @@ async function altaUsuario(usuario, callback){
     callback(resultado);
   }
 module.exports = {
-  connect:connect
-  
+  connect:connect 
 }

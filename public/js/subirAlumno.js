@@ -145,7 +145,8 @@ function crearAlumno(alumno, callback) {
                         url: "/ejecutarProcedimientoAlumno",
                         contentType: "application/json",
                         success: function(){
-                            alert("el procedimiento del alumno se ha ejecutado correctamente");
+                            //alert("el procedimiento del alumno se ha ejecutado correctamente");                            
+                            location.reload();
                         },
                         error: function(){
                             alert("error en ejecutar el procedimiento del alumno");

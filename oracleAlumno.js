@@ -3,20 +3,31 @@ var oracledb = require('oracledb');
 var dbConfig = require('./dbconfig.js');
 var fs = require("fs");
 oracledb.autoCommit= true;
+let allErr;
 //https://github.com/oracle/node-oracledb/blob/master/examples/example.js
 //https://oracle.github.io/node-oracledb/
 //NO BORRAR REFERENCIA POR AHORA
+/*async function disconnect(conection){
+  try{
+    //await conection.close();
+  }catch(error){
+    console.log(error);
+  }
+}*/
 async function connect(tablas,sql,datos, callback){
   try {
     //console.log(datos);
-    let user = datos.nombre + datos.idAlumno;
-
-    await comprobarProcedimineto(tablas,user,datos.solucion,sql, (err, ok) =>{
+    let user = datos.nombre.toUpperCase() + datos.idAlumno;
+    await comprobarProcedimineto(tablas,user,datos.solucion,sql,(err,sol)=>{
       if(err){
-        callback(err, undefined);
+        //allErr=allErr+err;
+        //console.log("comprobarProcedimineto:"+conection);
+        //console.log("comprobarProcedimineto:"+allErr);
+        callback(err, sol);
         return;
       }else{
-        callback(undefined, ok);
+        //console.log("comprobarProcedimineto:"+conection);
+        callback(undefined, sol);
         return;
       }
     });
@@ -32,11 +43,10 @@ async function connect(tablas,sql,datos, callback){
  * Devolver el resultado(uno o varios ficheros?)
  */
 async function comprobarProcedimineto(tablas, user,solucion,sql, callback){//sql tiene la cracion de las tablas, el porcedimiento y los scripts
-    let allErr;
     let conection;
-    console.log("scripts:"+scripts);
+    //console.log("scripts:"+sql);
     console.log("user:"+user);
-    console.log("solucion:"+solucion);
+    console.log("solucion:\n"+solucion);
     //console.log("tablas");
     //console.log(tablas);
     try {
@@ -49,17 +59,18 @@ async function comprobarProcedimineto(tablas, user,solucion,sql, callback){//sql
         if (err)
           callback(err, undefined);
         else{
-          await createTables(conection,tablas,allErr);
-          await almacenarProcedimineto(conection,solucion,allErr);
-          console.log(allErr);
+          await createTables(conection,tablas);
+          await almacenarProcedimineto(conection,solucion);
+          //console.log("entre almacenar y corregir"+allErr);
           await corregirProcedimiento(conection,sql, (err, sol)=>{//sql son los scripts para comprobar la solucion
             if(err){
-              callback(allErr+err, undefined);
-              return;
+              //allErr=allErr+err;
+              //console.log("corregirProcedimiento:"+allErr);
+              //console.log(conection);
+              callback(allErr, undefined);
             }else{
-              console.log(sol);
+              //console.log(conection);
               callback(undefined, sol);
-              return;
             }
           });
         }
@@ -76,7 +87,7 @@ async function comprobarProcedimineto(tablas, user,solucion,sql, callback){//sql
       }
     }
 }
-async function createTables(conection,sql,allErr) {
+async function createTables(conection,sql) {
   sql = sql.replace(/\r|\n|\t|#|COMMIT;|/g, '');
   sql=sql.split(";");
   var i, aux;
@@ -89,28 +100,39 @@ async function createTables(conection,sql,allErr) {
       await conection.execute(aux);
     }
   } catch (err) {
-    allErr = allErr+err;
+    await conection.close();
+    allErr = allErr + "\nError al crear las tablas" + err + JSON.stringify(err);
+    //console.log("createTables:"+allErr);
   }
 }
-async function almacenarProcedimineto(conection,solucion, allErr){
-  console.log(solucion);
+async function almacenarProcedimineto(conection,solucion){
+  //console.log(solucion);
   try {
     await conection.execute(solucion);
   } catch (err) {
-    allErr = allErr+err;
+    await conection.close();
+    //console.log(err);
+    allErr = allErr + "\nError al almacenar el procedimineto: " + err + JSON.stringify(err);
+    //console.log(err+JSON.stringify(err));
   }
 }
 async function corregirProcedimiento(connection, sql,callback){
   let resultado =[];
   let sq;
-  for(let i = 2; i < sql.length; i++){
-    //console.log(sql[i].toString());
-    sq = sql[i].toString();
-    await connection.execute(sq);
-    resultado[i-2] = fs.readFileSync('C:/tmp/resultado.log');
-    //console.log(resultado[i-2].toString());
+  let errorScript;
+  try {
+    for(let i = 2; i < sql.length; i++){
+      //console.log(sql[i].toString());
+      sq = sql[i].toString();
+      errorScript = await connection.execute(sq);////CONCATENAR LOS ERRORES DE CADA SCRIPT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      resultado[i-2] = fs.readFileSync('C:/tmp/resultado.log');
+      //console.log(resultado[i-2].toString());
+    }
+  } catch (err) {
+    allErr = allErr + "\nError al corregir procedimiento" +  err + JSON.stringify(err);
   }
-  callback(resultado);
+  //console.log("corregirProcedimiento:"+allErr);
+  callback(allErr,resultado);
 }
 module.exports = {
   connect:connect
