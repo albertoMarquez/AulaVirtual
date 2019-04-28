@@ -40,7 +40,7 @@ $(document).ready(function() {
                 elem.find("#apellidos").text(e.apellidos);
                 elem.find("#idEjer").text(e.idEjer);
                 elem.find("#titulo").text(e.titulo);
-                elem.find("#numScriptsOK").text(e.numScriptsOK);
+                elem.find("#numScriptsFallo").text(e.numScriptsFallo);
                 elem.find("#numsScriptsTotales").text(e.numScriptsTotales);
                 elem.find("#entregaRetrasada").html(e.entregaRetrasada);
                 elem.find("#cursoGrupo").text(e.cursoGrupo);
@@ -91,11 +91,13 @@ function abrirModal(info){
             var modal = document.getElementById('myModal');
             var span = document.getElementsByClassName("close")[0];
             modal.style.display = "block";
-           // console.log(info);
+            //console.log("Modal");
+            //console.log(info);
             $("#nombreModal").text(info[1] + " " + info[2]);
             $("#notaModal").val(info[11]);
             // When the user clicks on <span> (x), close the modal
             $("#solucionAlumnoModal").val(ultimaEntrega.solAlumno);
+            $("#solucionOracleAlumno").val(info[10]);
             span.onclick = function() {
                 modal.style.display = "none";
             }
@@ -108,7 +110,7 @@ function abrirModal(info){
                     contentType: "application/json",
                     data: JSON.stringify({idEjercicio:info[3], idAlumno: info[0], nota: $("#notaModal").val(), comentario: $("#solucionAlumnoModal").val()}),
                     success: function() {
-                        alert("Actualizado correctamente");
+                       // alert("Actualizado correctamente");
                         modal.style.display = "none";
                         location.reload();
                     },

@@ -9,3 +9,7 @@ th{
 th, td {
     padding: 15px;
 }
+
+.container {
+    width: 1000px;
+}

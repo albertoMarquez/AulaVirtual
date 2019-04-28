@@ -34,6 +34,8 @@ $(document).ready(function() {
         
         $(".parrafoExamenes").hide();
         $(".parrafoEjercicios").hide();
+     
+        
         $("#Ejercicios").click(function(event) {
             event.preventDefault();
             $(".parrafoEjercicios").show();
@@ -41,8 +43,11 @@ $(document).ready(function() {
             $("#tablaEjercicios tbody").remove();
             $(".parrafoExamenes").hide();
             $("#tablaExamenes").hide();
+           
+            
             cargarTabla(0);
-        
+           
+            
         });
     
         $("#Examenes").click(function(event) {
@@ -52,7 +57,10 @@ $(document).ready(function() {
             $("#tablaExamenes tbody").remove();
             $(".parrafoEjercicios").hide();
             $("#tablaEjercicios").hide();
+            
             cargarTabla(1);
+            
+            
         });
 
         
@@ -65,30 +73,47 @@ $(document).ready(function() {
 });
 
 function cargarTabla(type) {
+    
     $.ajax({
         method: "POST",
         url: "/principal",
         contentType: "application/json",
         data: JSON.stringify({tipo:type}),
         success: function(data) {
-
+            
             var tabla   = document.getElementsByTagName("table")[type];
             var tblBody = document.createElement("tbody");
             for(var i=0; i<data.length; i++){
                 var hilera = document.createElement("tr");
-                var celda = document.createElement("td");
+                var titulo = document.createElement("td");
+                var texto = document.createTextNode(data[i].titulo);
+                titulo.appendChild(texto);
+                var id = document.createElement("td");
+                var textoId = document.createTextNode(data[i].id);
+                id.appendChild(textoId);
+               
                 var link = document.createElement('a');
+                var linkId = document.createElement('a');
                 var url = "/subirAlumno/" + data[i].id + "/" + user.idAlumno;
                 link.setAttribute('href', url);
-                link.setAttribute('class',"linkEjercicio");
-               
-                var textoCelda = document.createTextNode(data[i].titulo +" "+"ID:"+ " "+data[i].id);
-                link.appendChild(textoCelda)
-                celda.appendChild(link);
-                hilera.appendChild(celda);
+                linkId.setAttribute('href', url);
+
+        
+                link.appendChild(texto);
+                titulo.appendChild(link);
+                linkId.appendChild(textoId);
+                id.appendChild(linkId);
+
+                hilera.appendChild(titulo);
+                hilera.appendChild(id);
                 tblBody.appendChild(hilera);
             }
             tabla.appendChild(tblBody);
+
+           // $('#tablaEjercicios').DataTable();
+           // $('#tablaExamenes').DataTable();
+
+           
         },
         error: function() {
             alert("Error al cargar tabla.");
@@ -96,20 +121,7 @@ function cargarTabla(type) {
     })
 }
 
-/*
-function addID(id){
-    $.ajax({
-        method: "GET",
-        url: "/principal/"+id,
-        success: function(data) {
-            
-        },
-        error: function() {
-            alert("Error al añadir ID");
-        }
-    })
-}
-*/
+
 
 
 

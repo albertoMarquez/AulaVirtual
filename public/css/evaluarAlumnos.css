@@ -21,11 +21,18 @@ span {
   font-family: inherit;
 }
 
-textarea{
+#solucionAlumnoModal{
   margin: 21px;
-  width: 564px;
-  height: 105px;
+  width: 860px;
+  height: 244px;
 }
+
+#solucionOracleAlumno{
+  margin: 21px;
+  width: 860px;
+  height: 107px;
+}
+
 input[type=text] {
   width: 20%;
   font-size: x-large;
@@ -35,14 +42,12 @@ input[type=text] {
 
 }
 
-#notaDiv{
+#notaDiv {
   padding: 0px 21px;
   width: 407px;
-}
-
-#boton{
-  display: flex;
-  justify-content: flex-end;
+  display: inline-flex;
+  justify-content: space-evenly;
+  align-items: center;
 }
 
 
@@ -62,11 +67,11 @@ input[type=text] {
   /* Modal Content/Box */
   .modal-content {
     background-color: #fefefe;
-    margin: 15% auto; /* 15% from the top and centered */
+    margin: 1% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 49%;
-  }
+    width: 70%;
+}
   
   /* The Close Button */
   .close {
