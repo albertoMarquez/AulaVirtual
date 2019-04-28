@@ -383,8 +383,8 @@ class DAOUsers {
                 callback(err);
             }else{
                 var sql = `select * 
-                from (select tb1.idAlumno, tb1.nombre, tb1.apellidos, tb1.nota, tb1.numOk, tb1.IdGEjerAlumno, tb1.intentos, tb1.resultado, tb1.fechaEntrega, tb1.idEjercicio as "idEjer", tb1.entregaRetrasada, e.idProfesor, e.numScriptsSol, e.titulo from ejercicio e join (
-                        select a.nombre, a.apellidos, ea.nota, ea.numOK, ea.idAlumno, ea.idGrupo as "IdGEjerAlumno", ea.intentos, ea.resultado, ea.fecha as "fechaEntrega", ea.idEjercicio, ea.entregaRetrasada 
+                from (select tb1.idAlumno, tb1.nombre, tb1.apellidos, tb1.nota, tb1.numFallos, tb1.IdGEjerAlumno, tb1.intentos, tb1.resultado, tb1.fechaEntrega, tb1.idEjercicio as "idEjer", tb1.entregaRetrasada, e.idProfesor, e.numScriptsSol, e.titulo from ejercicio e join (
+                        select a.nombre, a.apellidos, ea.nota, ea.numFallos, ea.idAlumno, ea.idGrupo as "IdGEjerAlumno", ea.intentos, ea.resultado, ea.fecha as "fechaEntrega", ea.idEjercicio, ea.entregaRetrasada 
                         from ejercicioAlumno ea join alumno a 
                         ON a.idAlumno = ea.idAlumno) tb1
                     ON e.idEjercicio = tb1.idEjercicio) tb2 join (select g.idGrupo, g.idAsignatura as "idGrupoAsignatura", g.grupo, a.curso 
@@ -405,12 +405,16 @@ class DAOUsers {
                             row.apellidos = e.apellidos;
                             row.idEjer = e.idEjer;
                             row.titulo = e.titulo;
-                            row.numScriptsOK = e.numOK;
+                            row.numScriptsFallo = e.numFallos;
                             row.numsScriptsTotales = e.numScriptsSol;
-                            if(e.fechaEntrega > e.entregaRetrasada){
-                                row.entregaRetrasada = "<span style='color: red;'>" + e.entregaRetrasada + "</span>"
+                           // var fechaE = new Date(e.fechaEntrega);
+                            //console.log(`fechaE:  ${fechaE.getDate()}-${fechaE.getMonth() + 1}-${fechaE.getFullYear()}`);
+                            var fechaR = new Date(e.entregaRetrasada);
+                           // console.log(`fechaR:  ${fechaR.getDate()}-${fechaR.getMonth() + 1}-${fechaR.getFullYear()}`);
+                            if(e.fechaEntrega > e.entregaRetrasada){ 
+                                row.entregaRetrasada = "<span style='color: red;'>" + `${fechaR.getDate()}-${fechaR.getMonth() + 1}-${fechaR.getFullYear()}`+"</span>"
                             }else{
-                                row.entregaRetrasada = "<span>" + e.entregaRetrasada + "</span>";
+                                row.entregaRetrasada = "<span>" +  `${fechaR.getDate()}-${fechaR.getMonth() + 1}-${fechaR.getFullYear()}` + "</span>";
                             }
                             row.cursoGrupo = e.curso + "º " + e.grupo;
                             row.intentos = e.intentos;
