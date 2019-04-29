@@ -316,6 +316,8 @@ app.post("/subirEjercicio", (request, response) =>{
     data.titulo = request.body.titu;
     data.idProfesor = request.body.idProfesor;
     data.numScripts = request.body.scripts.length;
+    data.usuario= request.body.user;
+    //data.idAlumno =request.body.idProfesor;//casteo para tratar al alumno y al profesor en oracleProfesor
 
     daoE.createEjercicio(data, (err, id) =>{
         if(err){
@@ -334,7 +336,7 @@ app.post("/subirEjercicio", (request, response) =>{
                         }else{
                             if(op !== undefined){
                                 response.json(op);
-                                oracle.connect(oracle.run,op,(sol)=>{
+                                oracleProfesor.connectProfesor(op,undefined,(sol)=>{
                                     daoE.solScripts(id,sol,(err, op)=>{
                                         if(err){
                                             response.status(400);

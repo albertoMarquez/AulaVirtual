@@ -7,34 +7,38 @@ oracledb.autoCommit= true;
 //https://github.com/oracle/node-oracledb/blob/master/examples/example.js
 //https://oracle.github.io/node-oracledb/
 //NO BORRAR REFERENCIA POR AHORA
-async function connect(sql,datos,callback){//sql son los scripts de prueba
+async function createUser(datos,callback){//sql son los scripts de prueba
   try {
-    // Create a connection pool which will later be accessed via the
-    // pool cache as the 'default' pool.
-    datos = datos.alumnoAux;
-    console.log(datos);
-    if(datos.usuario === 'alumno'){
-      let user = datos.nombre + datos.idAlumno.toString();
-      console.log(user);
-      await altaUsuario(user,(err, sol) =>{
-        //console.log("connect)");
-        console.log("User creado"); 
-        if(err){
-          callback(err, undefined);
-          return;
-        }else{
-          callback(undefined, sol);
-          return;
-        }        
-      });   
-    }else{
-        await run(sql,(resultado) =>{
-        //console.log("connect)");
-        callback(resultado);
-      });//la funcion que le pasamos(oracle.run)
-    }
+      //ADAPTAR EL CODIGO PARA QUE COJA LOS DATOS CON LOS MISMOS NOMBRES!!!!!!!!!!!!!
+      datos = datos.alumnoAux;
+      //console.log(datos);
+      //if(datos.usuario === 'alumno'){
+        let user = datos.nombre + datos.idAlumno.toString();
+        console.log(user);
+        await altaUsuario(user,(err, sol) =>{
+          //console.log("connect)");
+          console.log("User creado"); 
+          if(err){
+            callback(err, undefined);
+            return;
+          }else{
+            callback(undefined, sol);
+            return;
+          }        
+        });
+      //}
   } catch (err) {
-    console.error('init() error: ' + err.message);
+    console.error('connectAlumno() error: ' + err.message);
+  }
+}
+async function connectProfesor(sql,callback){
+  try {
+    await run(sql,(resultado) =>{
+      console.log("connect)");
+      callback(resultado);
+    });//la funcion que le pasamos(oracle.run)
+  } catch (err) {
+    console.error('connectProfesor() error: ' + err.message);
   }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -137,10 +141,11 @@ async function altaUsuario(usuario, callback){
             console.error("conection :"+err);
           else{
             await createTables(connection,sql[0]);
-            await createProcedure(connection,sql[1]);
-            await callProcedures(connection,sql,(sol)=>{
+            //await createProcedure(connection,sql[1]);
+            /*await callProcedures(connection,sql,(sol)=>{
               callback(sol);
-            });
+            });*/
+            callback(undefined);
           }
         }
       );      
@@ -160,9 +165,10 @@ async function altaUsuario(usuario, callback){
     sql = sql.replace(/\r|\n|\t|#|COMMIT;|/g, '');
     sql=sql.split(";");
     var i, aux;
-  
+    //console.log(sql);
     for( i=0; i<sql.length-1;i++){
       aux = sql[i];
+      console.log(aux);
       if(aux.indexOf("drop") > -1){
         aux=  "BEGIN EXECUTE IMMEDIATE '"+sql[i]+"'; EXCEPTION WHEN OTHERS THEN IF SQLCODE NOT IN (-00942) THEN RAISE; END IF; END;";
       }
@@ -173,9 +179,8 @@ async function altaUsuario(usuario, callback){
   }
   async function createProcedure(connection,sql){
     //var sq = sql.replace(/\r|\n|\t|#|COMMIT;|/g, '');
-    //console.log(sql);
+    console.log(sql);
     try {
-      // Put the connection back in the pool
       await connection.execute(sql);
     } catch (err) {
       console.error("createProcedure : "+err);
@@ -185,7 +190,7 @@ async function altaUsuario(usuario, callback){
     let resultado =[];
     let sq;
     for(let i = 2; i < sql.length; i++){
-      //console.log(sql[i].toString());
+      console.log(sql[i].toString());
       sq = sql[i].toString();
       await connection.execute(sq);
       resultado[i-2] = fs.readFileSync('C:/tmp/resultado.log');
@@ -194,5 +199,6 @@ async function altaUsuario(usuario, callback){
     callback(resultado);
   }
 module.exports = {
-  connect:connect 
+  connectAlumno:connectAlumno,
+  connectProfesor:connectProfesor
 }

@@ -1,4 +1,4 @@
-SET SERVEROUTPUT ON;
+--SET SERVEROUTPUT ON;
 
 DECLARE
   v_acceso VARCHAR2(10) := 'Sureste';
@@ -37,5 +37,5 @@ EXCEPTION
     DBMS_OUTPUT.PUT_LINE('ERROR: SE HA PRODUCIDO UNA EXCEPCION NO CAPTURADA: ' || SQLCODE || ' - ' || SQLERRM);   
     write_log('PROC_alumno.log');
 END;
-/
+
 
