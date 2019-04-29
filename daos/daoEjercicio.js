@@ -74,7 +74,7 @@ class DAOEjercicio {
                 callback(err);
             }else{//MYSQL:SELECT Titulo FROM `altaejercicio` INNER JOIN `ejercicio` ON altaejercicio.IdEj = ejercicio.IdEjercicio where evaluacion=1
             con.query(`SELECT Titulo,idEjercicio FROM altaejercicio a, ejercicio e where a.idEj = e.idEjercicio  
-                and evaluacion = ? and DATE(ini) <= DATE(?)`,
+                and evaluacion = ? and DATE(ini) <= DATE(?) order by Titulo asc`,
                 [datos, fecha], (err, resultado) =>{ 
                     if (!err) {
                         if (resultado.length === 0) 
@@ -326,22 +326,22 @@ class DAOEjercicio {
     }
 
     entregaRetrasada(idEjercicio, callback){
-        console.log("datos"+idEjercicio);
+       // console.log("datos"+idEjercicio);
         this.pool.getConnection((err, con)=>{
             if(err){
                 callback(err);
             }else{
                 con.query(`SELECT fin FROM altaejercicio WHERE idEj =?`,[idEjercicio],(err, filas)=>{
                     if(err){
-                        console.log("err");
+                        //console.log("err");
                         callback(err);
                     }else{
                         if(filas.length === 0){
-                            console.log("query 0");
+                           // console.log("query 0");
                             callback(undefined, false);
                         }else{
                             
-                            console.log(filas[0].fin);
+                           // console.log(filas[0].fin);
                             callback(undefined, filas[0].fin);
                         }
                     }

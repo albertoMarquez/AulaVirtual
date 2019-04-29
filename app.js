@@ -371,40 +371,51 @@ app.get("/subirAlumno/:id/:idAlumno", (request, response) => {
     if(!isNaN(data.idEjercicio)){
         daoE.seleccionarEjercicio(data.idEjercicio,  data.idAlumno, (error, res) =>{
             if(error){
-                response.status(404);
-                response.end();
+                alert(err);
             }else{
-                var sol = {};
-                sol.titulo = res.ejercicio.titulo;
-                sol.enun = res.ejercicio.enunciado;
-                if(res.ejAlumno){
-                    sol.solucion = res.ejAlumno.solucion;
-                    sol.solucionProfe = res.ejAlumno.correccionProfesor;
-                    sol.nota = res.ejAlumno.nota;
-                  
-                }else{
-                    sol.nota = " -";
-                    sol.solucion = "";
-                    sol.solucionProfe = ""; 
-                }
-                response.render("subirAlumno", {data:sol});
-                daoE.scriptsPorID(data.idEjercicio, (err, res)=>{
+               daoE.entregaRetrasada(data.idEjercicio, (err, infoAlta)=>{
                     if(err){
-                        console.log(err);
+                        alert(err);
                     }else{
-                        var datos = {};
-                        datos.idAlumno = data.idAlumno;
-                        datos.idEjercicio = data.idEjercicio;
-                        daoE.getUltimaEntrega(datos, (err, sol)=>{
+                        var hoy = new Date();
+                        console.log(`infoAlta ${infoAlta}`);
+                        var sol = {};
+                        sol.titulo = res.ejercicio.titulo;
+                        sol.enun = res.ejercicio.enunciado;
+                        sol.retrasada = "NO";
+                        if(hoy > infoAlta){
+                            sol.retrasada = "SI";
+                        }
+                        if(res.ejAlumno){
+                            sol.solucion = res.ejAlumno.solucion;
+                            sol.solucionProfe = res.ejAlumno.correccionProfesor;
+                            sol.nota = res.ejAlumno.nota;
+                          
+                        }else{
+                            sol.nota = " -";
+                            sol.solucion = "";
+                            sol.solucionProfe = ""; 
+                        }
+                        response.render("subirAlumno", {data:sol});
+                        daoE.scriptsPorID(data.idEjercicio, (err, res)=>{
                             if(err){
                                 console.log(err);
                             }else{
-                                //console.log(sol);
+                                var datos = {};
+                                datos.idAlumno = data.idAlumno;
+                                datos.idEjercicio = data.idEjercicio;
+                                daoE.getUltimaEntrega(datos, (err, sol)=>{
+                                    if(err){
+                                        console.log(err);
+                                    }else{
+                                        //console.log(sol);
+                                    }
+                                });
+                                
                             }
-                        });
-                        
+                        })
                     }
-                })
+               })
             }
         })      
     }

@@ -13,3 +13,9 @@ th, td {
 .container {
     width: 1000px;
 }
+
+h3 {
+    display: flex;
+    justify-content: center;
+    font-family: sans-serif;
+}
