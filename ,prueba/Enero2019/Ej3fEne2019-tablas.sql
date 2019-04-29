@@ -1,10 +1,3 @@
--- -------------------------------------------------------------
--- Bases de Datos.  Examen de enero de 2019. Ejercicio 3.
--- Tablas y datos de prueba.
--- -------------------------------------------------------------
-
-ALTER SESSION SET nls_date_format='DD/MM/YYYY';
-
 DROP TABLE tickets;
 DROP TABLE atiende;
 DROP  TABLE taquillas;
@@ -23,12 +16,12 @@ CREATE TABLE accesos (
 
 CREATE TABLE taquillas (
   taquilla INTEGER PRIMARY KEY,
-  puerta REFERENCES accesos,  -- el tipo esta definido en tabla accesos
+  puerta REFERENCES accesos,
   ventas NUMBER(11,2));
 
 CREATE TABLE atiende (
   DNIempleado VARCHAR2(10),
-  taquilla REFERENCES taquillas,  -- el tipo esta definido en tabla taquillas
+  taquilla REFERENCES taquillas,
   desde DATE,
   hasta DATE,
   PRIMARY KEY (DNIempleado, taquilla, desde));
@@ -36,10 +29,9 @@ CREATE TABLE atiende (
 CREATE TABLE tickets (
   ticket INTEGER PRIMARY KEY,
   DNIcliente VARCHAR2(10),
-  taquilla REFERENCES taquillas,  -- el tipo esta definido en tabla taquillas
-  fecha DATE, -- fecha del evento
+  taquilla REFERENCES taquillas,
   precio NUMBER(11,2),
-  fechaCompra DATE -- fecha de compra
+  fechaCompra DATE
 );
 
 INSERT INTO ofertas VALUES (1, '01/12/2018','08/12/2018',11.32);
