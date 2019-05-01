@@ -47,3 +47,7 @@ textarea{
 .formulario_login {
     padding: 55px;
 }
+
+.highlight{
+    background-color: rgb(118, 228, 160);
+}

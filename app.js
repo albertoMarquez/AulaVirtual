@@ -365,7 +365,17 @@ app.post("/subirEjercicio", (request, response) =>{
 });
 
 
-
+function highlight(newElem, oldElem){ 
+    var oldText = oldElem,     
+        text = '';
+    newElem.split('').forEach(function(val, i){
+      if (val != oldText.charAt(i))
+        text += "<span class='highlight'>"+val+"</span>";  
+      else
+        text += val;            
+    });
+    return text; 
+  }
 
 
 app.get("/subirAlumno/:id/:idAlumno", (request, response) => {
@@ -394,7 +404,7 @@ app.get("/subirAlumno/:id/:idAlumno", (request, response) => {
                         }
                         if(res.ejAlumno){
                             sol.solucion = res.ejAlumno.solucion;
-                            sol.solucionProfe = res.ejAlumno.correccionProfesor;
+                           // sol.solucionProfe = res.ejAlumno.correccionProfesor;
                             sol.nota = res.ejAlumno.nota;
                           
                         }else{
@@ -402,7 +412,7 @@ app.get("/subirAlumno/:id/:idAlumno", (request, response) => {
                             sol.solucion = "";
                             sol.solucionProfe = ""; 
                         }
-                        response.render("subirAlumno", {data:sol});
+                       
                         daoE.scriptsPorID(data.idEjercicio, (err, res)=>{
                             if(err){
                                 console.log(err);
@@ -412,8 +422,14 @@ app.get("/subirAlumno/:id/:idAlumno", (request, response) => {
                                 datos.idEjercicio = data.idEjercicio;
                                 daoE.getUltimaEntrega(datos, (err, sol)=>{
                                     if(err){
-                                        console.log(err);
+                                       // console.log(err);
                                     }else{
+                                     //  console.log(sol);
+                                       var solucion = highlight(sol.comentarioProfe, sol.solAlumno);
+                                       sol.solucionProfe = solucion;
+                                      // console.log(solucion);
+                                       response.render("subirAlumno", {data:sol});
+                                       // console.log(res);
                                         //console.log(sol);
                                     }
                                 });
