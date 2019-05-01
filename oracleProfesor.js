@@ -199,6 +199,6 @@ async function altaUsuario(usuario, callback){
     callback(resultado);
   }
 module.exports = {
-  connectAlumno:connectAlumno,
+  //connectAlumno:connectAlumno,
   connectProfesor:connectProfesor
 }

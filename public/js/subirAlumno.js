@@ -48,7 +48,13 @@ $(document).ready(function() {
                 subirScriptAlumno(user, idEjercicio);
             });
             
-        });
+        }); 
+
+       // location.reload();
+       if($("#solProf").text() !== ""){
+            var s = $("#solProf").text();
+            $("#solProf").html(s);
+       }
 
     }else{
         var link = window.location.href;
