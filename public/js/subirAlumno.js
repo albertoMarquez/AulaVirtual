@@ -81,24 +81,24 @@ function crearAlumno(alumno, callback) {
 }
 
  //coge el numero de intentos totales de altaEjercicio
- function numeroDeIntentos(idEjercicio, callback){
-        let idEj = idEjercicio;
-        $.ajax({
-            method: "POST",
-            url: "/numeroDeIntentos",
-            data: JSON.stringify({idEjercicio: idEj}),
-            dataType:"JSON",
-            contentType: "application/json",
-            success: function(nIntentos){
-                //console.log(numeroDeIntentos);
-                callback(nIntentos);
-            },
-            error: function() {
-                alert("Error numeroDeIntentos");
-            } 
-        });
+function numeroDeIntentos(idEjercicio, callback){
+    let idEj = idEjercicio;
+    $.ajax({
+        method: "POST",
+        url: "/numeroDeIntentos",
+        data: JSON.stringify({idEjercicio: idEj}),
+        dataType:"JSON",
+        contentType: "application/json",
+        success: function(nIntentos){
+            //console.log(numeroDeIntentos);
+            callback(nIntentos);
+        },
+        error: function() {
+            alert("Error numeroDeIntentos");
+        } 
+    });
  }
- function subirScriptAlumno(user, idEjercicio){
+function subirScriptAlumno(user, idEjercicio){
     //alert("hola");
     let solucion = $("#solAlmun").val();
     let numOk = 0;//coger resultado de oracledb
@@ -114,8 +114,8 @@ function crearAlumno(alumno, callback) {
         //get intentos alumno, comparar y si es menor, sumar 1 y
         //actualizar tabla
         getIntentosAlumno(idEjercicio, idAlumno, (numIntentos)=>{
-           // console.log("numIntentos del alumno " + numIntentos.intentos);
-           // console.log("numTotales " + num);
+            // console.log("numIntentos del alumno " + numIntentos.intentos);
+            // console.log("numTotales " + num);
             if(/*numIntentos.intentos < num*/true){
                 let resultado = ""; //se tiene que coger del oracledb
                 let fechaActual = new Date();
@@ -160,7 +160,7 @@ function crearAlumno(alumno, callback) {
         });
 
     });
- }
+}
  
 function getIntentosAlumno(idEjercicio, idAlumno, callback){
     var sol = {};

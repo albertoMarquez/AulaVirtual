@@ -316,7 +316,7 @@ app.post("/subirEjercicio", (request, response) =>{
     data.titulo = request.body.titu;
     data.idProfesor = request.body.idProfesor;
     data.numScripts = request.body.scripts.length;
-    data.usuario= request.body.user;
+    data.usuario= request.body.usuario;
     //data.idAlumno =request.body.idProfesor;//casteo para tratar al alumno y al profesor en oracleProfesor
 
     daoE.createEjercicio(data, (err, id) =>{
@@ -336,17 +336,21 @@ app.post("/subirEjercicio", (request, response) =>{
                         }else{
                             if(op !== undefined){
                                 response.json(op);
-                                oracleProfesor.connectProfesor(op,undefined,(sol)=>{
-                                    daoE.solScripts(id,sol,(err, op)=>{
-                                        if(err){
-                                            response.status(400);
-                                            response.end();
-                                        }else {
-                                            if(op !== undefined){
-                                                response.status(201);
+                                console.log(data.usuario);
+                                let user = "p"+data.usuario+data.idProfesor.toString();
+                                oracleProfesor.altaUsuario(user,(resul)=>{
+                                    oracleProfesor.connectProfesor(op,user,(sol)=>{
+                                        daoE.solScripts(id,sol,(err, op)=>{
+                                            if(err){
+                                                response.status(400);
                                                 response.end();
+                                            }else {
+                                                if(op !== undefined){
+                                                    response.status(201);
+                                                    response.end();
+                                                }
                                             }
-                                        }
+                                        });
                                     });
                                 });
                                 response.status(201);
@@ -597,8 +601,8 @@ app.post("/numeroDeIntentos", (request, response)=>{
 app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
     //console.log("subirProcedimientoAlumno");
     //console.log(request.body);
-   //console.log("idEjercicio:");
-   //console.log(request.body.idEjercicio);
+    //console.log("idEjercicio:");
+    //console.log(request.body.idEjercicio);
     daoE.scriptsPorID(request.body.info.idEjercicio, (err, filas)=>{
         if(err){
             response.status(400);
@@ -643,7 +647,7 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
                     response.status(201);
                     response.end();
                 }/                    })*/
-           // });
+            // });
         }
     });
 });

@@ -33,14 +33,11 @@ $(document).ready(function() {
             $("#menu").load("menuAlumno.html");
         }
         console.log(user);
-    
-       
         $("#file-5").fileinput({
             uploadUrl: "/scripts",
             allowedFileExtensions: ["sql", "txt"],
             maxFileCount: 5
         });
-    
         $("#formInput").on("submit", function(e){
             e.preventDefault();
            // var formData = new FormData($(this).get(0)); // Creating a formData using the form.
@@ -107,36 +104,33 @@ function nuevoEjercicio(archivosTo64) {
     tablas = $('input[type=file]')[1].files[0];
     solucion = $('input[type=file]')[2].files[0];
     titulo = $('#tituloProblema').val();
-
     
-        getBase64(tablas).then(tablas =>{
-            var tablas64 = tablas;
-            getBase64(solucion).then(sol =>{
-                var solucion64 = sol;
-                getBase64(enun).then(data => {
-                    var enun64 = data;
-                    info = {scripts: archivosTo64, enun:enun64, tablas: tablas64, solucion: solucion64, titu:titulo, idProfesor:user.idProfesor};
-                    $.ajax({
-                        method: "POST",
-                        url: "/subirEjercicio",
-                        data: JSON.stringify(info),
-                        dataType:"JSON",
-                        contentType: "application/json",
-                        success: function() {
-                            alert("se ha subido correctamente el ejercicio");
-                            var link = window.location.href;
-                            var res = link.split("/");
-                            window.location = res[1] + "/principal.html";
-                        },
-                        error: function() {
-                            alert("Error al subir un nuevo ejercicio.");
-                        }  
-                    });
+    getBase64(tablas).then(tablas =>{
+        var tablas64 = tablas;
+        getBase64(solucion).then(sol =>{
+            var solucion64 = sol;
+            getBase64(enun).then(data => {
+                var enun64 = data;
+                info = {scripts: archivosTo64, enun:enun64, tablas: tablas64, solucion: solucion64, titu:titulo, idProfesor:user.idProfesor, usuario:user.nombre};
+                $.ajax({
+                    method: "POST",
+                    url: "/subirEjercicio",
+                    data: JSON.stringify(info),
+                    dataType:"JSON",
+                    contentType: "application/json",
+                    success: function() {
+                        alert("se ha subido correctamente el ejercicio");
+                        var link = window.location.href;
+                        var res = link.split("/");
+                        window.location = res[1] + "/principal.html";
+                    },
+                    error: function() {
+                        alert("Error al subir un nuevo ejercicio.");
+                    }  
                 });
-                
             });
-        }
-    );   
+        });
+    });   
 }
 
 
