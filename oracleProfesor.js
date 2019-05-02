@@ -44,13 +44,16 @@ async function altaUsuario(usuario, callback){
           return;
         }else{
           connection.execute("begin ALTA_USUARIO(:user); end;",
-          {user:usuario}, function(err, sol){
+          {user:usuario}, async function(err, sol){
             sol = false;
             if(err){
+              console.log("err en altu usuario"+err);
+              await connection.close();
               callback(err, sol);
               return;
             }else{
               sol = true;
+              await connection.close();
               console.log("sol en altu usuario"+sol);
               callback(undefined, sol);
               return;
@@ -128,18 +131,21 @@ async function createTables(connection,sql) {
   //console.log(sql);
   for( i=0; i<sql.length-1;i++){
     aux = sql[i];
-    //////////////////////////////////////ELIMINAR LOS DROP DEL ARCHIVO
-    if(aux.indexOf("drop") > -1){
-      aux = '';//"BEGIN EXECUTE IMMEDIATE '"+sql[i]+"'; EXCEPTION WHEN OTHERS THEN IF SQLCODE NOT IN (-00942) THEN RAISE; END IF; END;";
+    auxx = aux.split(" ");
+    console.log((auxx[0]==="DROP")||(auxx[0]==="drop"));
+    console.log(auxx[0]);
+    if((auxx[0]==="DROP")||(auxx[0]==="drop")){
+      console.log("if\n"+aux);
+    }else{
+      console.log("else\n"+aux);
+      await connection.execute(aux);
     }
-    console.log(aux);
-    await connection.execute(aux);
   }
 }
 
 async function createProcedure(connection,sql){
   //var sq = sql.replace(/\r|\n|\t|#|COMMIT;|/g, '');
-  console.log(sql);
+  //console.log(sql);
   try{
     await connection.execute(sql);
   }catch(err){
@@ -154,14 +160,13 @@ async function callProcedures(connection, sql,callback){
     console.log(sql[i].toString());
     sq = sql[i].toString();
     await connection.execute(sq);
-    resultado[i-2] = fs.readFileSync('C:/tmp/resultado.log');
+    resultado[i-2] = fs.readFileSync('C:/tmp/PROC_alumno.log');
     //console.log(resultado[i-2].toString());
   }
   callback(resultado);
 }
 
 module.exports = {
-  //connectAlumno:connectAlumno,
   connectProfesor:connectProfesor,
   altaUsuario:altaUsuario
 }

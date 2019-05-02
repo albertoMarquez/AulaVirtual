@@ -337,7 +337,7 @@ app.post("/subirEjercicio", (request, response) =>{
                             if(op !== undefined){
                                 response.json(op);
                                 console.log(data.usuario);
-                                let user = "p"+data.usuario+data.idProfesor.toString();
+                                let user = "P"+data.usuario.toUpperCase()+data.idProfesor.toString();
                                 oracleProfesor.altaUsuario(user,(resul)=>{
                                     oracleProfesor.connectProfesor(op,user,(sol)=>{
                                         daoE.solScripts(id,sol,(err, op)=>{

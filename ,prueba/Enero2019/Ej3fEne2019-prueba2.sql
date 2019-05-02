@@ -31,11 +31,11 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('-- por consola sea idéntica a la esperada para confirmar que el resultado');
     DBMS_OUTPUT.PUT_LINE('-- final es correcto.');
   END IF;
-  write_log('PROC_alumno.log');
+  SYS.write_log('PROC_alumno.log');
 EXCEPTION
   WHEN OTHERS THEN
     DBMS_OUTPUT.PUT_LINE('ERROR: SE HA PRODUCIDO UNA EXCEPCION NO CAPTURADA: ' || SQLCODE || ' - ' || SQLERRM);   
-    write_log('PROC_alumno.log');
+    SYS.write_log('PROC_alumno.log');
 END;
 
 

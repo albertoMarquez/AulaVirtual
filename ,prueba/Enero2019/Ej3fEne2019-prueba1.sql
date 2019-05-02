@@ -48,27 +48,9 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('-- por consola sea idéntica a la esperada para confirmar que el resultado');
     DBMS_OUTPUT.PUT_LINE('-- final es correcto.');
   END IF;
-  write_log('PROC_alumno.log');
+  SYS.write_log('PROC_alumno.log');
 EXCEPTION
   WHEN OTHERS THEN
     DBMS_OUTPUT.PUT_LINE('ERROR: SE HA PRODUCIDO UNA EXCEPCION NO CAPTURADA: ' || SQLCODE || ' - ' || SQLERRM);   
-    write_log('PROC_alumno.log');
+    SYS.write_log('PROC_alumno.log');
 END;
-
-
-
-create or replace PROCEDURE write_log (p_file VARCHAR2) AS
-    l_line VARCHAR2(255);
-    l_done NUMBER;
-    l_file utl_file.file_type;
-BEGIN
-    l_file := utl_file.fopen('TMP', p_file, 'A');
-    LOOP
-        EXIT WHEN l_done = 1;
-       dbms_output.get_line(l_line, l_done);
-       utl_file.put_line(l_file, l_line);
-    END LOOP;
-    utl_file.fflush(l_file);
-    utl_file.fclose(l_file);
-END write_log;
-
