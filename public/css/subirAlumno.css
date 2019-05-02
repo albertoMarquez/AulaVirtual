@@ -5,6 +5,11 @@ textarea{
     resize:none;
 }
 
+.tfield span {
+    display: initial;
+    color: black;
+}
+
 #boton{
     display: flex;
     justify-content: center;
@@ -29,6 +34,10 @@ textarea{
     justify-content: center;
 }
 
+#solProf{
+    margin: 25px;
+}
+
 #enunciadoText{
     font-size: 16px;
     padding-right: 12px;
@@ -49,5 +58,11 @@ textarea{
 }
 
 .highlight{
-    background-color: rgb(118, 228, 160);
+    background-color: rgb(188, 208, 85);
+    color: black;
+}
+
+#comentarioProfesor{
+    overflow-y: scroll;
+    height: 519px;
 }

@@ -7,6 +7,8 @@ const oracleAlumno = require("./oracleAlumno");
 const config = require("./config");
 const bodyParser = require("body-parser");
 
+const diff = require("diff");
+
 const daoUser = require("./daos/daoUser");
 const daoEjer = require("./daos/daoEjercicio");
 const daoAsig = require("./daos/daoAsignatura");
@@ -366,16 +368,40 @@ app.post("/subirEjercicio", (request, response) =>{
 
 
 function highlight(newElem, oldElem){ 
-    var oldText = oldElem,     
-        text = '';
-    newElem.split('').forEach(function(val, i){
-      if (val != oldText.charAt(i))
-        text += "<span class='highlight'>"+val+"</span>";  
-      else
-        text += val;            
-    });
-    return text; 
-  }
+
+    var text = "";
+    if(newElem === undefined || oldElem === undefined){
+        text = "<span>No tienes comentarios</span>";
+    }else{
+        var d = diff.diffWordsWithSpace(oldElem, newElem);
+        d.forEach(elem =>{
+         
+            if(elem.value === '\n' || elem.value === '\r\n' || elem.value === '\r\n \r\n' || 
+            elem.value === '\r\n  ' || elem.value === '\n \n' || elem.value === '\n    ' ||
+            elem.value === '\r\n    ' || elem.value === '\n  ' || elem.value === '\n  ' || 
+            elem.value === '\r\n  ' || elem.value === '\r\n\r\n' || elem.value === '\n \n  ' ||
+            elem.value === '\n  \n    ' || elem.value === '\r\n       \t' || elem.value === '\r\n            ' ||
+            elem.value === '\n\n    '){
+                text += "<br>";
+            }
+            else{
+                if(elem.added === undefined && elem.removed === undefined){
+                    text += "<span>" + elem.value + "</span>";
+                }else{
+                    if(elem.added === true){
+                        text += "<span class='highlight'>" + elem.value + "</span>";
+                        if(elem.value.indexOf('\n') !== -1){
+                            text += "<br>";
+                        }
+                    }
+                }
+            }
+        });
+    }
+   
+
+   return text;
+}
 
 
 app.get("/subirAlumno/:id/:idAlumno", (request, response) => {
@@ -395,22 +421,22 @@ app.get("/subirAlumno/:id/:idAlumno", (request, response) => {
                     }else{
                         var hoy = new Date();
                         console.log(`infoAlta ${infoAlta}`);
-                        var sol = {};
-                        sol.titulo = res.ejercicio.titulo;
-                        sol.enun = res.ejercicio.enunciado;
-                        sol.retrasada = "NO";
+                        var infoRender = {};
+                        infoRender.titulo = res.ejercicio.titulo;
+                        infoRender.enun = res.ejercicio.enunciado;
+                        infoRender.retrasada = "NO";
                         if(hoy > infoAlta){
-                            sol.retrasada = "SI";
+                            infoRender.retrasada = "SI";
                         }
                         if(res.ejAlumno){
-                            sol.solucion = res.ejAlumno.solucion;
+                            infoRender.solucion = res.ejAlumno.solucion;
                            // sol.solucionProfe = res.ejAlumno.correccionProfesor;
-                            sol.nota = res.ejAlumno.nota;
+                            infoRender.nota = res.ejAlumno.nota;
                           
                         }else{
-                            sol.nota = " -";
-                            sol.solucion = "";
-                            sol.solucionProfe = ""; 
+                            infoRender.nota = " -";
+                            infoRender.solucion = "";
+                            infoRender.solucionProfe = ""; 
                         }
                        
                         daoE.scriptsPorID(data.idEjercicio, (err, res)=>{
@@ -424,13 +450,14 @@ app.get("/subirAlumno/:id/:idAlumno", (request, response) => {
                                     if(err){
                                        // console.log(err);
                                     }else{
-                                     //  console.log(sol);
-                                       var solucion = highlight(sol.comentarioProfe, sol.solAlumno);
-                                       sol.solucionProfe = solucion;
-                                      // console.log(solucion);
-                                       response.render("subirAlumno", {data:sol});
-                                       // console.log(res);
-                                        //console.log(sol);
+                                        var solucion = "<span>No tienes comentarios</span>";
+                                        if(sol !== undefined){
+                                            solucion = highlight(sol.comentarioProfe, sol.solAlumno);
+                                        }
+                                       
+                                       infoRender.solucionProfe = solucion;
+                                       console.log(infoRender);
+                                       response.render("subirAlumno", {data:infoRender});
                                     }
                                 });
                                 
