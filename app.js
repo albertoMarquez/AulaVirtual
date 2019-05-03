@@ -524,7 +524,7 @@ app.post("/crearAsignatura",(request, response) =>{
 });
 
 app.post("/cargarAsignaturas",(request, response) =>{
-    daoU.cargarAsignaturas(request.body,(err, op) =>{
+    daoU.cargarAsignaturas((err, op) =>{
         if (err){
             response.status(400); //mal introducido
             response.end();

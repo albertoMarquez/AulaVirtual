@@ -82,7 +82,7 @@ class DAOUsers {
         });
     }
     
-    cargarAsignaturas(datos, callback){ 
+    cargarAsignaturas(callback){ 
         //console.log( "dao"+datos.idProfesor);
         this.pool.getConnection((err, con) =>{
             if(err){

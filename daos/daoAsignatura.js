@@ -52,6 +52,7 @@ class DAOAsignatura {
                         var sol = [];
 
                         filas.forEach(e =>{
+                            row.anio = e.anio;
                             row.curso = e.curso;
                             row.idGrupo = e.idGrupo;
                             row.grupo = e.grupo;

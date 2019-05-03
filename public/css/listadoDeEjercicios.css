@@ -1,0 +1,12 @@
+#form{
+    padding: 25px;
+}
+
+#formAnioAsignatura{
+    display: flex;
+    justify-content: space-around;
+}
+
+#tabla{
+    padding: 25px;
+}
