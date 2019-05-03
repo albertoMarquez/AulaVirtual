@@ -103,10 +103,9 @@ async function run(sql,user,callback){//sql tiene la cracion de las tablas, el p
         else{
           await createTables(connection,sql[0]);
           await createProcedure(connection,sql[1]);
-          await callProcedures(connection,sql,(sol)=>{
+          await callProcedures(connection,sql,user,(sol)=>{
             callback(sol);
           });
-          //callback(undefined);
         }
       }
     );      
@@ -126,18 +125,18 @@ async function run(sql,user,callback){//sql tiene la cracion de las tablas, el p
 async function createTables(connection,sql) {
   sql = sql.replace(/\r|\n|\t|#|COMMIT;|/g, '');
   sql=sql.split(";");
-  console.log(sql);
+  //console.log(sql);
   var i, aux;
   //console.log(sql);
   for( i=0; i<sql.length-1;i++){
     aux = sql[i];
     auxx = aux.split(" ");
-    console.log((auxx[0]==="DROP")||(auxx[0]==="drop"));
-    console.log(auxx[0]);
+    //console.log((auxx[0]==="DROP")||(auxx[0]==="drop"));
+    //console.log(auxx[0]);
     if((auxx[0]==="DROP")||(auxx[0]==="drop")){
-      console.log("if\n"+aux);
+      //console.log("if\n"+aux);
     }else{
-      console.log("else\n"+aux);
+      //console.log("else\n"+aux);
       await connection.execute(aux);
     }
   }
@@ -153,15 +152,16 @@ async function createProcedure(connection,sql){
   }
 }
 
-async function callProcedures(connection, sql,callback){
+async function callProcedures(connection, sql,user,callback){
   let resultado = [];
   let sq;
-  for(let i = 2; i < sql.length; i++){
-    console.log(sql[i].toString());
+  for(let i = 2; i < sql.length; i++){//Las dos primeras posiciones del array son las tablas y el procedimiento
+    console.log(sql[i]);
+    sql[i] = sql[i].replace(/PROC_alumno/gi,user);
     sq = sql[i].toString();
+    console.log(sq);
     await connection.execute(sq);
-    resultado[i-2] = fs.readFileSync('C:/tmp/PROC_alumno.log');
-    //console.log(resultado[i-2].toString());
+    resultado[i-2] = fs.readFileSync('C:/tmp/'+user+'.log');
   }
   callback(resultado);
 }
