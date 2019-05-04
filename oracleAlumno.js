@@ -47,7 +47,7 @@ async function comprobarProcedimineto(tablas, user,solucion,sql, callback){//sql
     //console.log("scripts:"+sql);
     console.log("user:"+user);
     console.log("solucion:\n"+solucion);
-    //console.log("tablas");
+    console.log("tablas");
     //console.log(tablas);
     try {
       conection = await oracledb.getConnection({
