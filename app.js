@@ -420,7 +420,7 @@ app.get("/subirAlumno/:id/:idAlumno", (request, response) => {
                         alert(err);
                     }else{
                         var hoy = new Date();
-                        console.log(`infoAlta ${infoAlta}`);
+                        //console.log(`infoAlta ${infoAlta}`);
                         var infoRender = {};
                         infoRender.titulo = res.ejercicio.titulo;
                         infoRender.enun = res.ejercicio.enunciado;
@@ -456,7 +456,7 @@ app.get("/subirAlumno/:id/:idAlumno", (request, response) => {
                                         }
                                        
                                        infoRender.solucionProfe = solucion;
-                                       console.log(infoRender);
+                                       //console.log(infoRender);
                                        response.render("subirAlumno", {data:infoRender});
                                     }
                                 });
@@ -674,7 +674,9 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
                             response.end();
                         }else{
                             //oracleAlumno.disconnect(conection);
-                            console.log(resultado);
+                            for(let i=0; i< resultado.length;i++)
+                                resultado[i]=resultado[i].toString();
+                            response.json(resultado);
                             response.status(201);
                             response.end();
                         }
@@ -706,18 +708,17 @@ app.post("/crearAlumno", (request, response)=>{
     //console.log("crearAlumno");
     //console.log(request.body);
 
-        oracleProfesor.connect(undefined,request.body,(err,sol) =>{
-            if(sol){
-                //console.log(sol);
-                response.status(201);
-                response.end();
-            }else{
-                console.log(err);
-                response.status(400);
-                response.end();
-            }
-        });
-  
+    oracleProfesor.altaUsuario(request.body.usuario,(err,sol) =>{
+        if(sol){
+            console.log(sol);
+            response.status(201);
+            response.end();
+        }else{
+            console.log(err);
+            response.status(400);
+            response.end();
+        }
+    });
 });
 
 app.listen(config.port, function(err) {

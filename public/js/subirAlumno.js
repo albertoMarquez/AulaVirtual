@@ -64,29 +64,23 @@ $(document).ready(function() {
  });
 
 function crearAlumno(alumno, callback) {
-    let alumnoAux={};
-    alumnoAux.nombre= alumno.nombre.toUpperCase();
-    //console.log(alumnoAux.nombre);
-    alumnoAux.idAlumno= alumno.idAlumno;
-    alumnoAux.usuario = alumno.user;
-    //console.log(alumnoAux);
+    let user = alumno.nombre.toUpperCase() + alumno.idAlumno.toString();
+    console.log("usuario "+user);
     $.ajax({
         method: "POST",
         url: "/crearAlumno",
         contentType: "application/json",
-        data: JSON.stringify({alumnoAux:alumnoAux}),
+        data: JSON.stringify({usuario:user}),
         success: function() {
-            //alert("Alumno creado correctamente.");
             callback(undefined);
         },
         error: function() {
             alert("Error al crear el alumno ORACLEDB.");
-            callback(err);
+            callback(undefined);//cambiar
         }
     })
 }
-
- //coge el numero de intentos totales de altaEjercicio
+//coge el numero de intentos totales de altaEjercicio
 function numeroDeIntentos(idEjercicio, callback){
     let idEj = idEjercicio;
     $.ajax({
@@ -117,8 +111,7 @@ function subirScriptAlumno(user, idEjercicio){
     let idGrupo = user.idGrupo;
     let intentos = 0;
     numeroDeIntentos(idEjercicio, (num)=>{
-        //get intentos alumno, comparar y si es menor, sumar 1 y
-        //actualizar tabla
+        //get intentos alumno, comparar y si es menor, sumar 1 y actualizar tabla
         getIntentosAlumno(idEjercicio, idAlumno, (numIntentos)=>{
             // console.log("numIntentos del alumno " + numIntentos.intentos);
             // console.log("numTotales " + num);
@@ -150,9 +143,14 @@ function subirScriptAlumno(user, idEjercicio){
                         data:JSON.stringify({info:info}),
                         url: "/ejecutarProcedimientoAlumno",
                         contentType: "application/json",
-                        success: function(){
-                            //alert("el procedimiento del alumno se ha ejecutado correctamente");                            
-                            location.reload();
+                        success: function(data){
+                            //alert("el procedimiento del alumno se ha ejecutado correctamente"); 
+                            //data = JSON.parse(data);
+                            console.log(data);
+                            data.forEach(e => {
+                                console.log(e.toString());
+                            });                     
+                            //location.reload();
                         },
                         error: function(){
                             alert("error en ejecutar el procedimiento del alumno");

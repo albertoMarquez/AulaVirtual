@@ -6,28 +6,8 @@ oracledb.autoCommit= true;
 //https://github.com/oracle/node-oracledb/blob/master/examples/example.js
 //https://oracle.github.io/node-oracledb/
 //NO BORRAR REFERENCIA POR AHORA
-/*async function createUser(nombre,id,callback){//sql son los scripts de prueba
-  try{
-    //ADAPTAR EL CODIGO PARA QUE COJA LOS DATOS CON LOS MISMOS NOMBRES!!!!!!!!!!!!!
-    //datos = datos.alumnoAux;
-    
-    console.log(user);
-    await altaUsuario(user,(err, sol) =>{
-      console.log("User creado"); 
-      if(err){
-        callback(err, undefined);
-        return;
-      }else{
-        callback(undefined, user);
-        return;
-      }        
-    });
-  }catch(err){
-    console.error('createUser() error: ' + err.message);
-  }
-}*/
 async function altaUsuario(usuario, callback){
-  console.log("altaUsuario :"+usuario);
+  //console.log("altaUsuario :"+usuario);
   let connection;
   try {
     connection = await oracledb.getConnection(
@@ -47,14 +27,14 @@ async function altaUsuario(usuario, callback){
           {user:usuario}, async function(err, sol){
             sol = false;
             if(err){
-              console.log("err en altu usuario"+err);
+              console.log("err en alta usuario"+err);
               await connection.close();
               callback(err, sol);
               return;
             }else{
               sol = true;
               await connection.close();
-              console.log("sol en altu usuario"+sol);
+              //console.log("sol en altu usuario"+sol);
               callback(undefined, sol);
               return;
             }
@@ -208,3 +188,23 @@ module.exports = {
 /*process
   .on('SIGTERM', closePoolAndExit)
   .on('SIGINT',  closePoolAndExit)*/
+  /*async function createUser(nombre,id,callback){//sql son los scripts de prueba
+  try{
+    //ADAPTAR EL CODIGO PARA QUE COJA LOS DATOS CON LOS MISMOS NOMBRES!!!!!!!!!!!!!
+    //datos = datos.alumnoAux;
+    
+    console.log(user);
+    await altaUsuario(user,(err, sol) =>{
+      console.log("User creado"); 
+      if(err){
+        callback(err, undefined);
+        return;
+      }else{
+        callback(undefined, user);
+        return;
+      }        
+    });
+  }catch(err){
+    console.error('createUser() error: ' + err.message);
+  }
+}*/

@@ -1,34 +1,12 @@
--- -------------------------------------------------------------
--- Bases de Datos.  Examen de enero de 2019. Ejercicio 3f.
--- -------------------------------------------------------------
-
---ALTER SESSION SET nls_date_format='DD/MM/YYYY';
-
--- f. (2 puntos) Escribe un procedimiento almacenado que reciba como
--- parametro una puerta de acceso. Por cada taquilla de esa puerta de
--- acceso se mostrara por pantalla el DNI de todos los clientes que
--- compraron tickets, la cantidad de tickets que compraron y la suma
--- de sus precios. Para cada taquilla, se mostrara un resumen con el
--- numero total de tickets vendidos y la suma de sus precios por
--- taquilla, y se actualizara el campo ventas de cada taquilla con
--- este total. Se emitira una excepcion si no hay entradas vendidas
--- para la puerta recibida por parametro. Si la puerta no existe se
--- emitira otra excepcion indicandolo. Escribe como habilitar la
--- salida por pantalla y la llamada a este procedimiento con una
--- puerta en concreto.
-
 CREATE OR REPLACE PROCEDURE ventas_por_puerta(p_puerta accesos.puerta%TYPE) AS
--- cursor para recorrer las taquillas de la puerta p_puerta.
+
 CURSOR c_taquillas IS
   SELECT taquilla
   FROM taquillas
   WHERE puerta=p_puerta;
- 
--- Cursor para recorrer los clientes que han comprado en v_taquilla.
--- Se puede utilizar un parametro en un cursor para proporcionar la
--- taquilla que debe recorrerse, pero nosotros utilizaremos directamente
--- una variable local v_taquilla.
+
 v_taquilla taquillas.taquilla%TYPE;
+
 CURSOR c_clientes IS
   SELECT DNIcliente, SUM(precio) AS importe, COUNT(*) AS tickets
   FROM tickets JOIN taquillas USING (taquilla)
@@ -43,7 +21,6 @@ v_puerta_ventas NUMBER(8,2) := 0;
 e_sin_venta EXCEPTION;
  
 BEGIN
-  -- Comprobacion de que la puerta existe en la BD
   SELECT 0 INTO v_existe_puerta FROM accesos WHERE puerta=p_puerta;
  
   FOR r_taquilla IN c_taquillas LOOP

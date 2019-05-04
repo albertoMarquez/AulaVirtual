@@ -136,7 +136,7 @@ class DAOEjercicio {
             }else{                
                 var sql = '';
                 sql += "UPDATE scriptspruebas SET solucionPrueba = CASE idPrueba";
-                console.log(datos.length);
+                //console.log(datos.length);
                 for (let i = 0; i < datos.length; i++) {
                     sql+= " WHEN "+(i+1)+" THEN '"+datos[i].toString()+"'";
                 }
