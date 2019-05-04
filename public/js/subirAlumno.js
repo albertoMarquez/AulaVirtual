@@ -143,17 +143,23 @@ function subirScriptAlumno(user, idEjercicio){
                         data:JSON.stringify({info:info}),
                         url: "/ejecutarProcedimientoAlumno",
                         contentType: "application/json",
-                        success: function(data){
+                        success: function(resultado){
                             //alert("el procedimiento del alumno se ha ejecutado correctamente"); 
                             //data = JSON.parse(data);
-                            console.log(data);
-                            data.forEach(e => {
+                            //console.log(resultado);
+                            resultado.forEach(e => {
                                 console.log(e.toString());
                             });                     
                             //location.reload();
                         },
-                        error: function(){
-                            alert("error en ejecutar el procedimiento del alumno");
+                        error: function(error){
+                            if(!error.responseJSON.oracle){
+                                //error de los demas
+                            }else{
+                                //error que le ha dado al alumno de oracle
+                                console.log(error.responseJSON.oracle);
+                                //alert("error en ejecutar el procedimiento del alumno");
+                            }
                         }
                     })
                 });

@@ -23,7 +23,7 @@ async function connect(tablas,sql,datos, callback){
         //allErr=allErr+err;
         //console.log("comprobarProcedimineto:"+conection);
         //console.log("comprobarProcedimineto:"+allErr);
-        callback(err, sol);
+        callback(err, undefined);
         return;
       }else{
         //console.log("comprobarProcedimineto:\n"+sol);
@@ -62,12 +62,12 @@ async function comprobarProcedimineto(tablas, user,solucion,sql, callback){//sql
         await createTables(conection,tablas);
         await almacenarProcedimineto(conection,solucion);
         //console.log("entre almacenar y corregir"+allErr);
-        await corregirProcedimiento(user,conection,sql, async function (err, sol){//sql son los scripts para comprobar la solucion
-          if(err){
+        await corregirProcedimiento(user,conection,sql, async function (sol){//sql son los scripts para comprobar la solucion
+          if(allErr){
             //allErr=allErr+err;
             //console.log("corregirProcedimiento:"+allErr);
             //console.log(conection);
-            callback(allErr, undefined);
+            callback(allErr, undefined);//err===allErr
           }else{
             //console.log(conection);
             callback(undefined, sol);
@@ -110,8 +110,9 @@ async function createTables(connection,sql) {
       }
     }
   }catch(err){
+    //await connection.close();
     console.log("err al crear las tablas\n"+err);
-    allErr = allErr + "\nError al crear las tablas" + JSON.stringify(err);
+    //allErr = allErr + "\nError al crear las tablas\n" + JSON.stringify(err);
   }
 }
 
@@ -120,11 +121,11 @@ async function almacenarProcedimineto(conection,solucion){
   try {
     await conection.execute(solucion);
   } catch (err) {
-    let er =await conection.close();
-    if(er)
-      console.log("\nNo se pudo cerrar la conexion: " +er);
-    else
-      allErr = allErr + "\nError al almacenar el procedimineto: " + err + JSON.stringify(err);
+    //let er =await conection.close();
+    /*if(err)
+      console.log("\nNo se pudo cerrar la conexion:\n" +er);
+    else*/
+      allErr =  "\nError al almacenar el procedimineto:\n" + err + JSON.stringify(err);
     //console.log(err+JSON.stringify(err));
   }
 }
@@ -138,18 +139,20 @@ async function corregirProcedimiento(user,connection, sql,callback){
       //console.log(sql[i]);
       sql[i] = sql[i].replace(/PROC_alumno/gi,user);
       sq = sql[i].toString();
-      //console.log(sq);
-      /*errorScript =  */await connection.execute(sq);////CONCATENAR LOS ERRORES DE CADA SCRIPT!!!!      resultado[i-2] = fs.readFileSync('C:/tmp/'+user+'.log');
+      await connection.execute(sq);////CONCATENAR LOS ERRORES DE CADA SCRIPT!!!!      
       resultado[i] = fs.readFileSync('C:/tmp/'+user+'.log');
       //console.log(resultado[i].toString());
     }
   } catch (err) {
-    allErr = allErr + "\nError al corregir procedimiento" +  err + JSON.stringify(err);
-    console.log("corregirProcedimiento:"+allErr);
+    /*if(!allErr){
+      allErr = allErr + "\nError al corregir procedimiento" +  err + JSON.stringify(err);
+      console.log("corregirProcedimiento:"+allErr);
+    }*/
+    console.log("corregirProcedimiento:"+err);
   }
   await connection.close();
   //console.log("corregirProcedimiento:"+allErr);
-  callback(allErr,resultado);
+  callback(resultado);
 }
 module.exports = {
   connect:connect

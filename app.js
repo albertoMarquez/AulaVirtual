@@ -688,11 +688,18 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
                 }else{
                     oracleAlumno.connect(sol,scripts,request.body.info,(err, resultado)=>{
                         //console.log(conection);
+                       // console.log("error \n" + err);
+                        //console.log("res \n" + resultado);
                         if(err){
                             //oracleAlumno.disconnect(conection);
-                            console.log(err);
+                           // console.log(err);
+                            var error={};
+                            error.oracle = err;
+                            //console.log("error \n" + error.oracle);
                             //console.log("APP connect allError:"+err);
-                            response.status(400);
+                            //response.json(error);
+                            response.send(400, error);
+                           // response.status(400);
                             response.end();
                         }else{
                             //oracleAlumno.disconnect(conection);

@@ -28,7 +28,7 @@ BEGIN
 
   IF v_numAvisos = 0 THEN
     DBMS_OUTPUT.PUT_LINE('-- Las comprobaciones de prueba son correctas, pero comprueba que la salida ');
-    DBMS_OUTPUT.PUT_LINE('-- por consola sea idéntica a la esperada para confirmar que el resultado');
+    DBMS_OUTPUT.PUT_LINE('-- por consola sea identica a la esperada para confirmar que el resultado');
     DBMS_OUTPUT.PUT_LINE('-- final es correcto.');
   END IF;
   SYS.write_log('PROC_alumno.log');
