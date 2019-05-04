@@ -403,6 +403,27 @@ function highlight(newElem, oldElem){
    return text;
 }
 
+app.get("/getTablaEjerciciosAtrasados", (request, response) =>{
+
+   // console.log(request.query);
+
+    daoE.cargarEjerciciosAtrasados(request.query, (err, sol)=>{
+
+        if(err){
+            response.status(400);
+            response.end();
+        }else{
+          // console.log(sol);
+            response.json(sol);
+            response.status(200);
+            response.end();
+        }
+
+    });
+
+
+})
+
 
 app.get("/subirAlumno/:id/:idAlumno", (request, response) => {
     var data = {};
@@ -550,6 +571,7 @@ app.post("/eliminarAsignatura",(request, response) =>{
         }
     });
 });
+
 app.get("/evaluaAlumno", (request, response)=>{
    
     daoU.evaluaAlumno(request.query.id, (err, filas)=>{

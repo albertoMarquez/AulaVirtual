@@ -60,7 +60,7 @@ $(document).ready(function() {
                $('#tablaA').on('click', 'tbody tr', function(){
                   // console.log('TR cell textContent : ', this);
                     var data = table.row( this ).data();
-                    console.log(data);
+                    //console.log(data);
                     abrirModal(data);
                });
             },
