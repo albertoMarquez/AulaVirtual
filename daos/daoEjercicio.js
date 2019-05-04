@@ -95,6 +95,7 @@ class DAOEjercicio {
             }
         });
     }
+
     descargarProfesor(datos, callback){
         console.log(datos);
         this.pool.getConnection((err, con) =>{
@@ -488,6 +489,39 @@ class DAOEjercicio {
                             sol = filas[0]
                         }
                        
+                        callback(undefined, sol);
+                    }
+                });
+                con.release();
+            }
+        })
+    }
+
+    cargarEjerciciosAtrasados(datos, callback){
+        this.pool.getConnection((err, con)=>{
+            if(err){
+                callback(err);
+            }else{
+                var sql = `select * from (select e.fecha, e.titulo, p.idProfesor, e.idEjercicio, p.nombre from ejercicio e inner join profesor p on e.idProfesor = p.idProfesor) a inner join (
+                    select g.idGrupo, pg.idProfesor from profegrupo pg inner join grupos g on g.idGrupo = pg.idGrupo and g.idAsignatura = ? and g.anio = ?) b
+                    on a.idProfesor = b.idProfesor GROUP by idEjercicio`;
+                con.query(sql, [datos.idA, datos.anio], (err, filas)=>{
+                    if(err){
+                        callback(err, undefined);
+                    }else{
+
+                        var sol = [];
+                        var row = {};
+
+                        filas.forEach(e=>{
+                            row.titulo = e.titulo;
+                            row.autor = e.nombre;
+                            row.fecha = e.fecha;
+                            row.idEj = e.idEjercicio;
+                            sol.push(row);
+                            row = {};
+                        });
+
                         callback(undefined, sol);
                     }
                 });

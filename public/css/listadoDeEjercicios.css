@@ -10,3 +10,8 @@
 #tabla{
     padding: 25px;
 }
+
+tbody tr:hover{
+    cursor: pointer;
+    background-color: green !important;
+}

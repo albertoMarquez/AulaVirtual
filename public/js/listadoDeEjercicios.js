@@ -1,3 +1,4 @@
+var user;
 $(document).ready(function() {
     $("#cabecera").load("cabecera.html",function(responseTxt, statusTxt, xhr){
         if(statusTxt == "success"){
@@ -12,10 +13,9 @@ $(document).ready(function() {
     });
     var options={}
     $.galleta(options);
-    var user = $.galleta().getc("usuario");
+    user = $.galleta().getc("usuario");
     if(user !== "undefined"){
         user = JSON.parse(user);
-
     
         if( user.user.localeCompare("profesor")===0){
             $("#menu").load("menuProfesor.html");
@@ -25,12 +25,22 @@ $(document).ready(function() {
        
 
         listarAsignaturas();
+        let valAsig;
 
         $('#asig').on('change', function() {
-            let valor = $(this).find(':selected').data('idAsig');
+            valAsig = $(this).find(':selected').data('idAsig');
             //console.log(valor);
-            listarAnios(valor);
+            listarAnios(valAsig);
         });
+
+        $("#anioSelect").on('change', function(){
+            let valor = $(this).find(':selected').text();
+            let anio = valor.split("/");
+            cargarTablaEjercicios(valAsig, anio[0]);
+        });
+
+        $("#asig").val('0');
+        $("#anioSelect").val('0');
 
         
     }else{
@@ -98,7 +108,7 @@ function listarAnios(id){
             var cont = 1;
             unique.forEach(e => {
              var elem = $(".templateAnio").clone();
-             elem.text(e);
+             elem.text(`${e}/${e+1}`);
              //elem.data("idAsig", e.id);
              elem.removeClass("hidden");
              elem.removeClass("templateAnio");
@@ -116,4 +126,52 @@ function listarAnios(id){
 
 
     });
+}
+
+function parserFecha(f){
+    var fecha = new Date(f);
+    fecha = `${fecha.getDate()}-${fecha.getMonth() + 1}-${fecha.getFullYear()}`;
+    return fecha;
+}
+
+function cargarTablaEjercicios(idAsignatura, textAnio){
+
+    $.ajax({
+        method: "GET",
+        url: "/getTablaEjerciciosAtrasados",
+        contentType: "application/json",
+        data:{idA:idAsignatura, anio:textAnio},
+        success: function(data) {
+            data.forEach(e=>{
+                var elem = $("#template").clone();
+                elem.find("#titulo").text(e.titulo);
+                elem.find("#autor").text(e.autor);
+                elem.find("#id").text(e.idEj);
+                elem.find("#fecha").text(parserFecha(e.fecha));
+                elem.removeClass("hidden");
+                elem.removeAttr("id", "template");
+                elem.attr("class", "elem");
+                //elem.data("idEj", e.idEj);
+                $("#template").before(elem);
+           });
+           var table = $('#tablaDeEjercicios').DataTable();
+           
+           $('.dataTables_length').addClass('bs-select');
+
+           $('#tablaDeEjercicios').on('click', 'tbody tr', function(){
+              var data = table.row(this).data();
+              
+              console.log(data);
+              var link = window.location.href;
+              var res = link.split("/");
+              window.location = res[1] + "/" + "subirAlumno/" + Number(data[3]) + "/" + user.idAlumno;
+             
+         });
+
+        },
+        error: function(){
+            alert("Error al cargar los ejercicios de años anteriores");
+        }
+    })
+
 }
