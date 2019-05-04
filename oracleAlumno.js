@@ -62,7 +62,7 @@ async function comprobarProcedimineto(tablas, user,solucion,sql, callback){//sql
         await createTables(conection,tablas);
         await almacenarProcedimineto(conection,solucion);
         //console.log("entre almacenar y corregir"+allErr);
-        await corregirProcedimiento(user,conection,sql, (err, sol)=>{//sql son los scripts para comprobar la solucion
+        await corregirProcedimiento(user,conection,sql, async function (err, sol){//sql son los scripts para comprobar la solucion
           if(err){
             //allErr=allErr+err;
             //console.log("corregirProcedimiento:"+allErr);
@@ -147,6 +147,7 @@ async function corregirProcedimiento(user,connection, sql,callback){
     allErr = allErr + "\nError al corregir procedimiento" +  err + JSON.stringify(err);
     console.log("corregirProcedimiento:"+allErr);
   }
+  await connection.close();
   //console.log("corregirProcedimiento:"+allErr);
   callback(allErr,resultado);
 }
