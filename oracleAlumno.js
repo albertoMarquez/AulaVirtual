@@ -87,6 +87,7 @@ async function comprobarProcedimineto(tablas, user,solucion,sql, callback){//sql
     }
   }
 }
+
 async function createTables(connection,sql) {
   sql = sql.replace(/\r|\n|\t|#|COMMIT;|/g, '');
   sql=sql.split(";");

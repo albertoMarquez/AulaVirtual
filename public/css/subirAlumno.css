@@ -66,3 +66,7 @@ textarea{
     overflow-y: scroll;
     height: 519px;
 }
+
+#alertas{
+    padding: 25px;
+}

@@ -56,12 +56,18 @@
                     <label for="txt_procedimientoAlumno">Subir Ejercicio</label>
                     <input type="file" name="uploadedfile" id="procedimientoAlumno">
                 </div>
-                <div class="alert alert-info hidde">Resultado de la base de datos</div>
             <% if(data.retrasada === "NO"){ %>
                 <div id="boton">
                     <button type="submit" value="Submit" class="btn btn-default aceptar" id="evaluar">Evaluar</button>
                 </div>
             <% } %>
+
+            <div id="alertas">
+                <div class="alert alert-danger hidden template">Resultado de la base de datos</div>
+                <div class="alert alert-success hidden template">Exito</div>
+                <div class="alert alert-warning hidden template">warning</div>
+                <div class="alert alert-dark hidden template">error Oracle</div>
+            </div>
             </form>
         </div>           
     </body>

@@ -146,19 +146,52 @@ function subirScriptAlumno(user, idEjercicio){
                         success: function(resultado){
                             //alert("el procedimiento del alumno se ha ejecutado correctamente"); 
                             //data = JSON.parse(data);
-                            //console.log(resultado);
-                            resultado.forEach(e => {
-                                console.log(e.toString());
-                            });                     
+
+                            resultado.errores.forEach(e=>{
+                                var elem = $(".alert-danger").clone();
+                                elem.removeClass("hidden");
+                                elem.removeClass("template");
+                                elem.text(e);
+                                $("#alertas").append(elem);
+                            });
+
+
+                            resultado.avisos.forEach(e=>{
+                                var elem = $(".alert-warning").clone();
+                                elem.removeClass("hidden");
+                                elem.removeClass("template");
+                                elem.text(e);
+                                $("#alertas").append(elem);
+                            });
+
+                            resultados.ok.forEach(e=>{
+                                var elem = $(".alert-success").clone();
+                                elem.removeClass("hidden");
+                                elem.removeClass("template");
+                                elem.text(e);
+                                $("#alertas").append(elem);
+                            });
+                            
+                            console.log(`exito!! ${resultado}`);
+
+                           
+                           
+                                                 
                             //location.reload();
                         },
                         error: function(error){
+                             console.log("Error!!!");
                             if(!error.responseJSON.oracle){
-                                //error de los demas
+                                alert("error de ejecucion");
                             }else{
                                 //error que le ha dado al alumno de oracle
-                                console.log(error.responseJSON.oracle);
-                                //alert("error en ejecutar el procedimiento del alumno");
+                              //  console.log(error.responseJSON.oracle);
+                                var elem = $(".alert-dark").clone();
+                                elem.removeClass("hidden");
+                                elem.removeClass("template");
+                                elem.text(error.responseJSON.oracle);
+                                $("#alertas").append(elem);
+                                
                             }
                         }
                     })
