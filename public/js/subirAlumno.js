@@ -113,9 +113,10 @@ function subirScriptAlumno(user, idEjercicio){
     numeroDeIntentos(idEjercicio, (num)=>{
         //get intentos alumno, comparar y si es menor, sumar 1 y actualizar tabla
         getIntentosAlumno(idEjercicio, idAlumno, (numIntentos)=>{
-            // console.log("numIntentos del alumno " + numIntentos.intentos);
+            
+             console.log(numIntentos);
             // console.log("numTotales " + num);
-            if(numIntentos.intentos < num){
+            if(numIntentos < num){
                 let resultado = ""; //se tiene que coger del oracledb
                 let fechaActual = new Date();
                 let nombre = user.nombre;
@@ -181,12 +182,13 @@ function subirScriptAlumno(user, idEjercicio){
                         },
                         error: function(error){
                              console.log("Error!!!");
-                            if(!error.responseJSON.oracle){
+                             console.log(error);
+                            if(!error.responseJSON){
                                 alert("error de ejecucion");
                             }else{
                                 //error que le ha dado al alumno de oracle
                               //  console.log(error.responseJSON.oracle);
-                                var elem = $(".alert-dark").clone();
+                                var elem = $(".alert-light").clone();
                                 elem.removeClass("hidden");
                                 elem.removeClass("template");
                                 elem.text(error.responseJSON.oracle);

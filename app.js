@@ -472,7 +472,8 @@ app.get("/subirAlumno/:id/:idAlumno", (request, response) => {
                                        // console.log(err);
                                     }else{
                                         var solucion = "<span>No tienes comentarios</span>";
-                                        if(sol !== undefined){
+                                        //console.log(sol);
+                                        if(sol !== undefined && sol.comentarioProfe !== null){
                                             solucion = highlight(sol.comentarioProfe, sol.solAlumno);
                                         }
                                        
@@ -670,6 +671,8 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
     //console.log(request.body.idEjercicio);
     daoE.scriptsPorID(request.body.info.idEjercicio, (err, filas)=>{
         if(err){
+            console.log("scriptsPorID");
+            console.log(err);
             response.status(400);
             response.end();
         }else{
@@ -683,6 +686,8 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
             // console.log(scripts);           
             daoE.getCreacionTablasPorID(request.body.info.idEjercicio, (err, sol)=>{
                 if(err){
+                    console.log("creacionTablas");
+                    console.log(err);
                     response.status(400); 
                     response.end();
                 }else{

@@ -70,3 +70,9 @@ textarea{
 #alertas{
     padding: 25px;
 }
+
+.alert-light{
+    background-color: #aeafad;
+    border-color: #c1caba;
+    color:black;
+}

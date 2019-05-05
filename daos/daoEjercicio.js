@@ -397,10 +397,12 @@ class DAOEjercicio {
     }
     //  terminar no funcionaaaaaaaaaaaaaaa
     subirProcedimientoAlumno(datos, resultado, nErr, callback){
+        datos = datos.info;
         this.pool.getConnection((err, con) =>{
             if(err){
                 callback(err, undefined);
             }else{
+                console.log(datos);
                 con.query(`SELECT count(*) as e from ejercicioalumno where idEjercicio =?`,
                 [datos.idEjercicio], (err,sol) =>{
                     // console.log(sol[0].e);
@@ -408,18 +410,20 @@ class DAOEjercicio {
                         callback(err, undefined);
                     }
                     else{
+                        
+                        //console.log(sol);
                         if(sol[0].e===0){
                             //console.log(datos.info);
-                            datos = datos.info;
+                            
                             //console.log("\nErrores :" + nErr);
                             // console.log("\nResultado :");
                             //console.log(resultado);
                             var fecha = new Date();
                             con.query(`INSERT INTO ejercicioalumno (idEjercicio,solucion,numFallos,entregaRetrasada,idAlumno,idGrupo,intentos,resultado) VALUES(?,?,?,?,?,?,?,?)`,
-                            [datos.idEjercicio, datos.solucion, nErr, fecha, datos.idAlumno,datos.idGrupo,datos.intentos,resultado], (err) =>{
+                            [datos.idEjercicio, datos.solucion, nErr, fecha, datos.idAlumno,datos.idGrupo,1,resultado], (err) =>{
                                 if(err){
                                     console.log("Insert E:");
-                                    //console.log(err);
+                                    console.log(err);
                                     callback(err, undefined);
                                 }
                                 else{
@@ -513,12 +517,14 @@ class DAOEjercicio {
                         callback(err, undefined);
                     }
                     else{
+                        //console.log("sol  " + filas);
                         //console.log(filas);
                         var sol = 0;
                         if(filas.length === 0){
                             sol = 0;
                         }else{
-                            sol = filas[0]
+                            console.log(filas);
+                            sol = filas[0].intentos;
                         }
                        
                         callback(undefined, sol);
