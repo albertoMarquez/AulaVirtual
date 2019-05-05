@@ -19,8 +19,12 @@ $(document).ready(function() {
             });
         }  
     });
-    //scripts();
-    //alert("HOLA");
+    
+    $("input[type=file]").on('click', function(){
+        console.log("has pulsado el enunciado");
+    })
+
+
     var options={}
     $.galleta(options);
     user = $.galleta().getc("usuario");
