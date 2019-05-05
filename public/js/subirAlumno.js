@@ -132,75 +132,16 @@ function subirScriptAlumno(user, idEjercicio){
                             alert("sube una solucion");
                         }else{
                             info = {idEjercicio:idEjercicio, nombre:nombre, usuario:usuario, numOk: numOk, entregaRetrasada: entregaRetrasada, idAlumno:idAlumno, idGrupo:idGrupo,intentos:intentos,resultado:resultado,fechaActual:fechaActual,solucion:solucion2};
+                            ejecutaProcedimiento(info);
                         }
                     }else{
                         info = {idEjercicio:idEjercicio, nombre:nombre, usuario:usuario, numOk: numOk, entregaRetrasada: entregaRetrasada, idAlumno:idAlumno, idGrupo:idGrupo,intentos:intentos,resultado:resultado,fechaActual:fechaActual,solucion:solucion};
+                        ejecutaProcedimiento(info);
                     }
                     //console.log("info");
                     //console.log(info);
                     //alert("ajax 2 ejecutar procedimiento");
-                    $.ajax({
-                        method: "POST",
-                        data:JSON.stringify({info:info}),
-                        url: "/ejecutarProcedimientoAlumno",
-                        contentType: "application/json",
-                        success: function(resultado){
-                            //alert("el procedimiento del alumno se ha ejecutado correctamente"); 
-                            //data = JSON.parse(data);
-                           // console.log(resultado);
-
-                            resultado.errores.forEach(e=>{
-                                var elem = $("#plantilla1" ).clone();
-                                elem.removeClass("hidden");
-                                elem.removeAttr("id", "plantilla");
-                                elem.removeClass("template");
-                                elem.text(e);
-                                $("#alertas").append(elem);
-                            });
-
-
-                            resultado.avisos.forEach(e=>{
-                                var elem = $("#plantilla3").clone();
-                                elem.removeClass("hidden");
-                                elem.removeClass("template");
-                                elem.removeAttr("id", "plantilla2");
-                                elem.text(e);
-                                $("#alertas").append(elem);
-                            });
-
-                            resultado.ok.forEach(e=>{
-                                var elem = $("#plantilla2").clone();
-                                elem.removeClass("hidden");
-                                elem.removeClass("template");
-                                elem.removeAttr("id", "plantilla2");
-                                elem.text(e);
-                                $("#alertas").append(elem);
-                            });
-                            
-                            console.log(`exito!! ${resultado}`);
-
-                           
-                           
-                                                 
-                            //location.reload();
-                        },
-                        error: function(error){
-                             console.log("Error!!!");
-                             console.log(error);
-                            if(!error.responseJSON){
-                                alert("error de ejecucion");
-                            }else{
-                                //error que le ha dado al alumno de oracle
-                              //  console.log(error.responseJSON.oracle);
-                                var elem = $(".alert-light").clone();
-                                elem.removeClass("hidden");
-                                elem.removeClass("template");
-                                elem.text(error.responseJSON.oracle);
-                                $("#alertas").append(elem);
-                                
-                            }
-                        }
-                    })
+                   
                 });
             }else{
                 alert("Numero de intentos superado");
@@ -209,6 +150,70 @@ function subirScriptAlumno(user, idEjercicio){
         });
 
     });
+}
+
+
+function ejecutaProcedimiento(info){
+    $.ajax({
+        method: "POST",
+        data:JSON.stringify({info:info}),
+        url: "/ejecutarProcedimientoAlumno",
+        contentType: "application/json",
+        success: function(resultado){
+            //alert("el procedimiento del alumno se ha ejecutado correctamente"); 
+            //data = JSON.parse(data);
+           // console.log(resultado);
+
+            resultado.errores.forEach(e=>{
+                var elem = $("#plantilla1" ).clone();
+                elem.removeClass("hidden");
+                elem.removeAttr("id", "plantilla");
+                elem.removeClass("template");
+                elem.text(e);
+                $("#alertas").append(elem);
+            });
+
+
+            resultado.avisos.forEach(e=>{
+                var elem = $("#plantilla3").clone();
+                elem.removeClass("hidden");
+                elem.removeClass("template");
+                elem.removeAttr("id", "plantilla2");
+                elem.text(e);
+                $("#alertas").append(elem);
+            });
+
+            resultado.ok.forEach(e=>{
+                var elem = $("#plantilla2").clone();
+                elem.removeClass("hidden");
+                elem.removeClass("template");
+                elem.removeAttr("id", "plantilla2");
+                elem.text(e);
+                $("#alertas").append(elem);
+            });
+            
+            console.log(`exito!! ${resultado}`);
+
+                                 
+            //location.reload();
+        },
+        error: function(error){
+             console.log("Error!!!");
+             console.log(error);
+            if(!error.responseJSON){
+                alert("error de ejecucion");
+            }else{
+                //error que le ha dado al alumno de oracle
+              //  console.log(error.responseJSON.oracle);
+                var elem = $(".alert-light").clone();
+                elem.removeClass("hidden");
+                elem.removeClass("template");
+                elem.text(error.responseJSON.oracle);
+                $("#alertas").append(elem);
+                
+            }
+        }
+    })
 }
  
 function getIntentosAlumno(idEjercicio, idAlumno, callback){

@@ -671,8 +671,8 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
     //console.log(request.body.idEjercicio);
     daoE.scriptsPorID(request.body.info.idEjercicio, (err, filas)=>{
         if(err){
-            console.log("scriptsPorID");
-            console.log(err);
+           // console.log("scriptsPorID");
+           // console.log(err);
             response.status(400);
             response.end();
         }else{
@@ -686,8 +686,8 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
             // console.log(scripts);           
             daoE.getCreacionTablasPorID(request.body.info.idEjercicio, (err, sol)=>{
                 if(err){
-                    console.log("creacionTablas");
-                    console.log(err);
+                   // console.log("creacionTablas");
+                   // console.log(err);
                     response.status(400); 
                     response.end();
                 }else{
@@ -699,9 +699,11 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
                             response.send(400, error);
                             response.end();
                         }else{
-                            let res ;
+                            let res= "";
+                            
+                           // console.log(resultado);
                             resultado.forEach(e => {
-                                res += e;
+                                res += e;                                
                             });
                             //console.log(res);
                             let errores = numeroDeErrores(resultado);
@@ -710,8 +712,8 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
                                     response.status(400);
                                     response.end();
                                 }else{
-                                    console.log("resultado subirProcedimientoAlumno");
-                                    console.log(errores.r);
+                                   // console.log("resultado subirProcedimientoAlumno");
+                                   // console.log(errores.r);
                                     response.json(errores.r);
                                     response.status(201);
                                     response.end();
