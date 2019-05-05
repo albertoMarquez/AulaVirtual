@@ -2,7 +2,7 @@
 -- Bases de Datos.  Examen de enero de 2019. Ejercicio 3f.
 -- -------------------------------------------------------------
 
-ALTER SESSION SET nls_date_format='DD/MM/YYYY';
+--ALTER SESSION SET nls_date_format='DD/MM/YYYY';
 
 CREATE OR REPLACE PROCEDURE ventas_por_puerta(p_puerta accesos.puerta%TYPE) AS
 -- cursor para recorrer las taquillas de la puerta p_puerta.
@@ -59,5 +59,5 @@ EXCEPTION
   WHEN e_sin_venta THEN
     DBMS_OUTPUT.PUT_LINE('La puerta ' || p_puerta || ' no tiene entradas vendidas.');
 END;
-/
+
 

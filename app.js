@@ -687,44 +687,58 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
                     response.end();
                 }else{
                     oracleAlumno.connect(sol,scripts,request.body.info,(err, resultado)=>{
-                        //console.log(conection);
-                       // console.log("error \n" + err);
-                        //console.log("res \n" + resultado);
                         if(err){
-                            //oracleAlumno.disconnect(conection);
-                           // console.log(err);
                             var error={};
                             error.oracle = err;
                             //console.log("error \n" + error.oracle);
-                            //console.log("APP connect allError:"+err);
-                            //response.json(error);
                             response.send(400, error);
-                           // response.status(400);
                             response.end();
                         }else{
-                            //oracleAlumno.disconnect(conection);
-                            for(let i=0; i< resultado.length;i++)
-                                resultado[i]=resultado[i].toString();
-                            response.json(resultado);
-                            response.status(201);
-                            response.end();
+                            let res ;
+                            resultado.forEach(e => {
+                                res += e;
+                            });
+                            //console.log(res);
+                            let errores = numeroDeErrores(resultado);
+                            daoE.subirProcedimientoAlumno(request.body,res,errores,(err, sol)=>{
+                                if(err){
+                                    response.status(400);
+                                    response.end();
+                                }else{
+                                    response.json(resultado);
+                                    response.status(201);
+                                    response.end();
+                                }
+                            });
                         }
                     });
                 }
-            })
-            /* daoE.subirProcedimientoAlumno(request.body, (err, filas)=>{
-                if(err){
-                    response.status(400);
-                    response.end();
-                }else{
-                    response.json(filas);
-                    response.status(201);
-                    response.end();
-                }/                    })*/
-            // });
+            });
         }
     });
 });
+function numeroDeErrores(resultado){
+    res = {};
+    res.errores = [];
+    res.avisos = [];
+    res.ok = [];
+    //res = {errores:[aaaaaaaaa, bbbbbbbbbb, c], avisos:[]}
+    nErr =0;
+    for(let i=0; i < resultado.length;i++){
+        resultado[i]=resultado[i].toString();
+        if(resultado[i].indexOf("ERROR")===0){
+            nErr++;
+            res.errores[i] =  resultado[i];
+        }else if(resultado[i].indexOf("AVISO")===0){
+            res.avisos[i] =  resultado[i];
+        }else{
+            res.ok[i]= resultado[i];
+        }
+    }
+    resultado = res;
+    //console.log(res);
+    return nErr;
+}
 /*async function crearAlumno(request,callback){
     var oP = await oracleProfesor.connect(undefined,request.body);
     console.log(oP);

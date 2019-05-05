@@ -396,18 +396,50 @@ class DAOEjercicio {
         });
     }
     //  terminar no funcionaaaaaaaaaaaaaaa
-    subirProcedimientoAlumno(datos, callback){
+    subirProcedimientoAlumno(datos, resultado, nErr, callback){
         this.pool.getConnection((err, con) =>{
             if(err){
-                callback(err);
+                callback(err, undefined);
             }else{
-                con.query(`INSERT INTO ejercicioalumno (idGrupo, ini, fin, idEj, evaluacion) VALUES(?,?,?,?,?)`,
-                [datos.idGrupo, datos.ini, datos.fin, datos.idEj, datos.evaluacion], (err) =>{
+                con.query(`SELECT count(*) as e from ejercicioalumno where idEjercicio =?`,
+                [datos.idEjercicio], (err,sol) =>{
+                    // console.log(sol[0].e);
                     if(err){
                         callback(err, undefined);
                     }
                     else{
-                        callback(null);
+                        if(sol[0].e===0){
+                            //console.log(datos.info);
+                            datos = datos.info;
+                            //console.log("\nErrores :" + nErr);
+                            // console.log("\nResultado :");
+                            //console.log(resultado);
+                            var fecha = new Date();
+                            con.query(`INSERT INTO ejercicioalumno (idEjercicio,solucion,numFallos,entregaRetrasada,idAlumno,idGrupo,intentos,resultado) VALUES(?,?,?,?,?,?,?,?)`,
+                            [datos.idEjercicio, datos.solucion, nErr, fecha, datos.idAlumno,datos.idGrupo,datos.intentos,resultado], (err) =>{
+                                if(err){
+                                    console.log("Insert E:");
+                                    //console.log(err);
+                                    callback(err, undefined);
+                                }
+                                else{
+                                    console.log("Insert :");
+                                    callback(undefined,true);
+                                }
+                            });
+                        }else{
+                            var sql = `UPDATE ejercicioalumno SET solucion=?, numFallos=?, entregaRetrasada=?,intentos=?,resultado=? ;`
+                            con.query(sql,[datos.solucion, nErr, datos.entregaRetrasada, datos.intentos, resultado], (err) =>{
+                                if(err){
+                                    console.log("UPDATE E:");
+                                    callback(err, undefined);
+                                }
+                                else{
+                                    console.log("UPDATE :");
+                                    callback(undefined,true);
+                                }
+                            });
+                        }
                     }
                 });
             }

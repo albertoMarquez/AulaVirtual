@@ -115,7 +115,7 @@ function subirScriptAlumno(user, idEjercicio){
         getIntentosAlumno(idEjercicio, idAlumno, (numIntentos)=>{
             // console.log("numIntentos del alumno " + numIntentos.intentos);
             // console.log("numTotales " + num);
-            if(/*numIntentos.intentos < num*/true){
+            if(numIntentos.intentos < num){
                 let resultado = ""; //se tiene que coger del oracledb
                 let fechaActual = new Date();
                 let nombre = user.nombre;
@@ -135,7 +135,7 @@ function subirScriptAlumno(user, idEjercicio){
                     }else{
                         info = {idEjercicio:idEjercicio, nombre:nombre, usuario:usuario, numOk: numOk, entregaRetrasada: entregaRetrasada, idAlumno:idAlumno, idGrupo:idGrupo,intentos:intentos,resultado:resultado,fechaActual:fechaActual,solucion:solucion};
                     }
-                    console.log("info");
+                    //console.log("info");
                     //console.log(info);
                     //alert("ajax 2 ejecutar procedimiento");
                     $.ajax({
