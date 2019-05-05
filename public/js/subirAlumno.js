@@ -114,7 +114,7 @@ function subirScriptAlumno(user, idEjercicio){
         //get intentos alumno, comparar y si es menor, sumar 1 y actualizar tabla
         getIntentosAlumno(idEjercicio, idAlumno, (numIntentos)=>{
             
-             console.log(numIntentos);
+            // console.log(numIntentos);
             // console.log("numTotales " + num);
             if(numIntentos < num){
                 let resultado = ""; //se tiene que coger del oracledb
@@ -147,10 +147,12 @@ function subirScriptAlumno(user, idEjercicio){
                         success: function(resultado){
                             //alert("el procedimiento del alumno se ha ejecutado correctamente"); 
                             //data = JSON.parse(data);
+                           // console.log(resultado);
 
                             resultado.errores.forEach(e=>{
-                                var elem = $(".alert-danger").clone();
+                                var elem = $("#plantilla1" ).clone();
                                 elem.removeClass("hidden");
+                                elem.removeAttr("id", "plantilla");
                                 elem.removeClass("template");
                                 elem.text(e);
                                 $("#alertas").append(elem);
@@ -158,17 +160,19 @@ function subirScriptAlumno(user, idEjercicio){
 
 
                             resultado.avisos.forEach(e=>{
-                                var elem = $(".alert-warning").clone();
+                                var elem = $("#plantilla3").clone();
                                 elem.removeClass("hidden");
                                 elem.removeClass("template");
+                                elem.removeAttr("id", "plantilla2");
                                 elem.text(e);
                                 $("#alertas").append(elem);
                             });
 
-                            resultados.ok.forEach(e=>{
-                                var elem = $(".alert-success").clone();
+                            resultado.ok.forEach(e=>{
+                                var elem = $("#plantilla2").clone();
                                 elem.removeClass("hidden");
                                 elem.removeClass("template");
+                                elem.removeAttr("id", "plantilla2");
                                 elem.text(e);
                                 $("#alertas").append(elem);
                             });

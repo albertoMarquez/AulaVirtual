@@ -705,12 +705,14 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
                             });
                             //console.log(res);
                             let errores = numeroDeErrores(resultado);
-                            daoE.subirProcedimientoAlumno(request.body,res,errores,(err, sol)=>{
+                            daoE.subirProcedimientoAlumno(request.body,res,errores.nErr,(err, sol)=>{
                                 if(err){
                                     response.status(400);
                                     response.end();
                                 }else{
-                                    response.json(resultado);
+                                    console.log("resultado subirProcedimientoAlumno");
+                                    console.log(errores.r);
+                                    response.json(errores.r);
                                     response.status(201);
                                     response.end();
                                 }
@@ -740,9 +742,12 @@ function numeroDeErrores(resultado){
             res.ok[i]= resultado[i];
         }
     }
-    resultado = res;
+   // resultado = res;
+    var sol = {};
+    sol.r = res;
+    sol.nErr = nErr;
     //console.log(res);
-    return nErr;
+    return sol;
 }
 /*async function crearAlumno(request,callback){
     var oP = await oracleProfesor.connect(undefined,request.body);
