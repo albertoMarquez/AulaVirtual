@@ -15,7 +15,9 @@ $(document).ready(function() {
         $("#solProf").attr("disabled", true);
         $("#botonPdf").click(function(event){
             event.preventDefault();
+   
             var doc = $("#botonPdf").attr("href");
+   
             var htmlText = '<iframe width=100% height=100%'
                          + ' type="application/pdf"'
                          + ' src="'
@@ -26,6 +28,7 @@ $(document).ready(function() {
             detailWindow.document.write(htmlText);
             detailWindow.document.close();
         });
+        
         $("#evaluar").click(function(event) {//Dale al boton y deberia de ejecutarse la funcion 
             ///PROGRAMAR FUNCIONES
             event.preventDefault();
@@ -44,12 +47,15 @@ $(document).ready(function() {
                 console.log("entra en subirScriptAlumno subirScriptAlumno");
                 subirScriptAlumno(user, idEjercicio);
             });
+            
         }); 
+
        // location.reload();
        if($("#solProf").text() !== ""){
             var s = $("#solProf").text();
             $("#solProf").html(s);
        }
+
     }else{
         var link = window.location.href;
         var res = link.split("/");
@@ -107,6 +113,7 @@ function subirScriptAlumno(user, idEjercicio){
     numeroDeIntentos(idEjercicio, (num)=>{
         //get intentos alumno, comparar y si es menor, sumar 1 y actualizar tabla
         getIntentosAlumno(idEjercicio, idAlumno, (numIntentos)=>{
+            
             // console.log(numIntentos);
             // console.log("numTotales " + num);
             if(numIntentos < num){
@@ -125,69 +132,21 @@ function subirScriptAlumno(user, idEjercicio){
                             alert("sube una solucion");
                         }else{
                             info = {idEjercicio:idEjercicio, nombre:nombre, usuario:usuario, numOk: numOk, entregaRetrasada: entregaRetrasada, idAlumno:idAlumno, idGrupo:idGrupo,intentos:intentos,resultado:resultado,fechaActual:fechaActual,solucion:solucion2};
+                            ejecutaProcedimiento(info);
                         }
                     }else{
                         info = {idEjercicio:idEjercicio, nombre:nombre, usuario:usuario, numOk: numOk, entregaRetrasada: entregaRetrasada, idAlumno:idAlumno, idGrupo:idGrupo,intentos:intentos,resultado:resultado,fechaActual:fechaActual,solucion:solucion};
+                        ejecutaProcedimiento(info);
                     }
                     //console.log("info");
                     //console.log(info);
                     //alert("ajax 2 ejecutar procedimiento");
-                    $.ajax({
-                        method: "POST",
-                        data:JSON.stringify({info:info}),
-                        url: "/ejecutarProcedimientoAlumno",
-                        contentType: "application/json",
-                        success: function(resultado){
-                            //alert("el procedimiento del alumno se ha ejecutado correctamente"); 
-                            //data = JSON.parse(data);
-                           // console.log(resultado);
-                            resultado.errores.forEach(e=>{
-                                var elem = $("#plantilla1" ).clone();
-                                elem.removeClass("hidden");
-                                elem.removeAttr("id", "plantilla");
-                                elem.removeClass("template");
-                                elem.text(e);
-                                $("#alertas").append(elem);
-                            });
-                            resultado.avisos.forEach(e=>{
-                                var elem = $("#plantilla3").clone();
-                                elem.removeClass("hidden");
-                                elem.removeClass("template");
-                                elem.removeAttr("id", "plantilla2");
-                                elem.text(e);
-                                $("#alertas").append(elem);
-                            });
-                            resultado.ok.forEach(e=>{
-                                var elem = $("#plantilla2").clone();
-                                elem.removeClass("hidden");
-                                elem.removeClass("template");
-                                elem.removeAttr("id", "plantilla2");
-                                elem.text(e);
-                                $("#alertas").append(elem);
-                            });
-                            console.log(`exito!! ${resultado}`);        
-                            //location.reload();
-                        },
-                        error: function(error){
-                             console.log("Error!!!");
-                             console.log(error);
-                            if(!error.responseJSON){
-                                alert("error de ejecucion");
-                            }else{
-                                //error que le ha dado al alumno de oracle
-                                //onsole.log(error.responseJSON.oracle);
-                                var elem = $(".alert-light").clone();
-                                elem.removeClass("hidden");
-                                elem.removeClass("template");
-                                elem.text(error.responseJSON.oracle);
-                                $("#alertas").append(elem);  
-                            }
-                        }
-                    })
+                   
                 });
             }else{
                 alert("Numero de intentos superado");
-            } 
+            }
+            
         });
 
     });
@@ -276,8 +235,8 @@ function getIntentosAlumno(idEjercicio, idAlumno, callback){
 
 function leerArchivo(callback) {
     var archivo = $('input[type=file]')[0].files[0];
-    //console.log("archivo");
-    //console.log(archivo);
+    console.log("archivo");
+    console.log(archivo);
     if (!archivo) {
         callback(undefined);
     }else{
