@@ -43,11 +43,7 @@ $(document).ready(function() {
             $("#tablaEjercicios tbody").remove();
             $(".parrafoExamenes").hide();
             $("#tablaExamenes").hide();
-           
-            
             cargarTabla(0);
-           
-            
         });
     
         $("#Examenes").click(function(event) {
@@ -57,10 +53,7 @@ $(document).ready(function() {
             $("#tablaExamenes tbody").remove();
             $(".parrafoEjercicios").hide();
             $("#tablaEjercicios").hide();
-            
             cargarTabla(1);
-            
-            
         });
 
         

@@ -154,6 +154,7 @@ function subirScriptAlumno(user, idEjercicio){
 
 
 function ejecutaProcedimiento(info){
+    $("#alertas .resultados").remove();
     $.ajax({
         method: "POST",
         data:JSON.stringify({info:info}),
@@ -162,13 +163,16 @@ function ejecutaProcedimiento(info){
         success: function(resultado){
             //alert("el procedimiento del alumno se ha ejecutado correctamente"); 
             //data = JSON.parse(data);
-           // console.log(resultado);
+            //console.log("subirAlumno");
+            //console.log(resultado);
+            
 
             resultado.errores.forEach(e=>{
                 var elem = $("#plantilla1" ).clone();
                 elem.removeClass("hidden");
                 elem.removeAttr("id", "plantilla");
                 elem.removeClass("template");
+                elem.addClass("resultados");
                 elem.text(e);
                 $("#alertas").append(elem);
             });
@@ -179,6 +183,7 @@ function ejecutaProcedimiento(info){
                 elem.removeClass("hidden");
                 elem.removeClass("template");
                 elem.removeAttr("id", "plantilla2");
+                elem.addClass("resultados");
                 elem.text(e);
                 $("#alertas").append(elem);
             });
@@ -188,11 +193,12 @@ function ejecutaProcedimiento(info){
                 elem.removeClass("hidden");
                 elem.removeClass("template");
                 elem.removeAttr("id", "plantilla2");
+                elem.addClass("resultados");
                 elem.text(e);
                 $("#alertas").append(elem);
             });
             
-            console.log(`exito!! ${resultado}`);
+            console.log(`exito!!`);
 
                                  
             //location.reload();

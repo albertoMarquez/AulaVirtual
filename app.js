@@ -686,8 +686,8 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
             // console.log(scripts);           
             daoE.getCreacionTablasPorID(request.body.info.idEjercicio, (err, sol)=>{
                 if(err){
-                   // console.log("creacionTablas");
-                   // console.log(err);
+                    console.log("creacionTablas");
+                    console.log(err);
                     response.status(400); 
                     response.end();
                 }else{
@@ -713,7 +713,7 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
                                     response.end();
                                 }else{
                                    // console.log("resultado subirProcedimientoAlumno");
-                                   // console.log(errores.r);
+                                    //console.log(errores.r);
                                     response.json(errores.r);
                                     response.status(201);
                                     response.end();
@@ -735,13 +735,13 @@ function numeroDeErrores(resultado){
     nErr =0;
     for(let i=0; i < resultado.length;i++){
         resultado[i]=resultado[i].toString();
-        if(resultado[i].indexOf("ERROR")===0){
+        if(resultado[i].indexOf("ERROR") >= 0){
             nErr++;
-            res.errores[i] =  resultado[i];
-        }else if(resultado[i].indexOf("AVISO")===0){
-            res.avisos[i] =  resultado[i];
+            res.errores.push(resultado[i]);
+        }else if(resultado[i].indexOf("AVISO") >= 0){
+            res.avisos.push(resultado[i]);
         }else{
-            res.ok[i]= resultado[i];
+            res.ok.push(resultado[i]);
         }
     }
    // resultado = res;

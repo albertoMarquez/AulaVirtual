@@ -1,20 +1,12 @@
--- -------------------------------------------------------------
--- Bases de Datos.  Examen de enero de 2019. Ejercicio 3f.
--- -------------------------------------------------------------
 
---ALTER SESSION SET nls_date_format='DD/MM/YYYY';
 
 CREATE OR REPLACE PROCEDURE ventas_por_puerta(p_puerta accesos.puerta%TYPE) AS
--- cursor para recorrer las taquillas de la puerta p_puerta.
+
 CURSOR c_taquillas IS
   SELECT taquilla
   FROM taquillas
   WHERE puerta=p_puerta;
  
--- Cursor para recorrer los clientes que han comprado en v_taquilla.
--- Se puede utilizar un parametro en un cursor para proporcionar la
--- taquilla que debe recorrerse, pero nosotros utilizaremos directamente
--- una variable local v_taquilla.
 v_taquilla taquillas.taquilla%TYPE;
 CURSOR c_clientes IS
   SELECT DNIcliente, SUM(precio) AS importe, COUNT(*) AS tickets
@@ -30,9 +22,8 @@ v_puerta_ventas NUMBER(8,2) := 0;
 e_sin_venta EXCEPTION;
  
 BEGIN
-  -- Comprobacion de que la puerta existe en la BD
-  -- ERROR: SELECT INTO DEVUELVE VARIAS FILAS
-  SELECT 0 INTO v_existe_puerta FROM accesos; -- WHERE puerta=p_puerta;
+
+  SELECT 0 INTO v_existe_puerta FROM accesos;
  
   FOR r_taquilla IN c_taquillas LOOP
     DBMS_OUTPUT.PUT_LINE('Taquilla: ' || r_taquilla.taquilla);
