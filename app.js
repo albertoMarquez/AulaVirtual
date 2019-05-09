@@ -429,7 +429,7 @@ app.get("/subirAlumno/:id/:idAlumno", (request, response) => {
             }else{
                daoE.entregaRetrasada(data.idEjercicio, (err, infoAlta)=>{
                     if(err){
-                        alert(err);
+                        console.log(err);
                     }else{
                         var hoy = new Date();
                         //console.log(`infoAlta ${infoAlta}`);
@@ -456,9 +456,10 @@ app.get("/subirAlumno/:id/:idAlumno", (request, response) => {
                                 var datos = {};
                                 datos.idAlumno = data.idAlumno;
                                 datos.idEjercicio = data.idEjercicio;
+                              
                                 daoE.getUltimaEntrega(datos, (err, sol)=>{
                                     if(err){
-                                       // console.log(err);
+                                        // console.log(err);
                                     }else{
                                         var solucion = "<span>No tienes comentarios</span>";
                                         //console.log(sol);
@@ -469,7 +470,8 @@ app.get("/subirAlumno/:id/:idAlumno", (request, response) => {
                                         //console.log(infoRender);
                                         response.render("subirAlumno", {data:infoRender});
                                     }
-                                }); 
+                                });
+                                
                             }
                         })
                     }
