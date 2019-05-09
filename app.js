@@ -368,7 +368,6 @@ app.post("/subirEjercicio", (request, response) =>{
 
 
 function highlight(newElem, oldElem){ 
-
     var text = "";
     if(newElem === undefined || oldElem === undefined){
         text = "<span>No tienes comentarios</span>";
@@ -404,24 +403,16 @@ function highlight(newElem, oldElem){
 }
 
 app.get("/getTablaEjerciciosAtrasados", (request, response) =>{
-
-   // console.log(request.query);
-
     daoE.cargarEjerciciosAtrasados(request.query, (err, sol)=>{
-
         if(err){
             response.status(400);
             response.end();
         }else{
-          // console.log(sol);
             response.json(sol);
             response.status(200);
             response.end();
         }
-
     });
-
-
 })
 
 
@@ -453,13 +444,11 @@ app.get("/subirAlumno/:id/:idAlumno", (request, response) => {
                             infoRender.solucion = res.ejAlumno.solucion;
                            // sol.solucionProfe = res.ejAlumno.correccionProfesor;
                             infoRender.nota = res.ejAlumno.nota;
-                          
                         }else{
                             infoRender.nota = " -";
                             infoRender.solucion = "";
                             infoRender.solucionProfe = ""; 
                         }
-                       
                         daoE.scriptsPorID(data.idEjercicio, (err, res)=>{
                             if(err){
                                 console.log(err);
@@ -476,13 +465,11 @@ app.get("/subirAlumno/:id/:idAlumno", (request, response) => {
                                         if(sol !== undefined && sol.comentarioProfe !== null){
                                             solucion = highlight(sol.comentarioProfe, sol.solAlumno);
                                         }
-                                       
-                                       infoRender.solucionProfe = solucion;
-                                       //console.log(infoRender);
-                                       response.render("subirAlumno", {data:infoRender});
+                                        infoRender.solucionProfe = solucion;
+                                        //console.log(infoRender);
+                                        response.render("subirAlumno", {data:infoRender});
                                     }
-                                });
-                                
+                                }); 
                             }
                         })
                     }
@@ -560,7 +547,6 @@ app.post("/cargarAsignaturas",(request, response) =>{
 });
  
 app.post("/eliminarAsignatura",(request, response) =>{
-   // console.log(request.body);
     daoU.eliminarAsignatura(request.body,(err, op) =>{
         if (err){
             response.status(400); //mal introducido
@@ -574,7 +560,6 @@ app.post("/eliminarAsignatura",(request, response) =>{
 });
 
 app.get("/evaluaAlumno", (request, response)=>{
-   
     daoU.evaluaAlumno(request.query.id, (err, filas)=>{
         if(err){
             response.status(400);
@@ -589,9 +574,7 @@ app.get("/evaluaAlumno", (request, response)=>{
 });
 
 app.post("/actualizaComentarioNota", (request, response)=>{
-
-    console.log(request.body);
-
+    //console.log(request.body);
     daoE.actualizaEjercicioAlumno(request.body, (err, filas)=>{
         if(err){
             console.log("err");
@@ -606,8 +589,8 @@ app.post("/actualizaComentarioNota", (request, response)=>{
 });
 
 app.get("/getUltimaEntrega", (request, response)=>{
-    console.log("getUltimaEntrega");
-    console.log(request.query);
+    //console.log("getUltimaEntrega");
+    //console.log(request.query);
     daoE.getUltimaEntrega(request.query, (err, filas)=>{
         if(err){
             response.status(400);
@@ -619,7 +602,6 @@ app.get("/getUltimaEntrega", (request, response)=>{
         }
     })
 })
-//Cambiar a get ya que solo pide datos
 app.post("/entregaRetrasada", (request, response)=>{
     //console.log("entregaRetrasada "+request.body.idEjercicio);
     daoE.entregaRetrasada(request.body.idEjercicio, (err, filas)=>{
@@ -634,7 +616,6 @@ app.post("/entregaRetrasada", (request, response)=>{
         }
     })
 });
-
 app.get("/getIntentosAlumno", (request, response)=>{
     //console.log(request.query);
     daoE.getIntentosAlumno(request.query, (err, filas)=>{
@@ -648,7 +629,6 @@ app.get("/getIntentosAlumno", (request, response)=>{
         }
     });
 });
-
 app.post("/numeroDeIntentos", (request, response)=>{
     //console.log("numeroDeIntentos "+request.body.idEjercicio);
     daoE.numeroDeIntentos(request.body.idEjercicio, (err, filas)=>{
@@ -665,25 +645,15 @@ app.post("/numeroDeIntentos", (request, response)=>{
 });
 
 app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
-    //console.log("subirProcedimientoAlumno");
-    //console.log(request.body);
-    //console.log("idEjercicio:");
-    //console.log(request.body.idEjercicio);
     daoE.scriptsPorID(request.body.info.idEjercicio, (err, filas)=>{
         if(err){
-           // console.log("scriptsPorID");
-           // console.log(err);
             response.status(400);
             response.end();
         }else{
-            //ORACLEDB
             var scripts = [];
-            //console.log("scriptsPorID");
-            //console.log(filas);
             filas.forEach(e =>{
                 scripts.push(e.script);
             });
-            // console.log(scripts);           
             daoE.getCreacionTablasPorID(request.body.info.idEjercicio, (err, sol)=>{
                 if(err){
                     console.log("creacionTablas");
@@ -695,17 +665,13 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
                         if(err){
                             var error={};
                             error.oracle = err;
-                            //console.log("error \n" + error.oracle);
                             response.send(400, error);
                             response.end();
                         }else{
                             let res= "";
-                            
-                           // console.log(resultado);
                             resultado.forEach(e => {
                                 res += e;                                
                             });
-                            //console.log(res);
                             let errores = numeroDeErrores(resultado);
                             daoE.subirProcedimientoAlumno(request.body,res,errores.nErr,(err, sol)=>{
                                 if(err){
@@ -731,7 +697,6 @@ function numeroDeErrores(resultado){
     res.errores = [];
     res.avisos = [];
     res.ok = [];
-    //res = {errores:[aaaaaaaaa, bbbbbbbbbb, c], avisos:[]}
     nErr =0;
     for(let i=0; i < resultado.length;i++){
         resultado[i]=resultado[i].toString();
@@ -744,25 +709,13 @@ function numeroDeErrores(resultado){
             res.ok.push(resultado[i]);
         }
     }
-   // resultado = res;
     var sol = {};
     sol.r = res;
     sol.nErr = nErr;
-    //console.log(res);
     return sol;
 }
-/*async function crearAlumno(request,callback){
-    var oP = await oracleProfesor.connect(undefined,request.body);
-    console.log(oP);
-    if(oP){
-        console.log(oP);
-        callback(true);
-    }
-}*/
-app.post("/crearAlumno", (request, response)=>{
-    //console.log("crearAlumno");
-    //console.log(request.body);
 
+app.post("/crearAlumno", (request, response)=>{
     oracleProfesor.altaUsuario(request.body.usuario,(err,sol) =>{
         if(sol){
             console.log(sol);

@@ -8,14 +8,12 @@ class DAOEjercicio {
     constructor(pool) {
         this.pool = pool;
     }
-    //Implementando
     createEjercicio(datos, callback){
         this.pool.getConnection((err, con) =>{
             if(err){
                 callback(err);
             }else{
                 var fech = new Date();
-         
                 con.query(`INSERT INTO ejercicio (titulo, fecha, numScriptsSol, creacionTablas, enunciado, solucionProfesor,idProfesor) VALUES(?,?,?,?,?,?,?)`,
                 [datos.titulo, fech, datos.numScripts, datos.tablas, datos.enun, datos.sol, datos.idProfesor], (err, id) =>{
                     if(err){
@@ -36,9 +34,7 @@ class DAOEjercicio {
             if(err){
                 callback(err);
             }else{
-
                 var sql = "INSERT INTO scriptspruebas (idEjercicio, idPrueba, script) VALUES"
-
                 for(var i = 0; i < datos.length;i++){
                     sql += " (?, ?, ?)"
                     if(i < datos.length - 1){
@@ -47,15 +43,12 @@ class DAOEjercicio {
                         sql += ";"
                     }
                 }
-
                 var info = [];
-
                 for(var j = 0; j < datos.length; j++) {
                     info.push(idEjercicio);
                     info.push(datos[j].id);
                     info.push(datos[j].archivo);
                 }
-
                 con.query(sql, info, (err, filas) =>{
                     if(err){
                         callback(err);
@@ -137,7 +130,6 @@ class DAOEjercicio {
             }else{                
                 var sql = '';
                 sql += "UPDATE scriptspruebas SET solucionPrueba = CASE idPrueba";
-                //console.log(datos.length);
                 for (let i = 0; i < datos.length; i++) {
                     sql+= " WHEN "+(i+1)+" THEN '"+datos[i].toString()+"'";
                 }
@@ -156,7 +148,6 @@ class DAOEjercicio {
     }
 
     seleccionarEjercicio(id, idAlumno, callback){
-       
         this.pool.getConnection((err, con) =>{
             if(err){
                 callback(err, undefined);
@@ -253,22 +244,17 @@ class DAOEjercicio {
             if(err){
                 callback(err);
             }else{
-                //console.log(datos);
                 con.query(`SELECT * FROM ejercicioalumno WHERE idAlumno = ? AND idEjercicio = ?`,
                 [datos.idAlumno, datos.idEjercicio], (err, filas)=>{
                     if(err){
                         callback(err, undefined);
                     }else{
                         var sol = {};
-                       // console.log(filas);
                        if(filas.length === 0){
                            callback(undefined, undefined);
                        }else{
                         sol.solAlumno = filas[0].solucion;
                         sol.comentarioProfe = filas[0].correccionProfesor;
-
-                       // console.log("DAOE getUltimaEntrega");
-                       // console.log(sol);
                         callback(undefined, sol);
                        }
                     
@@ -297,7 +283,6 @@ class DAOEjercicio {
                             solucion.push(fila);
                             fila = {};
                         });
-
                         callback(undefined, solucion);
                     }
                 });
@@ -319,15 +304,13 @@ class DAOEjercicio {
                     else{
                         callback(undefined, true);
                     }
-                });
-               
+                });  
             }
             con.release();
         });
     }
 
     entregaRetrasada(idEjercicio, callback){
-       // console.log("datos"+idEjercicio);
         this.pool.getConnection((err, con)=>{
             if(err){
                 callback(err);
@@ -341,8 +324,6 @@ class DAOEjercicio {
                            // console.log("query 0");
                             callback(undefined, false);
                         }else{
-                            
-                           // console.log(filas[0].fin);
                             callback(undefined, filas[0].fin);
                         }
                     }
@@ -353,22 +334,19 @@ class DAOEjercicio {
     }
 
     numeroDeIntentos(idEjercicio, callback){
-      //  console.log("datos"+idEjercicio);
         this.pool.getConnection((err, con)=>{
             if(err){
                 callback(err);
             }else{
                 con.query(`SELECT numeroIntentos FROM altaejercicio WHERE idEj =?`,[idEjercicio],(err, filas)=>{
                     if(err){
-                       // console.log("err");
+                        //console.log("err");
                         callback(err);
                     }else{
                         if(filas.length === 0){
                             //console.log("query 0");
                             callback(undefined, false);
                         }else{
-                            
-                           // console.log(filas[0].numeroIntentos);
                             callback(undefined, filas[0].numeroIntentos);
                         }
                     }
@@ -395,29 +373,19 @@ class DAOEjercicio {
             }
         });
     }
-    //  terminar no funcionaaaaaaaaaaaaaaa
     subirProcedimientoAlumno(datos, resultado, nErr, callback){
         datos = datos.info;
         this.pool.getConnection((err, con) =>{
             if(err){
                 callback(err, undefined);
             }else{
-               // console.log(datos);
                 con.query(`SELECT count(*) as e from ejercicioalumno where idEjercicio =?`,
                 [datos.idEjercicio], (err,sol) =>{
-                    // console.log(sol[0].e);
                     if(err){
                         callback(err, undefined);
                     }
                     else{
-                        
-                        //console.log(sol);
                         if(sol[0].e===0){
-                            //console.log(datos.info);
-                            
-                            //console.log("\nErrores :" + nErr);
-                            // console.log("\nResultado :");
-                            //console.log(resultado);
                             var fecha = new Date();
                             con.query(`INSERT INTO ejercicioalumno (idEjercicio,solucion,numFallos,entregaRetrasada,idAlumno,idGrupo,intentos,resultado) VALUES(?,?,?,?,?,?,?,?)`,
                             [datos.idEjercicio, datos.solucion, nErr, fecha, datos.idAlumno,datos.idGrupo,1,resultado], (err) =>{
@@ -427,7 +395,6 @@ class DAOEjercicio {
                                     callback(err, undefined);
                                 }
                                 else{
-                                    console.log("Insert :");
                                     callback(undefined,true);
                                 }
                             });
@@ -439,7 +406,7 @@ class DAOEjercicio {
                                     callback(err, undefined);
                                 }
                                 else{
-                                    console.log("UPDATE :");
+                                    //console.log("UPDATE :");
                                     callback(undefined,true);
                                 }
                             });
@@ -487,7 +454,6 @@ class DAOEjercicio {
                             let res = [];
                             let i;
                             var sol = {};
-                          
                             filas.forEach(e=>{
                                 var script = e.script.split(",");
                                 script = new Buffer.from(script[1], 'base64').toString('ascii');
@@ -496,7 +462,6 @@ class DAOEjercicio {
                                 res.push(sol);
                                 sol = {};
                             })
-                            /*callback(undefined, filas[0].numeroIntentos);*/
                             callback(undefined, res);
                         }
                     }
@@ -523,10 +488,8 @@ class DAOEjercicio {
                         if(filas.length === 0){
                             sol = 0;
                         }else{
-                            console.log(filas);
                             sol = filas[0].intentos;
                         }
-                       
                         callback(undefined, sol);
                     }
                 });
