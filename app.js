@@ -675,7 +675,7 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
                                 res += e;                                
                             });
                             let errores = numeroDeErrores(resultado);
-                            daoE.entregaRetrasada(data.idEjercicio, (err, infoAlta)=>{
+                            daoE.entregaRetrasada(request.body.info.idEjercicio,(err,infoAlta)=>{
                                 if(err){
                                     console.log(err);
                                     response.status(400);
@@ -705,6 +705,8 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
         }
     });
 });
+
+
 function numeroDeErrores(resultado){
     res = {};
     res.errores = [];
