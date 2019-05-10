@@ -678,6 +678,8 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
                             daoE.entregaRetrasada(data.idEjercicio, (err, infoAlta)=>{
                                 if(err){
                                     console.log(err);
+                                    response.status(400);
+                                    response.end();
                                 }else{
                                     var hoy = new Date();
                                     if(hoy < infoAlta){

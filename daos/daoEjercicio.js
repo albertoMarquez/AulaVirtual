@@ -90,7 +90,7 @@ class DAOEjercicio {
     }
 
     descargarProfesor(datos, callback){
-        console.log(datos);
+        //console.log(datos);
         this.pool.getConnection((err, con) =>{
             if(err){
                 callback(err);
@@ -343,12 +343,8 @@ class DAOEjercicio {
                         //console.log("err");
                         callback(err);
                     }else{
-                        if(filas.length === 0){
-                            //console.log("query 0");
-                            callback(undefined, false);
-                        }else{
-                            callback(undefined, filas[0].numeroIntentos);
-                        }
+                        //if(filas.length === 0){callback(undefined, false);}else{
+                        callback(undefined, filas[0].numeroIntentos);
                     }
                 });
                 con.release();
