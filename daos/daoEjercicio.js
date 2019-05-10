@@ -391,8 +391,8 @@ class DAOEjercicio {
                                 }
                             });
                         }else{
-                            var sql = `UPDATE ejercicioalumno SET solucion=?, numFallos=?, entregaRetrasada=?,intentos=?,resultado=? ;`
-                            con.query(sql,[datos.solucion, nErr, datos.entregaRetrasada, datos.intentos, resultado], (err) =>{
+                            var sql = `UPDATE ejercicioalumno SET solucion=?, numFallos=?, entregaRetrasada=?,intentos=?,resultado=? WHERE idEjercicio = ? AND idAlumno = ? ;`
+                            con.query(sql,[datos.solucion, nErr, datos.entregaRetrasada, datos.intentos, resultado, datos.idEjercicio,  datos.idAlumno], (err) =>{
                                 if(err){
                                     console.log("UPDATE E:");
                                     callback(err, undefined);

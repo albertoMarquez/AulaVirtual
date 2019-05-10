@@ -49,18 +49,17 @@ $(document).ready(function() {
             });
             
         }); 
-
-       // location.reload();
-       if($("#solProf").text() !== ""){
+        // location.reload();
+        if($("#solProf").text() !== ""){
             var s = $("#solProf").text();
             $("#solProf").html(s);
-       }
-
+        }
     }else{
         var link = window.location.href;
         var res = link.split("/");
         window.location = res[1] + "/";
     }
+
  });
 
 function crearAlumno(alumno, callback) {
@@ -186,6 +185,7 @@ function ejecutaProcedimiento(info){
             });
             console.log(`exito!!`);
             //location.reload();
+            setTimeout(function(){ alert("After 5 seconds!"); }, 5000);
         },
         error: function(error){
              console.log("Error!!!");
@@ -201,6 +201,7 @@ function ejecutaProcedimiento(info){
                 elem.text(error.responseJSON.oracle);
                 $("#alertas").append(elem); 
             }
+            setTimeout(function(){ alert("After 5 seconds!"); }, 5000);
         }
     })
 }

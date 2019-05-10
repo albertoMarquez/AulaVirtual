@@ -375,15 +375,19 @@ function highlight(newElem, oldElem){
         var d = diff.diffWordsWithSpace(oldElem, newElem);
         d.forEach(elem =>{
          
-            if(elem.value === '\n' || elem.value === '\r\n' || elem.value === '\r\n \r\n' || 
+            /*if(elem.value === '\n' || elem.value === '\r\n' || elem.value === '\r\n \r\n' || 
             elem.value === '\r\n  ' || elem.value === '\n \n' || elem.value === '\n    ' ||
             elem.value === '\r\n    ' || elem.value === '\n  ' || elem.value === '\n  ' || 
             elem.value === '\r\n  ' || elem.value === '\r\n\r\n' || elem.value === '\n \n  ' ||
             elem.value === '\n  \n    ' || elem.value === '\r\n       \t' || elem.value === '\r\n            ' ||
             elem.value === '\n\n    '){
                 text += "<br>";
-            }
-            else{
+            }*/
+            if(elem.value === '\n' || elem.value === '\r'){
+                text += "<br>";
+            }else if(elem.value === '\r\n\r\n'|| elem.value === '\r\n \r\n'){
+                text += "<br><br>";
+            }else{
                 if(elem.added === undefined && elem.removed === undefined){
                     text += "<span>" + elem.value + "</span>";
                 }else{
@@ -567,7 +571,7 @@ app.get("/evaluaAlumno", (request, response)=>{
             response.status(400);
             response.end();
         }else{
-            console.log(filas);
+            //console.log(filas);
             response.json(filas);
             response.status(201);
             response.end();
@@ -674,18 +678,14 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
                             resultado.forEach(e => {
                                 res += e;                                
                             });
-                            
                             let errores = numeroDeErrores(resultado);
                             daoE.entregaRetrasada(request.body.info.idEjercicio,(err,infoAlta)=>{
-                                console.log("fin :"+new Date(infoAlta));
                                 if(err){
                                     console.log(err);
                                     response.status(400);
                                     response.end();
                                 }else{
                                     var hoy = new Date();
-                                    console.log("hoy :"+hoy);
-                                    console.log(hoy < new Date(infoAlta));
                                     if(hoy < new Date(infoAlta)){
                                         daoE.subirProcedimientoAlumno(request.body,res,errores.nErr,(err, sol)=>{
                                             if(err){
