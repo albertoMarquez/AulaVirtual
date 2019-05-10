@@ -320,12 +320,8 @@ class DAOEjercicio {
                         //console.log("err");
                         callback(err);
                     }else{
-                        if(filas.length === 0){
-                           // console.log("query 0");
-                            callback(undefined, false);
-                        }else{
-                            callback(undefined, filas[0].fin);
-                        }
+                        //if(filas.length === 0){callback(undefined, false);}else{
+                        callback(undefined, filas[0].fin);
                     }
                 });
                 con.release();

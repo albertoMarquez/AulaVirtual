@@ -674,15 +674,19 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
                             resultado.forEach(e => {
                                 res += e;                                
                             });
+                            
                             let errores = numeroDeErrores(resultado);
                             daoE.entregaRetrasada(request.body.info.idEjercicio,(err,infoAlta)=>{
+                                console.log("fin :"+new Date(infoAlta));
                                 if(err){
                                     console.log(err);
                                     response.status(400);
                                     response.end();
                                 }else{
                                     var hoy = new Date();
-                                    if(hoy < infoAlta){
+                                    console.log("hoy :"+hoy);
+                                    console.log(hoy < new Date(infoAlta));
+                                    if(hoy < new Date(infoAlta)){
                                         daoE.subirProcedimientoAlumno(request.body,res,errores.nErr,(err, sol)=>{
                                             if(err){
                                                 response.status(400);
@@ -695,6 +699,10 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
                                                 response.end();
                                             }
                                         });
+                                    }else{
+                                        response.json(errores.r);
+                                        response.status(201);
+                                        response.end();
                                     }
                                 }
                             });
