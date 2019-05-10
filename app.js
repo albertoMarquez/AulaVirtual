@@ -675,25 +675,16 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
                                 res += e;                                
                             });
                             let errores = numeroDeErrores(resultado);
-                            daoE.entregaRetrasada(data.idEjercicio, (err, infoAlta)=>{
+                            daoE.subirProcedimientoAlumno(request.body,res,errores.nErr,(err, sol)=>{
                                 if(err){
-                                    console.log(err);
+                                    response.status(400);
+                                    response.end();
                                 }else{
-                                    var hoy = new Date();
-                                    if(hoy < infoAlta){
-                                        daoE.subirProcedimientoAlumno(request.body,res,errores.nErr,(err, sol)=>{
-                                            if(err){
-                                                response.status(400);
-                                                response.end();
-                                            }else{
-                                                //console.log("resultado subirProcedimientoAlumno");
-                                                //console.log(errores.r);
-                                                response.json(errores.r);
-                                                response.status(201);
-                                                response.end();
-                                            }
-                                        });
-                                    }
+                                   // console.log("resultado subirProcedimientoAlumno");
+                                    //console.log(errores.r);
+                                    response.json(errores.r);
+                                    response.status(201);
+                                    response.end();
                                 }
                             });
                         }
@@ -703,6 +694,8 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
         }
     });
 });
+
+
 function numeroDeErrores(resultado){
     res = {};
     res.errores = [];
