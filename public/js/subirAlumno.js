@@ -1,4 +1,5 @@
 var user;
+var reloading =0;
 $(document).ready(function() { 
     $("#desconectar").removeClass("hidden");
     $("#desconectar").click(function(event) {
@@ -30,16 +31,14 @@ $(document).ready(function() {
         });
         
         $("#evaluar").click(function(event) {//Dale al boton y deberia de ejecutarse la funcion 
-            ///PROGRAMAR FUNCIONES
+            $( "#evaluar" ).prop( "disabled", true );
+            reloading++;
             event.preventDefault();
-            console.log("boton pulsado");
+            //console.log("boton pulsado");
             var link = window.location.href;
             var res = link.split("/");
             console.log(res);
             let idEjercicio = res[4];//coger del id
-            /*numeroDeIntentos(idEjercicio, (num)=>{//¿PORQUE NO FUNCIONA EL ALERT?
-                console.log("num de intentos"+num);
-            });*/
             //document.getElementById("myTextarea").value;
             //let solucion = $("#solAlmun").val();
             //console.log(user.idAlumno);
@@ -47,8 +46,8 @@ $(document).ready(function() {
                 console.log("entra en subirScriptAlumno subirScriptAlumno");
                 subirScriptAlumno(user, idEjercicio);
             });
-            
-        }); 
+
+        });
         // location.reload();
         if($("#solProf").text() !== ""){
             var s = $("#solProf").text();
@@ -61,7 +60,15 @@ $(document).ready(function() {
     }
 
  });
-
+ function bloquea(){
+    if(boton.disabled == false){
+       boton.disabled = true;
+       
+       setTimeout(function(){
+          boton.disabled = false;
+      }, 10000)
+    }
+  }
 function crearAlumno(alumno, callback) {
     let user = alumno.nombre.toUpperCase() + alumno.idAlumno.toString();
     console.log("usuario "+user);
@@ -136,6 +143,7 @@ function subirScriptAlumno(user, idEjercicio){
                     info = {idEjercicio:idEjercicio, nombre:nombre, usuario:usuario, numOk: numOk, entregaRetrasada: entregaRetrasada, idAlumno:idAlumno, idGrupo:idGrupo,intentos:intentos,resultado:resultado,fechaActual:fechaActual,solucion:solucion};
                     ejecutaProcedimiento(info);
                 }
+            
             });
             /*}else{
                 alert("Numero de intentos superado");
@@ -184,8 +192,8 @@ function ejecutaProcedimiento(info){
                 $("#alertas").append(elem);
             });
             console.log(`exito!!`);
-            //location.reload();
-            setTimeout(function(){ alert("After 5 seconds!"); }, 5000);
+            $( "#evaluar" ).prop( "disabled", false );
+            
         },
         error: function(error){
              console.log("Error!!!");
@@ -201,7 +209,7 @@ function ejecutaProcedimiento(info){
                 elem.text(error.responseJSON.oracle);
                 $("#alertas").append(elem); 
             }
-            setTimeout(function(){ alert("After 5 seconds!"); }, 5000);
+            $( "#evaluar" ).prop( "disabled", false );
         }
     })
 }
