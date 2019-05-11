@@ -298,7 +298,7 @@ app.get("/getEjercicios", (request, response) =>{
 });
 
 app.get("/getAsignaturas", (request, response) =>{
-    daoA.listarAsignaturas((err, filas) =>{
+    daoA.listarAsignaturas(request.query.id, (err, filas) =>{
         if(err){
             response.status(400);
             response.end();
@@ -511,9 +511,10 @@ app.get("/mostrarListaEjer", (request, response)=>{
     })
 });
 
-app.get("/getCursoGrupo/:id", (request, response) =>{
-    let id = Number(request.params.id);
-    daoA.listarCursoGrupo(id, (err, filas) =>{
+app.get("/getCursoGrupo", (request, response) =>{
+    let id = Number(request.query.id);
+    var idProfe = Number(request.query.idP);
+    daoA.listarCursoGrupo(id, idProfe, (err, filas) =>{
         if(err){
             response.status(400);
             response.end();
@@ -566,7 +567,8 @@ app.post("/eliminarAsignatura",(request, response) =>{
 });
 
 app.get("/evaluaAlumno", (request, response)=>{
-    daoU.evaluaAlumno(request.query.id, (err, filas)=>{
+    console.log(request.query);
+    daoU.evaluaAlumno(request.query, (err, filas)=>{
         if(err){
             response.status(400);
             response.end();
@@ -576,7 +578,7 @@ app.get("/evaluaAlumno", (request, response)=>{
             response.status(201);
             response.end();
         }
-    })
+    });
 });
 
 app.post("/actualizaComentarioNota", (request, response)=>{
