@@ -38,6 +38,7 @@ $(document).ready(function() {
             cursoGrupo = $(this).find(':selected').text();
            // console.log(grupo);
            if(asig !== undefined && grupo !== undefined && tipo !== undefined){
+                $("tbody .elem").remove();
                 cargarListaAlumnosEvaluar(asig, grupo, tipo, cursoGrupo);
             }
         });
@@ -46,9 +47,8 @@ $(document).ready(function() {
             tipo = $(this).find(':selected').val();
            // console.log(tipo);
            if(asig !== undefined && grupo !== undefined && tipo !== undefined){
-           // var row = document.getElementsByTagName('tbody')[0];
-            //row.parentNode.removeChild(row);
-            $("tbody .elem").remove();
+           
+                $("tbody .elem").remove();
                 cargarListaAlumnosEvaluar(asig, grupo, tipo, cursoGrupo);
             }
         });
