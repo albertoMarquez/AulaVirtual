@@ -240,12 +240,27 @@ app.post("/altaEjercicio", (request, response) =>{
     })     
 });
 
+app.get("/getAsignaturasOtrosAnios", (request, response) =>{
+    daoE.listarEjerciciosAltaAniosPasados(request.query.idA, (err, filas) =>{
+        if(err){
+            response.status(400);
+            response.end();
+        }else{
+            console.log("getAsignaturasOtrosAnios");
+            console.log(filas);
+            response.json(filas);
+            response.status(201);
+            response.end();
+        }
+    })
+});
+
 
 app.post("/principal", (request, response) =>{
-    //console.log(request.body); terminal code
+   // console.log(request.body);
     // oracle.alerta();
     
-    daoE.listarEjerciciosAlta(request.body.tipo, (err, op) =>{
+    daoE.listarEjerciciosAlta(request.body.tipo, request.body.id,(err, op) =>{
         if(err) {
             response.status(400);
             response.end();
