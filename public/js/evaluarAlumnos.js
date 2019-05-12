@@ -24,11 +24,9 @@ $(document).ready(function() {
         }else if(user.user.localeCompare("alumno")===0){
             $("#menu").load("menuAlumno.html");
         }
-
-
-
+        
         cargarAsignatura();
-        let asig, grupo, tipo;
+        let asig, grupo, tipo, cursoGrupo;
        
         $('#asignatura').on('change', function() {
             asig = $(this).find(':selected').data('idAsig');
@@ -37,9 +35,10 @@ $(document).ready(function() {
 
         $("#cursoGrupo").on('change', function() {
             grupo = $(this).find(':selected').data('idGrupo');
+            cursoGrupo = $(this).find(':selected').text();
            // console.log(grupo);
            if(asig !== undefined && grupo !== undefined && tipo !== undefined){
-                cargarListaAlumnosEvaluar(asig, grupo, tipo);
+                cargarListaAlumnosEvaluar(asig, grupo, tipo, cursoGrupo);
             }
         });
        
@@ -47,13 +46,12 @@ $(document).ready(function() {
             tipo = $(this).find(':selected').val();
            // console.log(tipo);
            if(asig !== undefined && grupo !== undefined && tipo !== undefined){
-                cargarListaAlumnosEvaluar(asig, grupo, tipo);
+           // var row = document.getElementsByTagName('tbody')[0];
+            //row.parentNode.removeChild(row);
+            $("tbody .elem").remove();
+                cargarListaAlumnosEvaluar(asig, grupo, tipo, cursoGrupo);
             }
         });
-    
-        
-        
-        
     }
     else{
         var link = window.location.href;
@@ -64,35 +62,33 @@ $(document).ready(function() {
 
 //se da por supuesto que el idA y el idG pertenecen al profesor logueado
 //por lo que en la query no hace falta dicha comprobación
-function cargarListaAlumnosEvaluar(idA, idG, tipoEjer){
+function cargarListaAlumnosEvaluar(idA, idG, tipoEjer, cursoGrupo){
     $.ajax({
         method: "GET",
         url: "/evaluaAlumno",
         contentType: "application/json",
         data: {asig:idA, grupo:idG, tipo:tipoEjer},
         success: function(data) {
-
             data.forEach(e => { 
                 
-            var elem = $("#template").clone();
-            elem.find("#nombre").text(e.nombre);
-            elem.find("#idAlumno").text(e.idAlumno);
-            elem.find("#apellidos").text(e.apellidos);
-            elem.find("#idEjer").text(e.idEjer);
-            elem.find("#titulo").text(e.titulo);
-            elem.find("#numScriptsFallo").text(e.numScriptsFallo);
-            elem.find("#numsScriptsTotales").text(e.numScriptsTotales);
-            elem.find("#entregaRetrasada").html(e.entregaRetrasada);
-            elem.find("#cursoGrupo").text(e.cursoGrupo);
-            elem.find("#intentos").text(e.intentos);
-            elem.find("#resultado").text(e.resultado);
-            elem.find("#nota").text(e.nota);
-            elem.data("idAlumno", e.idAlumno);
+                var elem = $("#template").clone();
+                elem.find("#nombre").text(e.nombre);
+                elem.find("#idAlumno").text(e.idAlumno);
+                elem.find("#apellidos").text(e.apellidos);
+                elem.find("#idEjer").text(e.idEjer);
+                elem.find("#titulo").text(e.titulo);
+                elem.find("#numScripts").text(e.numScripts);
+                elem.find("#cursoGrupo").text(cursoGrupo);
+                elem.find("#intentos").text(e.intentos);
+                elem.find("#resultado").text(e.resultado);
+                elem.find("#nota").text(e.nota);
+                elem.data("idAlumno", e.idAlumno);
 
-            elem.removeClass("hidden");
-            elem.attr("id", "elem");
-            $("#template").before(elem);
+                elem.removeClass("hidden");
+                elem.attr("class", "elem");
+                $("#template").before(elem);
             });
+
             $('#tablaA').DataTable();
             var table = $('#tablaA').DataTable();
             $('.dataTables_length').addClass('bs-select');
@@ -114,11 +110,12 @@ function cargarListaAlumnosEvaluar(idA, idG, tipoEjer){
 
 function abrirModal(info){
     // Get the modal
+    console.log(info);
 
     $.ajax({
         method: "GET",
         url: "/getUltimaEntrega",
-        data:{idEjercicio:info[3], idAlumno: info[0]},
+        data:{idEjercicio:info[2], idAlumno: info[0]},
         dataType:"JSON",
         contentType: "application/json",
         success: function(ultimaEntrega) {
@@ -127,11 +124,11 @@ function abrirModal(info){
             modal.style.display = "block";
             //console.log("Modal");
             //console.log(info);
-            $("#nombreModal").text(info[1] + " " + info[2]);
-            $("#notaModal").val(info[11]);
+            $("#nombreModal").text(info[1]);
+            $("#notaModal").val(info[8]);
             // When the user clicks on <span> (x), close the modal
             $("#solucionAlumnoModal").val(ultimaEntrega.solAlumno);
-            $("#solucionOracleAlumno").val(info[10]);
+            $("#solucionOracleAlumno").val(info[7]);
             span.onclick = function() {
                 modal.style.display = "none";
             }
@@ -142,7 +139,7 @@ function abrirModal(info){
                     method: "POST",
                     url: "/actualizaComentarioNota",
                     contentType: "application/json",
-                    data: JSON.stringify({idEjercicio:info[3], idAlumno: info[0], nota: $("#notaModal").val(), comentario: $("#solucionAlumnoModal").val()}),
+                    data: JSON.stringify({idEjercicio:info[2], idAlumno: info[0], nota: $("#notaModal").val(), comentario: $("#solucionAlumnoModal").val()}),
                     success: function() {
                        // alert("Actualizado correctamente");
                         modal.style.display = "none";

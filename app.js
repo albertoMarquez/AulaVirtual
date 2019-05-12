@@ -567,7 +567,7 @@ app.post("/eliminarAsignatura",(request, response) =>{
 });
 
 app.get("/evaluaAlumno", (request, response)=>{
-    console.log(request.query);
+    //console.log(request.query);
     daoU.evaluaAlumno(request.query, (err, filas)=>{
         if(err){
             response.status(400);
