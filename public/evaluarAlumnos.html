@@ -28,18 +28,43 @@
         <div id="cabecera"></div>
         <div id="menu"></div>
 
+        <div id="filtro">
+            <!--select para elegir la asignatura-->
+            <div id="asig">
+                <label>Asignatura: </label>
+                <select id ="asignatura" class="autocomplete">
+                    <option value="0" class="templateAsignatura">-- Selecciona una asignatura --</option>
+                </select>
+            </div>
+
+             <!--select para elegir el curso y grupo-->
+            <div id="cyg">
+                <label>Curso y grupo: </label>
+                <select id ="cursoGrupo" class="autocomplete">
+                    <option value="0" class="templateCursoGrupo">-- Selecciona un curso y grupo --</option>
+                </select>
+            </div>
+           
+            <!--select para elegir el tipo de problema-->
+            <div id="prob">
+                <label>Tipo de problema: </label>
+                <select id ="problema" class="autocomplete">
+                    <option value="0" class="templateProblema">-- Selecciona un tipo de problema --</option>
+                    <option value="1" class="templateProblema">Examen/Evaluación </option>
+                    <option value="2" class="templateProblema">Todos </option>
+                </select>
+            </div>
+        </div>
+
         <div id="tablaAlumnos">
             <table id="tablaA" class="table table-striped">
                 <thead>
                     <tr>
                         <th scope="col">ID del alumno</th>
                         <th scope="col">Nombre</th>
-                        <th scope="col">Apellidos</th>
                         <th scope="col">ID de ejercicio</th>
                         <th scope="col">Titulo del ejercicio</th>
-                        <th scope="col">Numero scripts OK</th>
-                        <th scope="col">Numero de scripts totales</th>
-                        <th scope="col">Entrega retrasada</th>
+                        <th scope="col">Scripts</th>
                         <th scope="col">Curso y grupo</th>
                         <th scope="col">Intentos</th>
                         <th class="hidden" scope="col">Resultado</th>
@@ -50,12 +75,9 @@
                     <tr id="template"class="hidden">
                         <td id="idAlumno">idAlumno</td>
                         <td id="nombre">Nombre</td>
-                        <td id="apellidos">Apellidos</td>
                         <td id="idEjer">ID de ejercicio</td>
                         <td id="titulo">Titulo del ejercicio</td>
-                        <td id="numScriptsFallo">Numero scripts OK</td>
-                        <td id="numsScriptsTotales">Numero de scripts totales</td>
-                        <td id="entregaRetrasada">Entrega retrasada</td>
+                        <td id="numScripts">Numero scripts</td>
                         <td id="cursoGrupo">Curso y grupo</td>
                         <td id="intentos">Intentos</td>
                         <td class="hidden" id="resultado">Resultado</td>

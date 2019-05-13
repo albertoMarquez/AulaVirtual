@@ -56,23 +56,39 @@ class DAOEjercicio {
                         callback(undefined);
                     }
                 });
+                con.release();
             }
         })
     }
 
-    listarEjerciciosAlta(datos, callback){ /// lista los ejercicios dados de alta
+    listarEjerciciosAlta(datos, idAlumno, callback){ /// lista los ejercicios dados de alta
+        
         this.pool.getConnection((err, con) =>{
             var fecha = new Date();
+            var anio = fecha.getFullYear();
+            console.log(fecha);
+            console.log(anio);
+            console.log(datos);
+            console.log(idAlumno);
             if(err){
                 callback(err);
-            }else{//MYSQL:SELECT Titulo FROM `altaejercicio` INNER JOIN `ejercicio` ON altaejercicio.IdEj = ejercicio.IdEjercicio where evaluacion=1
-            con.query(`SELECT Titulo,idEjercicio FROM altaejercicio a, ejercicio e where a.idEj = e.idEjercicio  
-                and evaluacion = ? and DATE(ini) <= DATE(?) order by Titulo asc`,
-                [datos, fecha], (err, resultado) =>{ 
+            }else{
+                 con.query(`select * 
+                            from (select c.idGrupo, idAsignatura, anio, grupo, c.Titulo, c.idEjercicio
+                                        from (SELECT Titulo,idEjercicio, idGrupo 
+                                                FROM altaejercicio a join ejercicio e 
+                                                on a.idEj = e.idEjercicio  
+                                                and evaluacion = ?
+                                                and DATE(ini) <= DATE(?)) c JOIN grupos g
+                                        ON c.idGrupo = g.idGrupo and g.anio = ?) tb1 JOIN alumno alu 
+                            ON tb1.idGrupo = alu.idGrupo and alu.idAlumno = ?`,
+                [datos, fecha, anio, idAlumno], (err, resultado) =>{ 
                     if (!err) {
                         if (resultado.length === 0) 
                             callback(undefined, undefined);
                         else { 
+                            console.log("res");
+                            console.log(resultado);
                             let res = [];
                             resultado.forEach(e => {
                                 res.push({titulo:e.Titulo, id:e.idEjercicio});
@@ -89,8 +105,41 @@ class DAOEjercicio {
         });
     }
 
+    listarEjerciciosAltaAniosPasados(datos, callback){
+        var fecha = new Date();
+        this.pool.getConnection((err, con)=>{
+            if(err){
+                callback(err);
+            }else{
+                var sql = `select * 
+                        from (select g.idAsignatura 
+                            from alumno a join grupos g 
+                            on a.idGrupo = g.idGrupo 
+                            and a.idAlumno = ? and g.anio < ?) tb1 join asignatura asig 
+                        ON tb1.idAsignatura = asig.idAsignatura`;
+                con.query(sql, [datos, fecha.getFullYear()-1], (err, filas) =>{
+                    if(err){
+                        callback(err, undefined);
+                    }else{
+                        console.log(filas);
+                        var sol = [];
+                        var row = {};
+                        filas.forEach(e =>{
+                            row.idAsignatura = e.idAsignatura;
+                            row.descripcion = e.descripcion;
+                            sol.push(row);
+                            row = {};
+                        });
+                        callback(undefined, filas);
+                    }
+                });
+                con.release();
+            }
+        })
+    }
+
     descargarProfesor(datos, callback){
-        console.log(datos);
+        //console.log(datos);
         this.pool.getConnection((err, con) =>{
             if(err){
                 callback(err);
@@ -320,12 +369,8 @@ class DAOEjercicio {
                         //console.log("err");
                         callback(err);
                     }else{
-                        if(filas.length === 0){
-                           // console.log("query 0");
-                            callback(undefined, false);
-                        }else{
-                            callback(undefined, filas[0].fin);
-                        }
+                        //if(filas.length === 0){callback(undefined, false);}else{
+                        callback(undefined, filas[0].fin);
                     }
                 });
                 con.release();
@@ -343,12 +388,8 @@ class DAOEjercicio {
                         //console.log("err");
                         callback(err);
                     }else{
-                        if(filas.length === 0){
-                            //console.log("query 0");
-                            callback(undefined, false);
-                        }else{
-                            callback(undefined, filas[0].numeroIntentos);
-                        }
+                        //if(filas.length === 0){callback(undefined, false);}else{
+                        callback(undefined, filas[0].numeroIntentos);
                     }
                 });
                 con.release();
@@ -399,8 +440,8 @@ class DAOEjercicio {
                                 }
                             });
                         }else{
-                            var sql = `UPDATE ejercicioalumno SET solucion=?, numFallos=?, entregaRetrasada=?,intentos=?,resultado=? ;`
-                            con.query(sql,[datos.solucion, nErr, datos.entregaRetrasada, datos.intentos, resultado], (err) =>{
+                            var sql = `UPDATE ejercicioalumno SET solucion=?, numFallos=?, entregaRetrasada=?,intentos=?,resultado=? WHERE idEjercicio = ? AND idAlumno = ? ;`
+                            con.query(sql,[datos.solucion, nErr, datos.entregaRetrasada, datos.intentos, resultado, datos.idEjercicio,  datos.idAlumno], (err) =>{
                                 if(err){
                                     console.log("UPDATE E:");
                                     callback(err, undefined);

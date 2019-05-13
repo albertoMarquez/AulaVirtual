@@ -1,3 +1,5 @@
+var user;
+
 $(document).ready(function() {
     $("#cabecera").load("cabecera.html",function(responseTxt, statusTxt, xhr){
         if(statusTxt == "success"){
@@ -14,7 +16,7 @@ $(document).ready(function() {
 
     var options={}
     $.galleta(options);
-    var user = $.galleta().getc("usuario");
+    user = $.galleta().getc("usuario");
     if(user !== "undefined"){
         user = JSON.parse(user);
         //alert(user);
@@ -82,6 +84,7 @@ function listarAsignaturas(){
         method: "GET",
         url: "/getAsignaturas",
         contentType: "application/json",
+        data:{id:user.idProfesor},
         success: function(data) {
             var cont = 1;
            data.forEach(e => {
@@ -97,17 +100,18 @@ function listarAsignaturas(){
            });
         },
         error: function() {
-            alert("Error al mostrar los ejercicios");
+            alert("Error al cargar la asignatura");
         }
     });
 }
 
-function listarCursoYgrupo(id){
+function listarCursoYgrupo(idA){
 
     $(".groupCurso").remove();
     $.ajax({
         method: "GET",
-        url: "/getCursoGrupo/" + id,
+        url: "/getCursoGrupo",
+        data:{id:idA, idP:user.idProfesor},
         contentType: "application/json",
         success: function(data) {
             var cont = 1;
