@@ -1,6 +1,6 @@
 "use strict";
 /**
- * Proporciona operaciones para la gestión de usuarios
+ * Proporciona operaciones para la gestión de ejercicios
  * en la base de datos.
  */
 class DAOEjercicio {

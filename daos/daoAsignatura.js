@@ -1,6 +1,6 @@
 "use strict";
 /**
- * Proporciona operaciones para la gestión de usuarios
+ * Proporciona operaciones para la gestión de asignaturas
  * en la base de datos.
  */
 class DAOAsignatura {
