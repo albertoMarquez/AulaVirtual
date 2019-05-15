@@ -1,4 +1,5 @@
 var user;
+var table;
 $(document).ready(function() {
 var options={}
 $.galleta(options);
@@ -29,6 +30,7 @@ if(user != "undefined"){
        
         $('#asignatura').on('change', function() {
             asig = $(this).find(':selected').data('idAsig');
+            //console.log(asig);
             listarCursoYgrupo(asig);
         });
 
@@ -37,6 +39,8 @@ if(user != "undefined"){
             cursoGrupo = $(this).find(':selected').text();
            // console.log(grupo);
            if(asig !== undefined && grupo !== undefined && tipo !== undefined){
+                if(table)
+                    table.destroy();
                 $("tbody .elem").remove();
                 cargarListaAlumnosEvaluar(asig, grupo, tipo, cursoGrupo);
             }
@@ -45,8 +49,9 @@ if(user != "undefined"){
         $("#problema").on('change', function(){
             tipo = $(this).find(':selected').val();
            // console.log(tipo);
-           if(asig !== undefined && grupo !== undefined && tipo !== undefined){
-           
+           if(asig !== undefined && grupo !== undefined && tipo !== undefined){               
+                if(table)
+                    table.destroy();
                 $("tbody .elem").remove();
                 cargarListaAlumnosEvaluar(asig, grupo, tipo, cursoGrupo);
             }
@@ -61,6 +66,7 @@ if(user != "undefined"){
 
 //se da por supuesto que el idA y el idG pertenecen al profesor logueado
 //por lo que en la query no hace falta dicha comprobación
+ 
 function cargarListaAlumnosEvaluar(idA, idG, tipoEjer, cursoGrupo){
     $.ajax({
         method: "GET",
@@ -69,7 +75,6 @@ function cargarListaAlumnosEvaluar(idA, idG, tipoEjer, cursoGrupo){
         data: {asig:idA, grupo:idG, tipo:tipoEjer},
         success: function(data) {
             data.forEach(e => { 
-                
                 var elem = $("#template").clone();
                 elem.find("#nombre").text(e.nombre);
                 elem.find("#idAlumno").text(e.idAlumno);
@@ -88,8 +93,9 @@ function cargarListaAlumnosEvaluar(idA, idG, tipoEjer, cursoGrupo){
                 $("#template").before(elem);
             });
 
-            $('#tablaA').DataTable();
-            var table = $('#tablaA').DataTable();
+            //$('#tablaA').DataTable();
+            table = $('#tablaA').DataTable();
+            
             $('.dataTables_length').addClass('bs-select');
             // el orden de la tabla lo he sacado de aqui https://mdbootstrap.com/docs/jquery/tables/sort/ 
             $('#tablaA').on('click', 'tbody tr', function(){
@@ -97,7 +103,7 @@ function cargarListaAlumnosEvaluar(idA, idG, tipoEjer, cursoGrupo){
                 var data = table.row( this ).data();
                 //console.log(data);
                 abrirModal(data);
-            });
+            }); 
         },
         error: function() {
             alert("Error al mostrar los ejercicios");
