@@ -30,6 +30,7 @@ $(document).ready(function() {
        
         $('#asignatura').on('change', function() {
             asig = $(this).find(':selected').data('idAsig');
+            //console.log(asig);
             listarCursoYgrupo(asig);
         });
 
@@ -62,6 +63,7 @@ $(document).ready(function() {
 
 //se da por supuesto que el idA y el idG pertenecen al profesor logueado
 //por lo que en la query no hace falta dicha comprobación
+ 
 function cargarListaAlumnosEvaluar(idA, idG, tipoEjer, cursoGrupo){
     $.ajax({
         method: "GET",
@@ -70,7 +72,6 @@ function cargarListaAlumnosEvaluar(idA, idG, tipoEjer, cursoGrupo){
         data: {asig:idA, grupo:idG, tipo:tipoEjer},
         success: function(data) {
             data.forEach(e => { 
-                
                 var elem = $("#template").clone();
                 elem.find("#nombre").text(e.nombre);
                 elem.find("#idAlumno").text(e.idAlumno);

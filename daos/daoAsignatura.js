@@ -46,7 +46,7 @@ class DAOAsignatura {
             if(err){
                 callback(err);
             }else{
-                con.query(`SELECT * FROM asignatura a, grupos g, profeGrupo pg where a.idAsignatura = g.idAsignatura and g.idGrupo = pg.idGrupo AND a.idAsignatura = 1 and anio = '2018' and pg.idProfesor = 1`,
+                con.query(`SELECT * FROM asignatura a, grupos g, profeGrupo pg where a.idAsignatura = g.idAsignatura and g.idGrupo = pg.idGrupo AND a.idAsignatura = ? and anio = ? and pg.idProfesor = ?`,
                  [idAsignatura, anioHoy, idProfe],
                 (err, filas) =>{
                     if(err){
