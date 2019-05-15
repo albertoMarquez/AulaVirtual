@@ -1,5 +1,6 @@
 //falta arreglar todo desde aqui
 var user;
+var table;
 $(document).ready(function() {
     $("#cabecera").load("cabecera.html",function(responseTxt, statusTxt, xhr){
         if(statusTxt == "success"){
@@ -39,6 +40,8 @@ $(document).ready(function() {
             cursoGrupo = $(this).find(':selected').text();
            // console.log(grupo);
            if(asig !== undefined && grupo !== undefined && tipo !== undefined){
+                if(table)
+                    table.destroy();
                 $("tbody .elem").remove();
                 cargarListaAlumnosEvaluar(asig, grupo, tipo, cursoGrupo);
             }
@@ -47,8 +50,9 @@ $(document).ready(function() {
         $("#problema").on('change', function(){
             tipo = $(this).find(':selected').val();
            // console.log(tipo);
-           if(asig !== undefined && grupo !== undefined && tipo !== undefined){
-           
+           if(asig !== undefined && grupo !== undefined && tipo !== undefined){               
+                if(table)
+                    table.destroy();
                 $("tbody .elem").remove();
                 cargarListaAlumnosEvaluar(asig, grupo, tipo, cursoGrupo);
             }
@@ -90,8 +94,9 @@ function cargarListaAlumnosEvaluar(idA, idG, tipoEjer, cursoGrupo){
                 $("#template").before(elem);
             });
 
-            $('#tablaA').DataTable();
-            var table = $('#tablaA').DataTable();
+            //$('#tablaA').DataTable();
+            table = $('#tablaA').DataTable();
+            
             $('.dataTables_length').addClass('bs-select');
             // el orden de la tabla lo he sacado de aqui https://mdbootstrap.com/docs/jquery/tables/sort/ 
             $('#tablaA').on('click', 'tbody tr', function(){
@@ -99,7 +104,7 @@ function cargarListaAlumnosEvaluar(idA, idG, tipoEjer, cursoGrupo){
                 var data = table.row( this ).data();
                 //console.log(data);
                 abrirModal(data);
-            });
+            }); 
         },
         error: function() {
             alert("Error al mostrar los ejercicios");
