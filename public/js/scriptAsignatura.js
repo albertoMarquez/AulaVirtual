@@ -1,25 +1,26 @@
 
 var user;
 $(document).ready(function() {
-    $("#cabecera").load("cabecera.html",function(responseTxt, statusTxt, xhr){
-        if(statusTxt == "success"){
-            $("#desconectar").removeClass("hidden");
-            $("#desconectar").click(function(event) {
-                $.galleta().setc("usuario", "undefined", "Thu, 01 Jan 1970 00:00:01 GMT");
-                var link = window.location.href;
-                var res = link.split("/");
-                window.location = res[1] + "/";
-            });
-        }  
-    });
-    //alert(getCookie("usuario").toString());
     var options={}
     $.galleta(options);
     user = $.galleta().getc("usuario");
     if(user != "undefined"){
         user = JSON.parse(user);
+        $("#cabecera").load("cabecera.html",function(responseTxt, statusTxt, xhr){
+            if(statusTxt == "success"){
+                $("#nombre_usuario").text(user.nombre);
+                $("#roll_usuario").text(user.user);
 
-        //alert(user);
+                $("#desconectar").removeClass("hidden");
+                $("#desconectar").click(function(event) {
+                    $.galleta().setc("usuario", "undefined", "Thu, 01 Jan 1970 00:00:01 GMT");
+                    var link = window.location.href;
+                    var res = link.split("/");
+                    window.location = res[1] + "/";
+                });
+            }  
+        });
+        
         if( user.user.localeCompare("profesor")===0){
             $("#menu").load("menuProfesor.html");
         }else if(user.user.localeCompare("alumno")===0){
