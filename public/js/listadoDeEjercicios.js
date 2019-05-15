@@ -60,9 +60,8 @@ function listarAsignaturas(){
 
     $.ajax({
         method: "GET",
-        url: "/getAsignaturasOtrosAnios",
+        url: "/getAsignaturas",
         contentType: "application/json",
-        data:{idA: user.idAlumno},
         success: function(data) {
             var cont = 1;
             data.forEach(e => {
