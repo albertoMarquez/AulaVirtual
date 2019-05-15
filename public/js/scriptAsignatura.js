@@ -66,7 +66,7 @@ function crearAsignatura(){
 
 function eliminarAsignatura(){
     var asignatura = $("#sEliminarAsignatura").val();
-    
+    alert(asignatura);
     $.ajax({
         method: "POST",
         url: "/eliminarAsignatura",

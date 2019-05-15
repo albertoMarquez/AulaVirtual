@@ -1,4 +1,5 @@
 var user;
+var reloading =0;
 $(document).ready(function() { 
     $("#desconectar").removeClass("hidden");
     $("#desconectar").click(function(event) {
@@ -30,16 +31,14 @@ $(document).ready(function() {
         });
         
         $("#evaluar").click(function(event) {//Dale al boton y deberia de ejecutarse la funcion 
-            ///PROGRAMAR FUNCIONES
+            $( "#evaluar" ).prop( "disabled", true );
+            reloading++;
             event.preventDefault();
-            console.log("boton pulsado");
+            //console.log("boton pulsado");
             var link = window.location.href;
             var res = link.split("/");
             console.log(res);
             let idEjercicio = res[4];//coger del id
-            /*numeroDeIntentos(idEjercicio, (num)=>{//¿PORQUE NO FUNCIONA EL ALERT?
-                console.log("num de intentos"+num);
-            });*/
             //document.getElementById("myTextarea").value;
             //let solucion = $("#solAlmun").val();
             //console.log(user.idAlumno);
@@ -47,22 +46,29 @@ $(document).ready(function() {
                 console.log("entra en subirScriptAlumno subirScriptAlumno");
                 subirScriptAlumno(user, idEjercicio);
             });
-            
-        }); 
 
-       // location.reload();
-       if($("#solProf").text() !== ""){
+        });
+        // location.reload();
+        if($("#solProf").text() !== ""){
             var s = $("#solProf").text();
             $("#solProf").html(s);
-       }
-
+        }
     }else{
         var link = window.location.href;
         var res = link.split("/");
         window.location = res[1] + "/";
     }
- });
 
+ });
+ function bloquea(){
+    if(boton.disabled == false){
+       boton.disabled = true;
+       
+       setTimeout(function(){
+          boton.disabled = false;
+      }, 10000)
+    }
+  }
 function crearAlumno(alumno, callback) {
     let user = alumno.nombre.toUpperCase() + alumno.idAlumno.toString();
     console.log("usuario "+user);
@@ -113,45 +119,38 @@ function subirScriptAlumno(user, idEjercicio){
     numeroDeIntentos(idEjercicio, (num)=>{
         //get intentos alumno, comparar y si es menor, sumar 1 y actualizar tabla
         getIntentosAlumno(idEjercicio, idAlumno, (numIntentos)=>{
-            
             // console.log(numIntentos);
             // console.log("numTotales " + num);
-            if(numIntentos < num){
-                let resultado = ""; //se tiene que coger del oracledb
-                let fechaActual = new Date();
-                let nombre = user.nombre;
-                let usuario = user.user;
-                intentos = numIntentos + 1;
-                leerArchivo((contenido)=>{
-                    //console.log(user.user);
-                    //if(true){//reader.EMPTY){
-                    let solucion2 = contenido;
-                    var info = {};
-                    if(solucion === ""){
-                        if(solucion2 === undefined){
-                            alert("sube una solucion");
-                        }else{
-                            info = {idEjercicio:idEjercicio, nombre:nombre, usuario:usuario, numOk: numOk, entregaRetrasada: entregaRetrasada, idAlumno:idAlumno, idGrupo:idGrupo,intentos:intentos,resultado:resultado,fechaActual:fechaActual,solucion:solucion2};
-                            ejecutaProcedimiento(info);
-                        }
+            //if(numIntentos < num){
+            let resultado = ""; //se tiene que coger del oracledb
+            let fechaActual = new Date();
+            let nombre = user.nombre;
+            let usuario = user.user;
+            intentos = numIntentos + 1;
+            leerArchivo((contenido)=>{
+                //console.log(user.user);
+                //if(true){//reader.EMPTY){
+                let solucion2 = contenido;
+                var info = {};
+                if(solucion === ""){
+                    if(solucion2 === undefined){
+                        alert("sube una solucion");
                     }else{
-                        info = {idEjercicio:idEjercicio, nombre:nombre, usuario:usuario, numOk: numOk, entregaRetrasada: entregaRetrasada, idAlumno:idAlumno, idGrupo:idGrupo,intentos:intentos,resultado:resultado,fechaActual:fechaActual,solucion:solucion};
+                        info = {idEjercicio:idEjercicio, nombre:nombre, usuario:usuario, numOk: numOk, entregaRetrasada: entregaRetrasada, idAlumno:idAlumno, idGrupo:idGrupo,intentos:intentos,resultado:resultado,fechaActual:fechaActual,solucion:solucion2};
                         ejecutaProcedimiento(info);
                     }
-                    //console.log("info");
-                    //console.log(info);
-                    //alert("ajax 2 ejecutar procedimiento");
-                   
-                });
-            }else{
-                alert("Numero de intentos superado");
-            }
+                }else{
+                    info = {idEjercicio:idEjercicio, nombre:nombre, usuario:usuario, numOk: numOk, entregaRetrasada: entregaRetrasada, idAlumno:idAlumno, idGrupo:idGrupo,intentos:intentos,resultado:resultado,fechaActual:fechaActual,solucion:solucion};
+                    ejecutaProcedimiento(info);
+                }
             
+            });
+            /*}else{
+                alert("Numero de intentos superado");
+            }*/
         });
-
     });
 }
-
 
 function ejecutaProcedimiento(info){
     $("#alertas .resultados").remove();
@@ -193,7 +192,8 @@ function ejecutaProcedimiento(info){
                 $("#alertas").append(elem);
             });
             console.log(`exito!!`);
-            //location.reload();
+            $( "#evaluar" ).prop( "disabled", false );
+            
         },
         error: function(error){
              console.log("Error!!!");
@@ -202,14 +202,14 @@ function ejecutaProcedimiento(info){
                 alert("error de ejecucion");
             }else{
                 //error que le ha dado al alumno de oracle
-              //  console.log(error.responseJSON.oracle);
+                //console.log(error.responseJSON.oracle);
                 var elem = $(".alert-light").clone();
                 elem.removeClass("hidden");
                 elem.removeClass("template");
                 elem.text(error.responseJSON.oracle);
-                $("#alertas").append(elem);
-                
+                $("#alertas").append(elem); 
             }
+            $( "#evaluar" ).prop( "disabled", false );
         }
     })
 }
