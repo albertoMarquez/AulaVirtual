@@ -240,27 +240,12 @@ app.post("/altaEjercicio", (request, response) =>{
     })     
 });
 
-app.get("/getAsignaturasOtrosAnios", (request, response) =>{
-    daoE.listarEjerciciosAltaAniosPasados(request.query.idA, (err, filas) =>{
-        if(err){
-            response.status(400);
-            response.end();
-        }else{
-            console.log("getAsignaturasOtrosAnios");
-            console.log(filas);
-            response.json(filas);
-            response.status(201);
-            response.end();
-        }
-    })
-});
-
 
 app.post("/principal", (request, response) =>{
-   // console.log(request.body);
+    //console.log(request.body); terminal code
     // oracle.alerta();
     
-    daoE.listarEjerciciosAlta(request.body.tipo, request.body.id,(err, op) =>{
+    daoE.listarEjerciciosAlta(request.body.tipo, (err, op) =>{
         if(err) {
             response.status(400);
             response.end();
@@ -313,7 +298,7 @@ app.get("/getEjercicios", (request, response) =>{
 });
 
 app.get("/getAsignaturas", (request, response) =>{
-    daoA.listarAsignaturas(request.query.id, (err, filas) =>{
+    daoA.listarAsignaturas((err, filas) =>{
         if(err){
             response.status(400);
             response.end();
@@ -390,19 +375,15 @@ function highlight(newElem, oldElem){
         var d = diff.diffWordsWithSpace(oldElem, newElem);
         d.forEach(elem =>{
          
-            /*if(elem.value === '\n' || elem.value === '\r\n' || elem.value === '\r\n \r\n' || 
+            if(elem.value === '\n' || elem.value === '\r\n' || elem.value === '\r\n \r\n' || 
             elem.value === '\r\n  ' || elem.value === '\n \n' || elem.value === '\n    ' ||
             elem.value === '\r\n    ' || elem.value === '\n  ' || elem.value === '\n  ' || 
             elem.value === '\r\n  ' || elem.value === '\r\n\r\n' || elem.value === '\n \n  ' ||
             elem.value === '\n  \n    ' || elem.value === '\r\n       \t' || elem.value === '\r\n            ' ||
             elem.value === '\n\n    '){
                 text += "<br>";
-            }*/
-            if(elem.value === '\n' || elem.value === '\r'){
-                text += "<br>";
-            }else if(elem.value === '\r\n\r\n'|| elem.value === '\r\n \r\n'){
-                text += "<br><br>";
-            }else{
+            }
+            else{
                 if(elem.added === undefined && elem.removed === undefined){
                     text += "<span>" + elem.value + "</span>";
                 }else{
@@ -526,10 +507,9 @@ app.get("/mostrarListaEjer", (request, response)=>{
     })
 });
 
-app.get("/getCursoGrupo", (request, response) =>{
-    let id = Number(request.query.id);
-    var idProfe = Number(request.query.idP);
-    daoA.listarCursoGrupo(id, idProfe, (err, filas) =>{
+app.get("/getCursoGrupo/:id", (request, response) =>{
+    let id = Number(request.params.id);
+    daoA.listarCursoGrupo(id, (err, filas) =>{
         if(err){
             response.status(400);
             response.end();
@@ -582,18 +562,17 @@ app.post("/eliminarAsignatura",(request, response) =>{
 });
 
 app.get("/evaluaAlumno", (request, response)=>{
-    //console.log(request.query);
-    daoU.evaluaAlumno(request.query, (err, filas)=>{
+    daoU.evaluaAlumno(request.query.id, (err, filas)=>{
         if(err){
             response.status(400);
             response.end();
         }else{
-            //console.log(filas);
+            console.log(filas);
             response.json(filas);
             response.status(201);
             response.end();
         }
-    });
+    })
 });
 
 app.post("/actualizaComentarioNota", (request, response)=>{
@@ -696,14 +675,12 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
                                 res += e;                                
                             });
                             let errores = numeroDeErrores(resultado);
-                            daoE.entregaRetrasada(request.body.info.idEjercicio,(err,infoAlta)=>{
+                            daoE.entregaRetrasada(data.idEjercicio, (err, infoAlta)=>{
                                 if(err){
                                     console.log(err);
-                                    response.status(400);
-                                    response.end();
                                 }else{
                                     var hoy = new Date();
-                                    if(hoy < new Date(infoAlta)){
+                                    if(hoy < infoAlta){
                                         daoE.subirProcedimientoAlumno(request.body,res,errores.nErr,(err, sol)=>{
                                             if(err){
                                                 response.status(400);
@@ -716,10 +693,6 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
                                                 response.end();
                                             }
                                         });
-                                    }else{
-                                        response.json(errores.r);
-                                        response.status(201);
-                                        response.end();
                                     }
                                 }
                             });
@@ -730,8 +703,6 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
         }
     });
 });
-
-
 function numeroDeErrores(resultado){
     res = {};
     res.errores = [];
