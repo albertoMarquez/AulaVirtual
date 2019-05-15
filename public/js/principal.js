@@ -71,7 +71,7 @@ function cargarTabla(type) {
         method: "POST",
         url: "/principal",
         contentType: "application/json",
-        data: JSON.stringify({tipo:type, id:user.idAlumno}),
+        data: JSON.stringify({tipo:type}),
         success: function(data) {
             
             var tabla   = document.getElementsByTagName("table")[type];

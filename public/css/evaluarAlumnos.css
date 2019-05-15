@@ -87,9 +87,3 @@ input[type=text] {
     text-decoration: none;
     cursor: pointer;
   }
-
-#filtro{
-  display: flex;
-  margin: 25px;
-  justify-content: space-between;
-}

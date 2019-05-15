@@ -376,47 +376,50 @@ class DAOUsers {
         })
     }
 
-
-    evaluaAlumno(data, callback){
-        //console.log(data);
-        var ev = 1;
-        if(data.tipo === 1){
-            ev = 0;
-        }
-
+    //////////////////////////////////////////falta depurar la query
+    evaluaAlumno(idProfesor, callback){
         this.pool.getConnection((err, con)=>{
             if(err){
                 callback(err);
             }else{
-                var sql = `SELECT * 
-                from (SELECT a.nombre, a.apellidos, a.idAlumno, a.idGrupo, ea.idEjercicio, ea.solucion, ea.nota, ea.numFallos, ea.entregaRetrasada, ea.intentos, ea.resultado 
-                    from ejercicioalumno ea join alumno a 
-                    ON ea.idAlumno = a.idAlumno and a.idGrupo = ?) a JOIN (select e.idEjercicio, e.numScriptsSol, e.titulo, ae.evaluacion, ae.numeroIntentos 
-                                                                            from ejercicio e join altaejercicio ae 
-                                                                            ON ae.idEj = e.idEjercicio and ae.evaluacion = ?) b
-                ON a.idEjercicio = b.idEjercicio`; 
-                con.query(sql, [Number(data.grupo), Number(ev)], (err, filas)=>{
+                var sql = `select * 
+                from (select tb1.idAlumno, tb1.nombre, tb1.apellidos, tb1.nota, tb1.numFallos, tb1.IdGEjerAlumno, tb1.intentos, tb1.resultado, tb1.fechaEntrega, tb1.idEjercicio as "idEjer", tb1.entregaRetrasada, e.idProfesor, e.numScriptsSol, e.titulo from ejercicio e join (
+                        select a.nombre, a.apellidos, ea.nota, ea.numFallos, ea.idAlumno, ea.idGrupo as "IdGEjerAlumno", ea.intentos, ea.resultado, ea.fecha as "fechaEntrega", ea.idEjercicio, ea.entregaRetrasada 
+                        from ejercicioAlumno ea join alumno a 
+                        ON a.idAlumno = ea.idAlumno) tb1
+                    ON e.idEjercicio = tb1.idEjercicio) tb2 join (select g.idGrupo, g.idAsignatura as "idGrupoAsignatura", g.grupo, a.curso 
+                                                                from asignatura a join grupos g 
+                                                                ON g.idAsignatura = a.idAsignatura) tb3
+                ON tb3.idGrupo = tb2.IdGEjerAlumno
+                WHERE tb2.idProfesor = ?;`;
+                                            
+                con.query(sql, [idProfesor], (err, filas)=>{
                     if(err){
                         callback(err);
                     }else{
-
-                        //console.log(filas);
-                        
                         var sol = [];
                         var row = {};
                         filas.forEach(e=>{
                             row.idAlumno = e.idAlumno;
-                            row.nombre = `${e.apellidos}, ${e.nombre}`;
-                            row.idAlumno = e.idAlumno;
-                            row.idGrupo = e.idGrupo;
-                            row.idEjer = e.idEjercicio;
-                            row.sol = e.solucion;
+                            row.nombre = e.nombre;
+                            row.apellidos = e.apellidos;
+                            row.idEjer = e.idEjer;
                             row.titulo = e.titulo;
-                            row.nota = e.nota;
-                            row.numScripts = `${e.numFallos}/${e.numScriptsSol}`;                           
+                            row.numScriptsFallo = e.numFallos;
+                            row.numsScriptsTotales = e.numScriptsSol;
+                           // var fechaE = new Date(e.fechaEntrega);
+                            //console.log(`fechaE:  ${fechaE.getDate()}-${fechaE.getMonth() + 1}-${fechaE.getFullYear()}`);
+                            var fechaR = new Date(e.entregaRetrasada);
+                           // console.log(`fechaR:  ${fechaR.getDate()}-${fechaR.getMonth() + 1}-${fechaR.getFullYear()}`);
+                            if(e.fechaEntrega > e.entregaRetrasada){ 
+                                row.entregaRetrasada = "<span style='color: red;'>" + `${fechaR.getDate()}-${fechaR.getMonth() + 1}-${fechaR.getFullYear()}`+"</span>"
+                            }else{
+                                row.entregaRetrasada = "<span>" +  `${fechaR.getDate()}-${fechaR.getMonth() + 1}-${fechaR.getFullYear()}` + "</span>";
+                            }
+                            row.cursoGrupo = e.curso + "º " + e.grupo;
                             row.intentos = e.intentos;
                             row.resultado = e.resultado;
-                          
+                            row.nota = e.nota;
                             sol.push(row);
                             row = {};
                         });
