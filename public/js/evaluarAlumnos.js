@@ -40,7 +40,7 @@ if(user != "undefined"){
             cursoGrupo = $(this).find(':selected').text();
            // console.log(grupo);
            if(asig !== undefined && grupo !== undefined && tipo !== undefined){
-                $("tbody .elem").remove();
+               // $("tbody .elem").remove();
                 cargarListaAlumnosEvaluar(asig, grupo, tipo, cursoGrupo);
             }
         });
@@ -49,7 +49,7 @@ if(user != "undefined"){
             tipo = $(this).find(':selected').val();
            // console.log(tipo);
            if(asig !== undefined && grupo !== undefined && tipo !== undefined){               
-                $("tbody .elem").remove();
+               // $("tbody .elem").remove();
                 cargarListaAlumnosEvaluar(asig, grupo, tipo, cursoGrupo);
             }
         });
@@ -129,6 +129,10 @@ function cargarListaAlumnosEvaluar(idA, idG, tipoEjer, cursoGrupo){
             
             $('.dataTables_length').addClass('bs-select');
             // el orden de la tabla lo he sacado de aqui https://mdbootstrap.com/docs/jquery/tables/sort/ 
+            $(".previous").text(" ");
+            $(".next").text(" ");
+            var img = $("img").attr("src", "images/nextButton.png");
+            $(".next").append(img);
             $('#tablaA').on('click', 'tbody tr', function(){
                 // console.log('TR cell textContent : ', this);
                 var data = tableData.row( this ).data();

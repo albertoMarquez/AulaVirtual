@@ -54,6 +54,7 @@ a{
 }
 .dropdown-menu > a{
     color:white;
+    margin-left: 18px;
 }
 a:hover, a:focus {
     color: #feffff;
@@ -248,4 +249,17 @@ a:hover, a:focus {
 .open > .dropdown-menu {
     background-color: #3f5d55;
     color: white; 
+}
+
+.dataTables_info{
+    display: none;
+}
+
+div.dataTables_wrapper div.dataTables_paginate {
+    display: flex;
+    justify-content: center;
+}
+
+.previous::before{
+    background-image: "public/images/previousButton.png"
 }
