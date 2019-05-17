@@ -7,13 +7,6 @@ let allErr;
 //https://github.com/oracle/node-oracledb/blob/master/examples/example.js
 //https://oracle.github.io/node-oracledb/
 //NO BORRAR REFERENCIA POR AHORA
-/*async function disconnect(conection){
-  try{
-    //await conection.close();
-  }catch(error){
-    console.log(error);
-  }
-}*/
 async function connect(tablas,sql,datos, callback){
   try {
     console.log("Oracle ALUMNO connect");

@@ -48,17 +48,19 @@ function login() {
             usuAux= usuario;
             usuAux= JSON.stringify(usuAux);//Para castearlo a un objeto y despues cogerlo en ese formato de la cookie cuando lo necesite
             date = new Date();
-            $.galleta().setc("usuario",usuAux, 1);
-            //$.galleta().setc("usuario2",usu, 1);
-            var fecha = new Date(usuario.cambioContrasenia);
-            if(fecha.getFullYear() > date.getFullYear() || usuario.user.localeCompare("profesor")===0){//ya ha cambiado su contraseña
-                var link = window.location.href;
-                var res = link.split("/");
-                window.location = res[1] + "principal.html";
-            }else{
-                $("#formulario_login").hide();
-                $("#formulario_pass").removeClass("hidden");
-            }       
+            /***********************Modal para elegir el usuario***********************/ 
+            abrirModal(usuAux, function (escogido){
+                $.galleta().setc("usuario",escogido, 1);
+                var fecha = new Date(usuario.cambioContrasenia);
+                if(fecha.getFullYear() > date.getFullYear() || usuario.user.localeCompare("profesor")===0){//ya ha cambiado su contraseña
+                    var link = window.location.href;
+                    var res = link.split("/");
+                    window.location = res[1] + "principal.html";
+                }else{
+                    $("#formulario_login").hide();
+                    $("#formulario_pass").removeClass("hidden");
+                }
+            });     
         },
         error: function() {
             alert("Error al iniciar sesión.");
@@ -83,5 +85,29 @@ function cambiarpass() {///Revisar el meter el usuario en la cooki la primera ve
         error: function() {
             alert("Error al cambiar contraseña.");
         }
+    });
+}
+
+function abrirModal(alumno){
+    console.log("abrirModal alumno");
+    console.log(alumno);
+
+    var modal = document.getElementById('myModal');
+    var span = document.getElementsByClassName("close")[0];
+    modal.style.display = "block";
+    //$("#nombreModal").text(alumno[0].user); terminar
+    let element=$("<div>").addClass("cuentasDeUsuario");
+
+    for (let i = 0; i < alumno.length; i++){
+        var e = $('<input type="Radio">').attr("value", i);
+        e.text()
+        element.append(e);
+    }
+    $("#notaLabelM").append(element);
+    span.onclick = function(){
+        modal.style.display = "none";
+    }
+    $("#botonModal").click(function(event) {
+        event.preventDefault();
     });
 }

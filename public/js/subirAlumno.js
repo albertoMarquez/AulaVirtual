@@ -60,6 +60,7 @@ $(document).ready(function() {
     }
 
  });
+ /*
  function bloquea(){
     if(boton.disabled == false){
        boton.disabled = true;
@@ -68,7 +69,7 @@ $(document).ready(function() {
           boton.disabled = false;
       }, 10000)
     }
-  }
+  }*/
 function crearAlumno(alumno, callback) {
     let user = alumno.nombre.toUpperCase() + alumno.idAlumno.toString();
     console.log("usuario "+user);
@@ -206,8 +207,11 @@ function ejecutaProcedimiento(info){
                 var elem = $(".alert-light").clone();
                 elem.removeClass("hidden");
                 elem.removeClass("template");
+                elem.removeAttr("id", "plantilla2");
+                elem.addClass("resultados");
                 elem.text(error.responseJSON.oracle);
-                $("#alertas").append(elem); 
+                $("#alertas").append(elem);
+
             }
             $( "#evaluar" ).prop( "disabled", false );
         }
