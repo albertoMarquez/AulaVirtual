@@ -93,3 +93,30 @@ input[type=text] {
   margin: 25px;
   justify-content: space-between;
 }
+
+a:hover{
+  background-color: white;
+  color: black;
+  cursor: pointer;
+}
+
+
+#ne{
+  width: 23px;
+  margin-left: 11px;
+}
+
+#pre{
+  width: 15px;
+  margin-right: 12px;
+}
+
+#ne:hover{
+  cursor: pointer;
+  background-color: white;
+}
+
+#pre:hover{
+  cursor: pointer;
+  background-color: white;
+}
