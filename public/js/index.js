@@ -46,12 +46,27 @@ function login() {
         data: JSON.stringify({ login: user, password: pass}),
         success: function(usuario){
             usuAux= usuario;
-            usuAux= JSON.stringify(usuAux);//Para castearlo a un objeto y despues cogerlo en ese formato de la cookie cuando lo necesite
             date = new Date();
-            /***********************Modal para elegir el usuario***********************/ 
-            abrirModal(usuAux, function (escogido){
+            /***********************Modal para elegir el usuario***********************/
+            if(usuario.user = "alumno"){
+                abrirModal(usuAux, function (escogido){
+                    var fecha = new Date(escogido.cambioContrasenia);
+                    usuAux= JSON.stringify(escogido);//Para castearlo a un objeto y despues cogerlo en ese formato de la cookie cuando lo necesite
+                    $.galleta().setc("usuario",usuAux, 1);
+                    if(fecha.getFullYear() > date.getFullYear() || usuario.user.localeCompare("profesor")===0){//ya ha cambiado su contraseña
+                        var link = window.location.href;
+                        var res = link.split("/");
+                        window.location = res[1] + "principal.html";
+                    }else{
+                        $("#formulario_login").hide();
+                        $("#formulario_pass").removeClass("hidden");
+                    }
+                });
+            }else{  
+                usuAux= JSON.stringify(usuAux);
                 $.galleta().setc("usuario",escogido, 1);
                 var fecha = new Date(usuario.cambioContrasenia);
+
                 if(fecha.getFullYear() > date.getFullYear() || usuario.user.localeCompare("profesor")===0){//ya ha cambiado su contraseña
                     var link = window.location.href;
                     var res = link.split("/");
@@ -60,7 +75,7 @@ function login() {
                     $("#formulario_login").hide();
                     $("#formulario_pass").removeClass("hidden");
                 }
-            });     
+            }   
         },
         error: function() {
             alert("Error al iniciar sesión.");
@@ -88,7 +103,7 @@ function cambiarpass() {///Revisar el meter el usuario en la cooki la primera ve
     });
 }
 
-function abrirModal(alumno){
+function abrirModal(alumno,callback){
     console.log("abrirModal alumno");
     console.log(alumno);
 
@@ -97,11 +112,21 @@ function abrirModal(alumno){
     modal.style.display = "block";
     //$("#nombreModal").text(alumno[0].user); terminar
     let element=$("<div>").addClass("cuentasDeUsuario");
-
-    for (let i = 0; i < alumno.length; i++){
-        var e = $('<input type="Radio">').attr("value", i);
-        e.text()
-        element.append(e);
+    console.log(alumno.length);
+    for (let i = 0;  i< alumno.length; i++){
+       
+        let s = alumno[i].descripcion+" "+ alumno[i].curso+"º"+alumno[i].grupo;
+        console.log(s);
+        var d = $('<div>').addClass("radios");
+        var l =  $('<label>').text(s);
+        var e = $('<input>').attr("value", i);
+        e.attr('type',"Radio");
+        e.attr('name',1);
+        d.append(e);
+        d.append(l);
+        element.append(d);
+        
+       
     }
     $("#notaLabelM").append(element);
     span.onclick = function(){
@@ -109,5 +134,6 @@ function abrirModal(alumno){
     }
     $("#botonModal").click(function(event) {
         event.preventDefault();
+        callback();
     });
 }

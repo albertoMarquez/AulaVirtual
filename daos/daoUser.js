@@ -319,69 +319,51 @@ class DAOUsers {
         });
     }
     
-    isAlumno(login, password, callback) { //comprobacion usuario
+    isAlumno(login, callback) { //comprobacion usuario
         this.pool.getConnection((err, conexion) =>{
             if(err){
                 console.log(err);
                 callback(err);
             }
             else{
-                //cambiar
-                conexion.query(`select * from alumno where correo = ? and pass = ?`, 
-                [login , password], (err, resultado) =>{
+                conexion.query(`SELECT ag.correo, ag.nombre, ag.apellidos, ag.pass, ag.idG as idGrupo , ag.idAlumno, ag.cambioContrasenia, a.descripcion,a.curso, ag.grupo,ag.anio
+                                from (  select a.correo, a.nombre, a.apellidos, a.pass, a.idGrupo as idG , a.idAlumno , a.cambioContrasenia ,g.grupo, g.anio, g.idAsignatura 
+                                        from alumno a join grupos g ON g.idGrupo = a.idGrupo and a.correo = ? ) ag 
+                                INNER JOIN asignatura a ON ag.idAsignatura = a.idAsignatura `, 
+                [login],(err,resultado)=>{
                     if(!err){
                         if(resultado.length === 0){
-                            console.log("Error :"+res);
+                            //console.log("Error :"+err);
                             callback(undefined, false, undefined);
                         }else{ 
                             var alumno={};
-                            var descripcion="";
-                            var anio ;
                             var sol = [];
-                            (sol) =>{
-                                var sol = [];
-                                resultado.forEach(e => {
-                                    alumno.correo=e.correo;
-                                    alumno.nombre=e.nombre;
-                                    alumno.apellidos=e.apellidos;
-                                    alumno.idGrupo=e.idGrupo;
-                                    alumno.idAlumno=e.idAlumno;
-                                    alumno.cambioContrasenia=e.cambioContrasenia;
-                                    alumno.user="alumno";
-                                    conexion.query(`SELECT descripcion,curso,grupo,anio FROM grupos, asignatura WHERE grupos.idAsignatura = asignatura.idAsignatura and grupos.idGrupo = ?`,
-                                    [e.idGrupo], (err, filas) =>{
-                                        if(err){
-                                            console.log("error al coger curso y grupo");
-                                            callback(undefined, false, undefined);
-                                        }else{
-                                        //console.log(filas);
-                                        
-                                        descripcion= filas[0].descripcion+" "+ filas[0].curso+"º"+filas[0].grupo.toString();
-                                        anio= filas[0].anio;
-                                        //console.log("Descripcion");
-                                        alumno.descripcion=descripcion;
-                                        //console.log(descripcion);
-                                        //console.log("Anio");
-                                        alumno.anio=anio;
-                                        //console.log(anio);
-                                        //console.log("Alumno");
-                                        //console.log(alumno);
-                                        //callback(undefined, true, alumno);
-                                        sol.push(alumno);
-                                        alumno = {}
-                                        }
-                                    });
-                                });
-                                callback(sol);
-                            };
-                            sol = sol;
+                            resultado.forEach(e=>{
+                                alumno.correo=e.correo;
+                                alumno.nombre=e.nombre;
+                                alumno.apellidos=e.apellidos;
+                                alumno.pass=e.pass;
+                                alumno.idGrupo=e.idGrupo;
+                                alumno.idAlumno=e.idAlumno;
+                                alumno.cambioContrasenia=e.cambioContrasenia;
+                                alumno.user="alumno";
+                                alumno.descripcion= e.descripcion;
+                                alumno.anio=e.anio;
+                                alumno.curso= e.curso;
+                                alumno.grupo=e.grupo;
+                                //traer id de la asignatura
+                                sol.push(alumno);
+                                
+                                alumno = {}
+                                //filas[0].descripcion+" "+ filas[0].curso+"º"+filas[0].grupo.toString();
+                            })
                             console.log(sol);
                             callback(undefined, true, sol);
                         }
                     }else{
-                        callback(err, undefined);
+                        callback(undefined, false, undefined);
                     }
-                })
+                });
                 conexion.release();
             }
         });

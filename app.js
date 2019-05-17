@@ -61,12 +61,11 @@ app.get("/getId", (request, response) => {
 });
 //import Cookie from "./public/js/cookie";
 app.post("/login", (request, response) => {
-    daoU.isAlumno(request.body.login, request.body.password, (err, op, alumno) =>{
+    daoU.isAlumno(request.body.login, /*request.body.password,*/ (err, op, alumno) =>{
         if (err){
             response.status(400); //mal introducido
             response.end();
-        }
-        else {
+        }else {
             if (op === false) { // el alumno no existe
                 daoU.isProfesor(request.body.login, request.body.password, (err, op, profesor) =>{
                     if(err){ // mal introducido
@@ -78,7 +77,7 @@ app.post("/login", (request, response) => {
                             response.end(); 
                         }
                         else{ //es profesor
-                            //console.log("profesor:  "+profesor);
+                            console.log(profesor);
                             response.json(profesor);
                             response.status(201); //el usuario es correcto
                             response.end();
@@ -86,7 +85,7 @@ app.post("/login", (request, response) => {
                     }
                 })
             }else{
-                console.log(alumno);
+                //console.log(alumno);
                 response.json(alumno);
                 response.status(201); //el alumno es correcto
                 response.end();
