@@ -116,7 +116,6 @@ function cargarListaAlumnosEvaluar(idA, idG, tipoEjer, cursoGrupo){
 function abrirModal(info){
     // Get the modal
     console.log(info);
-
     $.ajax({
         method: "GET",
         url: "/getUltimaEntrega",
