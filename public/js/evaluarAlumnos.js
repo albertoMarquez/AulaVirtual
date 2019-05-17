@@ -1,5 +1,6 @@
 var user;
-var table;
+var tableData;
+let asig, grupo, tipo, cursoGrupo;
 $(document).ready(function() {
 var options={}
 $.galleta(options);
@@ -26,7 +27,7 @@ if(user != "undefined"){
         }
         
         cargarAsignatura();
-        let asig, grupo, tipo, cursoGrupo;
+        
        
         $('#asignatura').on('change', function() {
             asig = $(this).find(':selected').data('idAsig');
@@ -39,9 +40,7 @@ if(user != "undefined"){
             cursoGrupo = $(this).find(':selected').text();
            // console.log(grupo);
            if(asig !== undefined && grupo !== undefined && tipo !== undefined){
-                if(table)
-                    table.destroy();
-                $("tbody .elem").remove();
+               // $("tbody .elem").remove();
                 cargarListaAlumnosEvaluar(asig, grupo, tipo, cursoGrupo);
             }
         });
@@ -50,12 +49,14 @@ if(user != "undefined"){
             tipo = $(this).find(':selected').val();
            // console.log(tipo);
            if(asig !== undefined && grupo !== undefined && tipo !== undefined){               
-                if(table)
-                    table.destroy();
-                $("tbody .elem").remove();
+               // $("tbody .elem").remove();
                 cargarListaAlumnosEvaluar(asig, grupo, tipo, cursoGrupo);
             }
         });
+
+        if(tipo !== undefined){
+            $("#problema").val(tipo).change();
+        }
     }
     else{
         var link = window.location.href;
@@ -74,7 +75,35 @@ function cargarListaAlumnosEvaluar(idA, idG, tipoEjer, cursoGrupo){
         contentType: "application/json",
         data: {asig:idA, grupo:idG, tipo:tipoEjer},
         success: function(data) {
+            
+            $('#tablaA').DataTable().clear().destroy();
+
+            var el = $("<tr>").attr("id", "template");
+            el.addClass("hidden");
+            var row = $("<td>").attr("id", "idAlumno");
+            el.append(row);
+            row = $("<td>").attr("id", "nombre");
+            el.append(row);
+            row = $("<td>").attr("id", "idEjer");
+            el.append(row);
+            row = $("<td>").attr("id", "titulo");
+            el.append(row);
+            row = $("<td>").attr("id", "numScripts");
+            el.append(row);
+            row = $("<td>").attr("id", "cursoGrupo");
+            el.append(row);
+            row = $("<td>").attr("id", "intentos");
+            el.append(row);
+            row = $("<td>").attr("id", "resultado");
+            row.addClass("hidden");
+            el.append(row);
+            row = $("<td>").attr("id", "nota");
+            el.append(row);
+            
+            $("tbody").append(el);
+
             data.forEach(e => { 
+
                 var elem = $("#template").clone();
                 elem.find("#nombre").text(e.nombre);
                 elem.find("#idAlumno").text(e.idAlumno);
@@ -88,19 +117,25 @@ function cargarListaAlumnosEvaluar(idA, idG, tipoEjer, cursoGrupo){
                 elem.find("#nota").text(e.nota);
                 elem.data("idAlumno", e.idAlumno);
 
+                elem.attr("id", "");
                 elem.removeClass("hidden");
                 elem.attr("class", "elem");
                 $("#template").before(elem);
             });
 
-            //$('#tablaA').DataTable();
-            table = $('#tablaA').DataTable();
+           
+         //   $('#tablaA').DataTable();
+            tableData = $('#tablaA').DataTable();
             
             $('.dataTables_length').addClass('bs-select');
             // el orden de la tabla lo he sacado de aqui https://mdbootstrap.com/docs/jquery/tables/sort/ 
+            $(".previous").text(" ");
+            $(".next").text(" ");
+            var img = $("img").attr("src", "images/nextButton.png");
+            $(".next").append(img);
             $('#tablaA').on('click', 'tbody tr', function(){
                 // console.log('TR cell textContent : ', this);
-                var data = table.row( this ).data();
+                var data = tableData.row( this ).data();
                 //console.log(data);
                 abrirModal(data);
             }); 
@@ -147,7 +182,9 @@ function abrirModal(info){
                     success: function() {
                        // alert("Actualizado correctamente");
                         modal.style.display = "none";
-                        location.reload();
+                                         
+                        $("#problema").val(0).change();
+                   
                     },
                     error: function(){
                         alert("Error al actualizar");
@@ -182,7 +219,6 @@ function entregaRetrasada(idEjercicio){
         } 
     });
 }
-
 
 function cargarAsignatura(){
     $.ajax({
