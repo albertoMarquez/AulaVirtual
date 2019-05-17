@@ -259,7 +259,3 @@ div.dataTables_wrapper div.dataTables_paginate {
     display: flex;
     justify-content: center;
 }
-
-.previous::before{
-    background-image: "public/images/previousButton.png"
-}
