@@ -324,12 +324,13 @@ class DAOUsers {
     isAlumno(login, password, callback) { //comprobacion usuario
         this.pool.getConnection((err, conexion) =>{
             if(err){
-                console.log(err);
+                //console.log(err);
                 callback(err);
             }
             else{
                 conexion.query(`select * from alumno where correo = ? and pass = ?`, 
                 [login , password], (err, resultado) =>{
+                    //console.log("resultado:"+resultado);
                     if(!err){
                         //console.log(resultado);
                         //console.log("resultado.length :"+resultado.length)

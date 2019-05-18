@@ -1,5 +1,6 @@
 var user;
-let idEj, idA;
+var idE;
+var idA;
 $(document).ready(function() {
 var options={}
 $.galleta(options);
@@ -24,31 +25,25 @@ if(user != "undefined"){
         }else if(user.user.localeCompare("alumno")===0){
             $("#menu").load("menuAlumno.html");
         }
-        $('#datetimepicker1').datepicker();
-        $('#datetimepicker2').datepicker();
     
         $("#btnGuardar").click(function(event) {
             event.preventDefault();
-            alta();
+            baja();
         });
     
-        listarTodosEjercicios(); 
-        listarAsignaturas();
-        
+        listarEjerciciosAlta(); 
 
-        $("#ejercicio").on('change', function(){
-            idEj = $(this).find(':selected').data('idEj');
-            if(idA !== undefined){
-                $(".groupCurso").remove();
-                listarCursoYgrupo(idA, idEj);
-            }
+        $("#ejercicio").on('change', function(e){
+            idE = $(this).find(':selected').data('idEj');
+            
+            listarAsignaturas(idE);
         });
-    
-        $('#asignatura').on('change', function() {
+
+        $("#asignatura").on('change', function(){
             idA = $(this).find(':selected').data('idAsig');
-            $(".groupCurso").remove();
-            listarCursoYgrupo(idA, idEj);
+            listarCursoyGrupo(idE, idA);
         });
+       
        
     }else{
         var link = window.location.href;
@@ -57,19 +52,20 @@ if(user != "undefined"){
     }
 });
 
-
-function listarTodosEjercicios(){
+function listarEjerciciosAlta(){
     $.ajax({
         method: "GET",
-        url: "/getEjercicios",
+        url: "/listarBajaEjercicio",
         contentType: "application/json",
+        data: {id: user.idProfesor},
         success: function(data) {
+
             console.log(data);
             var cont = 1;
            data.forEach(e => {
             var elem = $(".templateEjercicio").clone();
-            elem.text("Ejercicio " + e.idEjercicio + " - " + e.titulo);
-            elem.data("idEj", e.idEjercicio);
+            elem.text("Ejercicio " + e.idEj + " - " + e.titulo);
+            elem.data("idEj", e.idEj);
             elem.removeClass("hidden");
             elem.removeClass("templateEjercicio");
             elem.attr("value", cont);
@@ -83,13 +79,14 @@ function listarTodosEjercicios(){
     });
 }
 
-function listarAsignaturas(){
-    
+
+function listarAsignaturas(idE){
+    $(".asign").remove();
     $.ajax({
         method: "GET",
-        url: "/getAsignaturas",
+        url: "/getAsignaturasEjercicioGrupo",
         contentType: "application/json",
-        data:{id:user.idProfesor},
+        data:{id:user.idProfesor, idE:idE},
         success: function(data) {
             var cont = 1;
            data.forEach(e => {
@@ -98,10 +95,10 @@ function listarAsignaturas(){
             elem.data("idAsig", e.id);
             elem.removeClass("hidden");
             elem.removeClass("templateAsignatura");
+            elem.addClass("asign");
             elem.attr("value", cont);
             $(".templateAsignatura").before(elem);
             cont = cont + 1;
-
            });
         },
         error: function() {
@@ -110,12 +107,11 @@ function listarAsignaturas(){
     });
 }
 
-function listarCursoYgrupo(idA, idE){
-
+function listarCursoyGrupo(idE, idA){
     $(".groupCurso").remove();
     $.ajax({
         method: "GET",
-        url: "/getCursoGrupoNoAlta",
+        url: "/getCursoGrupoEjerAlta",
         data:{idA:idA, idP:user.idProfesor, idE:idE},
         contentType: "application/json",
         success: function(data) {
@@ -138,29 +134,22 @@ function listarCursoYgrupo(idA, idE){
     });
 }
 
-function alta(){
-
+function baja(){
     var info = {};
-    info.idEjercicio = $("#ejercicio").find(':selected').data('idEj');
-    info.examen = $("input[name='optradio']:checked").val();
-    info.idAsignatua =  $("#asignatura").find(':selected').data('idAsig');
+    info.idEjercicio = idE;
+    info.idAsignatua =  idA;
     info.idGrupo = $("#curso").find(':selected').data('idGrupo');
-    info.ini = $("#ini").val();
-    info.fin = $("#fin").val();
-    info.numIntentos= $("#intentos").val();
-
-
     $.ajax({
         method: "POST",
-        url: "/altaEjercicio",
+        url: "/bajaEjercicio",
         contentType: "application/json",
         data:JSON.stringify({ejer:info}),
         success: function() {
-           alert("Ejercicio dado de alta correctamente");
+           alert("Ejercicio dado de baja correctamente");
            location.reload();
         },
         error: function() {
-            alert("Error al mostrar los ejercicios");
+            alert("Error al dar de baja un ejercicio");
         }
     });
 }
