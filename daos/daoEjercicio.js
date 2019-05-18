@@ -250,12 +250,6 @@ class DAOEjercicio {
                             ejercicio.numScripts = e.numScriptsSol;
                             ejercicio.autor = e.Autor;
                             
-                            if(e.alta === null){
-                                ejercicio.alta = "NO";
-                            }else{
-                                ejercicio.alta = "SI";
-                            }
-
                             if(e.asignatura === null){
                                 ejercicio.asignatura = "-";
                             }
@@ -288,6 +282,32 @@ class DAOEjercicio {
         })
     }
 
+    listarEjercicios(callback){
+        this.pool.getConnection((err, con )=>{
+            if(err){
+                callback(err);
+            }else{
+                var sql = `select * from ejercicio`;
+                con.query(sql, (err, filas) =>{
+                    if(err){
+                        callback(err, undefined);
+                    }else{
+                        //console.log(filas);
+                        var row = {};
+                        var sol = [];
+                        filas.forEach(e =>{
+                            row.titulo = e.titulo;
+                            row.idEjercicio = e.idEjercicio;
+                            sol.push(row);
+                            row = {};
+                        })
+                        callback(undefined, sol);
+                    }
+                });
+                con.release();
+            }
+        });
+    }
     getUltimaEntrega(datos, callback){
         this.pool.getConnection((err, con)=>{
             if(err){
@@ -359,6 +379,61 @@ class DAOEjercicio {
         });
     }
 
+    listarBajaEjercicio(id, callback){
+        this.pool.getConnection((err, con) =>{
+            if(err){
+                callback(err);
+            }else{
+                var sql = `select tb1.idEj, e.titulo 
+                        from 
+                            (select ae.idGrupo, ae.idEj 
+                            from altaejercicio ae join profegrupo pg 
+                            ON ae.idGrupo = pg.idGrupo and pg.idProfesor = ?) tb1 join ejercicio e 
+                        ON e.idEjercicio = tb1.idEj
+                        group by tb1.idEj`;
+                con.query(sql, [id], (err, filas) =>{
+                    if(err){
+                        callback(err, undefined);
+                    }else{
+
+                        var sol = [];
+                        var row = {};
+
+                        filas.forEach(e=>{
+                            row.idGrupo = e.idGrupo;
+                            row.idEj = e.idEj;
+                            row.titulo = e.titulo;
+                            sol.push(row);
+                            row = {};
+                        });
+                        //console.log(filas);
+                        callback(undefined, sol);
+                    }
+                });
+            }
+        })
+    }
+
+    bajaEjercicio(data, callback){
+        this.pool.getConnection((err, con) =>{
+            if(err){
+                callback(err);
+            }else{
+                var sql = `DELETE FROM altaejercicio where idEj = ? and idGrupo = ?`
+                con.query(sql,
+                [data.idEjercicio, data.idGrupo], (err) =>{
+                    if(err){
+                        callback(err, undefined);
+                    }
+                    else{
+                        callback(undefined, true);
+                    }
+                });  
+            }
+            con.release();
+        });
+    }
+
     entregaRetrasada(idEjercicio, callback){
         this.pool.getConnection((err, con)=>{
             if(err){
@@ -414,6 +489,7 @@ class DAOEjercicio {
             }
         });
     }
+
     subirProcedimientoAlumno(datos, resultado, nErr, callback){
         datos = datos.info;
         this.pool.getConnection((err, con) =>{

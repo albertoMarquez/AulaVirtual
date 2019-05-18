@@ -238,6 +238,46 @@ app.post("/altaEjercicio", (request, response) =>{
     })     
 });
 
+app.post("/bajaEjercicio", (request, response) =>{  
+    var datos = request.body.ejer; 
+    daoE.bajaEjercicio(datos, (err, filas) =>{
+        if(err){
+            response.status(400);
+            response.end();
+        }else{
+            response.status(201);
+            response.end();
+        }
+    })   
+});
+
+app.get("/listarBajaEjercicio", (request, response) =>{
+    daoE.listarBajaEjercicio(request.query.id, (err, filas) =>{
+        if(err){
+            response.status(400);
+            response.end();
+        }else{
+            response.json(filas);
+            response.status(201);
+            response.end();
+        }
+    })
+});
+
+app.get("/getAsignaturasEjercicioGrupo", (request, response) =>{
+  //  console.log(request.query);
+    daoA.listarAsignaturasEjerEnGrupo(request.query, (err, filas) =>{
+        if(err){
+            response.status(400);
+            response.end();
+        }else{
+            response.json(filas);
+            response.status(201);
+            response.end();
+        }
+    })
+})
+
 app.get("/getAsignaturasOtrosAnios", (request, response) =>{
     daoE.listarEjerciciosAltaAniosPasados(request.query.idA, (err, filas) =>{
         if(err){
@@ -252,7 +292,6 @@ app.get("/getAsignaturasOtrosAnios", (request, response) =>{
         }
     })
 });
-
 
 app.post("/principal", (request, response) =>{
    // console.log(request.body);
@@ -274,30 +313,9 @@ app.post("/principal", (request, response) =>{
     });
 });
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-/*app.post("/principal", (request, response) =>{
-    console.log("dentro de app");
-    daoE.descargarProfesor(request.body.id, (err, op) =>{
-        if(err) {
-            response.status(400);
-            response.end();
-        }
-        else {
-            if(op !== undefined){
-                response.json(op);
-                //oracle.connect(oracle.run,op);
-                //oracleProcedure.createPool;
-                //console.log(reemplazar(op));
-                response.status(201);
-                response.end();
-            }
-        }
-    });
-});*/
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-
 app.get("/getEjercicios", (request, response) =>{
-    daoE.listarEjerciciosNoAlta((err, ejs) =>{
+    daoE.listarEjercicios((err, ejs) =>{
+        //console.log(ejs);
         if(err){
             response.status(400);
             response.end();
@@ -309,6 +327,7 @@ app.get("/getEjercicios", (request, response) =>{
     })
 
 });
+
 
 app.get("/getAsignaturas", (request, response) =>{
     daoA.listarAsignaturas(request.query.id, (err, filas) =>{
@@ -379,7 +398,6 @@ app.post("/subirEjercicio", (request, response) =>{
     });
 });
 
-
 function highlight(newElem, oldElem){ 
     var text = "";
     if(newElem === undefined || oldElem === undefined){
@@ -431,7 +449,6 @@ app.get("/getTablaEjerciciosAtrasados", (request, response) =>{
         }
     });
 })
-
 
 app.get("/subirAlumno/:id/:idAlumno", (request, response) => {
     var data = {};
@@ -524,10 +541,36 @@ app.get("/mostrarListaEjer", (request, response)=>{
     })
 });
 
+app.get("/getCursoGrupoEjerAlta", (request, response)=>{
+    daoA.listarCursoGrupoEjerAlta(request.query, (err, filas) =>{
+        if(err){
+            response.status(400);
+            response.end();
+        }else{
+            response.status(200);
+            response.json(filas);
+            response.end();
+        }
+    })
+})
+
 app.get("/getCursoGrupo", (request, response) =>{
     let id = Number(request.query.id);
     var idProfe = Number(request.query.idP);
     daoA.listarCursoGrupo(id, idProfe, (err, filas) =>{
+        if(err){
+            response.status(400);
+            response.end();
+        }else{
+            response.status(200);
+            response.json(filas);
+            response.end();
+        }
+    })
+});
+app.get("/getCursoGrupoNoAlta", (request, response) =>{
+   // console.log(request.query);
+    daoA.listarCursoGrupoNoAlta(request.query, (err, filas) =>{
         if(err){
             response.status(400);
             response.end();
@@ -622,7 +665,8 @@ app.get("/getUltimaEntrega", (request, response)=>{
             response.end();
         }
     })
-})
+});
+
 app.post("/entregaRetrasada", (request, response)=>{
     //console.log("entregaRetrasada "+request.body.idEjercicio);
     daoE.entregaRetrasada(request.body.idEjercicio, (err, filas)=>{
@@ -637,6 +681,7 @@ app.post("/entregaRetrasada", (request, response)=>{
         }
     })
 });
+
 app.get("/getIntentosAlumno", (request, response)=>{
     //console.log(request.query);
     daoE.getIntentosAlumno(request.query, (err, filas)=>{
@@ -650,6 +695,7 @@ app.get("/getIntentosAlumno", (request, response)=>{
         }
     });
 });
+
 app.post("/numeroDeIntentos", (request, response)=>{
     //console.log("numeroDeIntentos "+request.body.idEjercicio);
     daoE.numeroDeIntentos(request.body.idEjercicio, (err, filas)=>{
@@ -728,7 +774,6 @@ app.post("/ejecutarProcedimientoAlumno", (request, response)=>{
         }
     });
 });
-
 
 function numeroDeErrores(resultado){
     res = {};
