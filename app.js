@@ -61,7 +61,7 @@ app.get("/getId", (request, response) => {
 });
 //import Cookie from "./public/js/cookie";
 app.post("/login", (request, response) => {
-    daoU.isAlumno(request.body.login, /*request.body.password,*/ (err, op, alumno) =>{
+    daoU.isAlumno(request.body.login, request.body.password, (err, op, alumno) =>{
         if (err){
             response.status(400); //mal introducido
             response.end();
@@ -85,7 +85,7 @@ app.post("/login", (request, response) => {
                     }
                 })
             }else{
-                //console.log(alumno);
+                console.log(alumno);
                 response.json(alumno);
                 response.status(201); //el alumno es correcto
                 response.end();
@@ -106,8 +106,10 @@ app.post("/cambiarpass", (request, response) =>{
     console.log(request.body.pass1);
     console.log("request.body.pass2");
     console.log(request.body.pass2);
+    console.log("user.idAlumno");
+    console.log(request.body.idAlumno);
    if(request.body.pass1 === request.body.pass2){
-        daoU.cambiarpass(request.body.user, request.body.pass1, request.body.date, (err) =>{
+        daoU.cambiarpass(request.body.user, request.body.pass1, request.body.date, request.body.idAlumno, (err) =>{
            if(!err){
                response.status(200);
                response.end();

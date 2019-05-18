@@ -45,11 +45,15 @@ function login() {
         contentType: "application/json",
         data: JSON.stringify({ login: user, password: pass}),
         success: function(usuario){
-            usuAux= usuario;
+           
             date = new Date();
-            /***********************Modal para elegir el usuario***********************/
-            if(usuario.user = "alumno"){
-                abrirModal(usuAux, function (escogido){
+            /*console.log("usuario[0].user === 'alumno'");
+            console.log(usuario[0].user === "alumno");*/
+            if(usuario[0].user === "alumno" && usuario[0].nAsignaturas > 1){
+                abrirModal(usuario, function (escogido){
+                    console.log(escogido);
+                    user = escogido;//Para tener el usuario al cambiar la contraseña
+                    usuAux= escogido;
                     var fecha = new Date(escogido.cambioContrasenia);
                     usuAux= JSON.stringify(escogido);//Para castearlo a un objeto y despues cogerlo en ese formato de la cookie cuando lo necesite
                     $.galleta().setc("usuario",usuAux, 1);
@@ -62,12 +66,16 @@ function login() {
                         $("#formulario_pass").removeClass("hidden");
                     }
                 });
-            }else{  
+            }else{
+                usuAux= usuario[0];
                 usuAux= JSON.stringify(usuAux);
-                $.galleta().setc("usuario",escogido, 1);
-                var fecha = new Date(usuario.cambioContrasenia);
-
-                if(fecha.getFullYear() > date.getFullYear() || usuario.user.localeCompare("profesor")===0){//ya ha cambiado su contraseña
+                $.galleta().setc("usuario",usuAux, 1);
+                var fecha = new Date(usuario[0].cambioContrasenia);
+                user = usuario[0];//PAra tener el usuario al cambiar la contraseña
+                /*console.log("usuario[0].user === 'profesor'");
+                console.log(usuario[0].user === "profesor");
+                console.log(usuario);*/
+                if(fecha.getFullYear() > date.getFullYear() || usuario[0].user === "profesor"){//ya ha cambiado su contraseña               
                     var link = window.location.href;
                     var res = link.split("/");
                     window.location = res[1] + "principal.html";
@@ -83,16 +91,17 @@ function login() {
     });
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////
 function cambiarpass() {///Revisar el meter el usuario en la cooki la primera vez que entra
     date = new Date();
     var anio = date.getFullYear()+1;
     date.setFullYear(anio);
+    console.log("user.idAlumno");
+    console.log(user.idAlumno);
     $.ajax({
         method: "POST",
         url: "/cambiarpass",
         contentType: "application/json",
-        data: JSON.stringify({user: $("#user").val(), pass1:$("#password1").val(), pass2:$("#password2").val(), date: date}),
+        data: JSON.stringify({user: $("#user").val(), pass1:$("#password1").val(), pass2:$("#password2").val(), date: date, idAlumno:user.idAlumno}),
         success: function() {
            alert("contraseña cambiada :)");
            window.location = "/principal.html"; 
@@ -102,7 +111,7 @@ function cambiarpass() {///Revisar el meter el usuario en la cooki la primera ve
         }
     });
 }
-
+ /***********************Modal para elegir el usuario***********************/
 function abrirModal(alumno,callback){
     console.log("abrirModal alumno");
     console.log(alumno);
@@ -114,19 +123,17 @@ function abrirModal(alumno,callback){
     let element=$("<div>").addClass("cuentasDeUsuario");
     console.log(alumno.length);
     for (let i = 0;  i< alumno.length; i++){
-       
         let s = alumno[i].descripcion+" "+ alumno[i].curso+"º"+alumno[i].grupo;
         console.log(s);
         var d = $('<div>').addClass("radios");
         var l =  $('<label>').text(s);
         var e = $('<input>').attr("value", i);
+        e.addClass("radio");
         e.attr('type',"Radio");
         e.attr('name',1);
         d.append(e);
         d.append(l);
         element.append(d);
-        
-       
     }
     $("#notaLabelM").append(element);
     span.onclick = function(){
@@ -134,6 +141,15 @@ function abrirModal(alumno,callback){
     }
     $("#botonModal").click(function(event) {
         event.preventDefault();
-        callback();
+        var botones =document.getElementsByClassName("radio");
+        var i;
+        for (i = 0; i < botones.length; i++) {
+            console.log("botones[i].checked");
+            console.log(botones[i].checked);
+          if (botones[i].checked) {
+            console.log(alumno[i]);
+            callback(alumno[i]);
+          }
+        }
     });
 }
