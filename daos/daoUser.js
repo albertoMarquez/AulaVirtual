@@ -326,10 +326,10 @@ class DAOUsers {
                 callback(err);
             }
             else{
-                conexion.query(`SELECT ag.correo, ag.nombre, ag.apellidos, ag.pass, ag.idG as idGrupo , ag.idAlumno, ag.cambioContrasenia, a.descripcion,a.curso, ag.grupo,ag.anio
-                                from (  select a.correo, a.nombre, a.apellidos, a.pass, a.idGrupo as idG , a.idAlumno , a.cambioContrasenia ,g.grupo, g.anio, g.idAsignatura 
-                                        from alumno a join grupos g ON g.idGrupo = a.idGrupo and a.correo = ? ) ag 
-                                INNER JOIN asignatura a ON ag.idAsignatura = a.idAsignatura `, 
+                conexion.query(`SELECT ag.correo, ag.nombre, ag.apellidos, ag.pass, ag.idG as idGrupo , ag.idAlumno, ag.cambioContrasenia, a.descripcion,a.curso, ag.grupo,ag.anio,a.idAsignatura from 
+                                (   select a.correo, a.nombre, a.apellidos, a.pass, a.idGrupo as idG , a.idAlumno , a.cambioContrasenia ,g.grupo, g.anio, g.idAsignatura 
+                                    from alumno a join grupos g ON g.idGrupo = a.idGrupo and a.correo = 'a@ucm.es' )
+                                ag INNER JOIN asignatura a ON ag.idAsignatura = a.idAsignatura `, 
                 [login],(err,resultado)=>{
                     if(!err){
                         if(resultado.length === 0){
@@ -351,9 +351,8 @@ class DAOUsers {
                                 alumno.anio=e.anio;
                                 alumno.curso= e.curso;
                                 alumno.grupo=e.grupo;
-                                //traer id de la asignatura
+                                alumno.idAsignatura= e.idAsignatura;
                                 sol.push(alumno);
-                                
                                 alumno = {}
                                 //filas[0].descripcion+" "+ filas[0].curso+"º"+filas[0].grupo.toString();
                             })
