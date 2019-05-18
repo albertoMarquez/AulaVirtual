@@ -301,14 +301,16 @@ class DAOUsers {
                             callback(undefined, false, undefined)
                         }else{
                             var profesor={};
+                            var sol = [];
                             resultado.forEach(e => {
                                 profesor.correo=(e.correo);
                                 profesor.nombre=(e.nombre);
                                 profesor.idProfesor=(e.idProfesor);
                                 profesor.user="profesor";
+                                sol.push(profesor);
                             });
                             //console.log(profesor);
-                            callback(undefined, true, profesor)
+                            callback(undefined, true, sol)
                         }
                     }
                     else{

@@ -24,7 +24,6 @@ $(document).ready(function() {
         window.location = res[1] + "principal.html";
     }
     else{
-        
         $("#login").click(function(event) {
             event.preventDefault();
             login();
@@ -47,8 +46,8 @@ function login() {
         success: function(usuario){
            
             date = new Date();
-            /*console.log("usuario[0].user === 'alumno'");
-            console.log(usuario[0].user === "alumno");*/
+            console.log("usuario[0].user === 'profesor'");
+            console.log(usuario[0].user === "profesor");
             if(usuario[0].user === "alumno" && usuario[0].nAsignaturas > 1){
                 abrirModal(usuario, function (escogido){
                     console.log(escogido);
@@ -95,8 +94,8 @@ function cambiarpass() {///Revisar el meter el usuario en la cooki la primera ve
     date = new Date();
     var anio = date.getFullYear()+1;
     date.setFullYear(anio);
-    console.log("user.idAlumno");
-    console.log(user.idAlumno);
+    /*console.log("user.idAlumno");
+    console.log(user.idAlumno);*/
     $.ajax({
         method: "POST",
         url: "/cambiarpass",
@@ -113,18 +112,18 @@ function cambiarpass() {///Revisar el meter el usuario en la cooki la primera ve
 }
  /***********************Modal para elegir el usuario***********************/
 function abrirModal(alumno,callback){
-    console.log("abrirModal alumno");
-    console.log(alumno);
+    /*console.log("abrirModal alumno");
+    console.log(alumno);*/
 
     var modal = document.getElementById('myModal');
     var span = document.getElementsByClassName("close")[0];
     modal.style.display = "block";
     //$("#nombreModal").text(alumno[0].user); terminar
     let element=$("<div>").addClass("cuentasDeUsuario");
-    console.log(alumno.length);
+    //console.log(alumno.length);
     for (let i = 0;  i< alumno.length; i++){
         let s = alumno[i].descripcion+" "+ alumno[i].curso+"º"+alumno[i].grupo;
-        console.log(s);
+        //console.log(s);
         var d = $('<div>').addClass("radios");
         var l =  $('<label>').text(s);
         var e = $('<input>').attr("value", i);
@@ -145,10 +144,10 @@ function abrirModal(alumno,callback){
         var botones =document.getElementsByClassName("radio");
         var i;
         for (i = 0; i < botones.length; i++) {
-            console.log("botones[i].checked");
-            console.log(botones[i].checked);
+            //console.log("botones[i].checked");
+            //console.log(botones[i].checked);
           if (botones[i].checked) {
-            console.log(alumno[i]);
+            //console.log(alumno[i]);
             callback(alumno[i]);
           }
         }

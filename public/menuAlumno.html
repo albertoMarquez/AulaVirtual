@@ -1,11 +1,25 @@
 <!-- Menú de alumno -->
+<!-- <script src="/js/redireccionarBoton.js"></script>-->
 
 <div class="btn-group">
-    <button class="btn btn-secondary btn-lg dropdown-toggle" type="button"data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Ejercicios
+    <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" aria-haspopup="true" aria-expanded="false" 
+    onclick= redireccionarBoton("listadoDeEjercicios.html")>
+    Listado de ejercicios
     </button>
-    <div class="dropdown-menu" style="min-width: 180px;">
-        <a class="dropdown-item" href="listadoDeEjercicios.html" id="mostrarEjerciciosAlumno">Listado de ejercicios</a>
-        <div class="dropdown-divider"></div>
-    </div>
+    <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" aria-haspopup="true" aria-expanded="false" 
+    onclick= redireccionarBoton("Ejercicios.html")>
+    Ejercicios
+    </button>
+    <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" aria-haspopup="true" aria-expanded="false" 
+    onclick= redireccionarBoton("Examenes.html")>
+    Examenes
+    </button>
+    
 </div>
+<script>
+function redireccionarBoton(dir){
+    var link = window.location.href;
+    var res = link.split("/");
+    window.location = res[1] + dir;
+}
+</script>
