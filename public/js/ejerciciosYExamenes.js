@@ -25,29 +25,16 @@ $(document).ready(function() {
         }else if(user.user.localeCompare("alumno")===0){
             $("#menu").load("menuAlumno.html");
         }
-        
-        $(".parrafoExamenes").hide();
-        $(".parrafoEjercicios").hide();
-        
-        $("#Ejercicios").click(function(event) {
-            event.preventDefault();
-            $(".parrafoEjercicios").show();
-            $("#tablaEjercicios").show();
-            $("#tablaEjercicios tbody").remove();
-            $(".parrafoExamenes").hide();
-            $("#tablaExamenes").hide();
+
+        var link = window.location.href;
+        var res = link.split("/");
+        link =  res[3].split(".") ;
+        console.log(link[0]);
+        if(link[0] === "ejercicios"){
             cargarTabla(0);
-        });
-    
-        $("#Examenes").click(function(event) {
-            event.preventDefault();
-            $(".parrafoExamenes").show();
-            $("#tablaExamenes").show();
-            $("#tablaExamenes tbody").remove();
-            $(".parrafoEjercicios").hide();
-            $("#tablaEjercicios").hide();
+        }else{
             cargarTabla(1);
-        });
+        }
     }else{
         var link = window.location.href;
         var res = link.split("/");
@@ -64,7 +51,7 @@ function cargarTabla(type) {
         data: JSON.stringify({tipo:type, id:user.idAlumno}),
         success: function(data) {
             
-            var tabla   = document.getElementsByTagName("table")[type];
+            var tabla   = document.getElementsByTagName("table")[0];
             var tblBody = document.createElement("tbody");
             for(var i=0; i<data.length; i++){
                 var hilera = document.createElement("tr");
@@ -103,9 +90,3 @@ function cargarTabla(type) {
         }
     })
 }
-
-
-
-
-
-

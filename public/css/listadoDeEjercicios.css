@@ -15,3 +15,8 @@ tbody tr:hover{
     cursor: pointer;
     background-color: green !important;
 }
+h3{
+    text-align: center;
+    display: block;
+    color: green
+}

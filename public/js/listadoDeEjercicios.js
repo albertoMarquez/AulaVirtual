@@ -1,4 +1,5 @@
 var user;
+$(document).ready(function() {
 var options={}
 $.galleta(options);
 user = $.galleta().getc("usuario");
@@ -49,7 +50,7 @@ if(user != "undefined"){
         window.location = res[1] + "/";
     }
     
-
+});
 
 
 

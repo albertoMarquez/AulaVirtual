@@ -11,20 +11,30 @@
         <link rel="stylesheet" href="/css/altaEjercicio.css" type="text/css" />
         <link rel="stylesheet" href="/css/listadoDeEjercicios.css" type="text/css" />
 
-
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.2/moment.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js"></script>
-        <script src="js/listadoDeEjercicios.js"></script>
+        <script src="js/ejerciciosYExamenes.js"></script>
         <script src="js/cookie.js"></script>
     </head>
     <body>
-        
         <div id="cabecera"></div>
         <div id="menu"></div>
-    
+        <div class="parrafoEjercicios">
+            <h3>Ejercicios a desarrollar por el alumno</h3>
+            <div class="container">
+                <table id="tablaEjercicios" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Titulo del ejercicio</th>
+                            <th scope="col">ID</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
     </body>
 </html>

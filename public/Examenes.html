@@ -18,12 +18,26 @@
         <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js"></script>
-        <script src="js/listadoDeEjercicios.js"></script>
+        <script src="js/ejerciciosYExamenes.js"></script>
         <script src="js/cookie.js"></script>
     </head>
     <body>
         
         <div id="cabecera"></div>
         <div id="menu"></div>
+
+        <div class="parrafoExamenes" >
+            <h3>Examenes a desarrollar por el alumno</h3>
+            <div class="container">
+                <table id="tablaExamenes" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Titulo del ejercicio</th>
+                            <th scope="col">ID</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>                   
+        </div>
     </body>
 </html>

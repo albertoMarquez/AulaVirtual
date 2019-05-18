@@ -77,7 +77,7 @@ app.post("/login", (request, response) => {
                             response.end(); 
                         }
                         else{ //es profesor
-                            console.log(alumno);
+                            //console.log(alumno);
                             response.json(alumno);
                             response.status(201); //el usuario es correcto
                             response.end();
@@ -85,7 +85,7 @@ app.post("/login", (request, response) => {
                     }
                 })
             }else{
-                console.log(profesor);
+                //console.log(profesor);
                 response.json(profesor);
                 response.status(201); //el alumno es correcto
                 response.end();
