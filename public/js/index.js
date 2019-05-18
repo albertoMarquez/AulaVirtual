@@ -138,6 +138,7 @@ function abrirModal(alumno,callback){
     $("#notaLabelM").append(element);
     span.onclick = function(){
         modal.style.display = "none";
+        location.reload();
     }
     $("#botonModal").click(function(event) {
         event.preventDefault();
