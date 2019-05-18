@@ -65,8 +65,7 @@ app.post("/login", (request, response) => {
         if (err){
             response.status(400); //mal introducido
             response.end();
-        }
-        else {
+        }else {
             if (op === false) { // el alumno no existe
                 daoU.isProfesor(request.body.login, request.body.password, (err, op, profesor) =>{
                     if(err){ // mal introducido
@@ -78,7 +77,7 @@ app.post("/login", (request, response) => {
                             response.end(); 
                         }
                         else{ //es profesor
-                            //console.log("profesor:  "+profesor);
+                            console.log(profesor);
                             response.json(profesor);
                             response.status(201); //el usuario es correcto
                             response.end();
@@ -107,8 +106,10 @@ app.post("/cambiarpass", (request, response) =>{
     console.log(request.body.pass1);
     console.log("request.body.pass2");
     console.log(request.body.pass2);
+    console.log("user.idAlumno");
+    console.log(request.body.idAlumno);
    if(request.body.pass1 === request.body.pass2){
-        daoU.cambiarpass(request.body.user, request.body.pass1, request.body.date, (err) =>{
+        daoU.cambiarpass(request.body.user, request.body.pass1, request.body.date, request.body.idAlumno, (err) =>{
            if(!err){
                response.status(200);
                response.end();
