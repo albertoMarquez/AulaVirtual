@@ -669,6 +669,34 @@ app.get("/evaluaAlumno", (request, response)=>{
         }
     });
 });
+app.get("/alumnosPorgrupo", (request, response)=>{
+    daoU.alumnosPorgrupo(request.query.idGrupo, (err, filas)=>{
+        if(err){
+            response.status(400);
+            response.end();
+        }else{
+            //console.log(filas);
+            response.json(filas);
+            response.status(201);
+            response.end();
+        }
+    });
+});
+///////////COMPROBAR
+app.get("/notasAlumno", (request, response)=>{
+    console.log(request.query.idAlumno);
+    daoU.notasAlumno(request.query.idAlumno, (err, filas)=>{
+        if(err){
+            response.status(400);
+            response.end();
+        }else{
+            //console.log(filas);
+            response.json(filas);
+            response.status(201);
+            response.end();
+        }
+    });
+});
 
 app.post("/actualizaComentarioNota", (request, response)=>{
     //console.log(request.body);

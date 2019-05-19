@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html lang="es">
+    <head>
+        <meta charset="utf-8"> 
+        <title>Inicio</title>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.css" rel="stylesheet"/>
+        <!-- <link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.css" rel="stylesheet"/> -->
+        <link href="//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/css/dataTables.bootstrap.min.css" rel="stylesheet">
+
+        <link rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" type="text/css" />
+        <!-- <link rel="stylesheet" href="/css/mostrarListaEjer.css" type="text/css" /> -->
+        <link rel="stylesheet" href="/css/main_style.css" type="text/css" />
+        <link rel="stylesheet" href="/css/evaluarAlumnos.css" type="text/css" />
+        
+
+
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.2/moment.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.js"></script>
+        <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script> -->
+        <script src="//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js"></script>
+
+        <script src="js/calificacionesProfesor.js"></script>
+        <script src="js/cookie.js"></script>
+    </head>
+    <body>
+        
+        <div id="cabecera"></div>
+        <div id="menu"></div>
+
+        <div id="filtro">
+            <!--select para elegir la asignatura-->
+            <div id="asig">
+                <label>Asignatura: </label>
+                <select id ="asignatura" class="autocomplete">
+                    <option value="0" class="templateAsignatura">-- Selecciona una asignatura --</option>
+                </select>
+            </div>
+             <!--select para elegir el curso y grupo-->
+            <div id="cyg">
+                <label>Curso y grupo: </label>
+                <select id ="cursoGrupo" class="autocomplete">
+                    <option value="0" class="templateCursoGrupo">-- Selecciona un curso y grupo --</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="tablaAlumnos">
+            <table id="tablaA" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col" class="th-sm">ID</th>
+                        <th scope="col" class="th-sm">Correo</th>
+                        <th scope="col" class="th-sm">Nombre</th>
+                        <th scope="col" class="th-sm">Apellidos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>   
+        
+        <div id="myModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <span id="nombreModal"></span>
+                <label id="notaLabelM">Notas del alumno:</label>
+                <div id="tablaNotas">
+                        <table id="tablaN" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="th-sm">IDEjercicio</th>
+                                    <th scope="col" class="th-sm">Titulo</th>
+                                    <th scope="col" class="th-sm">Nota</th>
+                                </tr>
+                            </thead>
+                            <tbody id= "bodyNotas">
+                            </tbody>
+                        </table>
+                    </div>   
+            </div>
+        </div>
+    </body>
+</html>

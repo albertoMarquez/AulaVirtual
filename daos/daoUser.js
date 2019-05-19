@@ -46,7 +46,7 @@ class DAOUsers {
                 for(var i=0;i<aux.length-1;i++){
                     aux2=aux2.concat(aux[i],aux[i+1]);
                 };
-                console.log(aux2);
+                //console.log(aux2);
                 //console.log(sql);
                 conexion.query(sql, aux2, (err, res) => {
                     if(err){
@@ -82,8 +82,8 @@ class DAOUsers {
     }
     
     crearCursoYGrupo(datos, callback){
-        console.log("datos");
-        console.log(datos);
+        //console.log("datos");
+        //console.log(datos);
         this.pool.getConnection((err, con) =>{
             if(err){
                 callback(err);
@@ -117,7 +117,7 @@ class DAOUsers {
             if(err){
                 callback(err);
             }else{
-                console.log(datos.idProfesor+" "+ datos.idGrupo);
+                //console.log(datos.idProfesor+" "+ datos.idGrupo);
                 con.query(`DELETE FROM grupos WHERE idGrupo = ?`,
                 [Number(datos.idGrupo)], (err, filas) =>{
                     if(err){
@@ -137,7 +137,6 @@ class DAOUsers {
                         con.release();
                     }
                 })
-                
             }
         });
     }
@@ -318,7 +317,7 @@ class DAOUsers {
                             [login,password],(err,resultado)=>{
                                 if(!err){
                                     if(resultado.length === 0){
-                                        console.log("Error :"+err);
+                                        //console.log("Error :"+err);
                                         callback(undefined, false, undefined);
                                     }else{ 
                                         //console.log("mas de un resultado");
@@ -402,7 +401,7 @@ class DAOUsers {
             }
         })
     }
-
+   
 
     evaluaAlumno(data, callback){
         //console.log(data);
@@ -410,7 +409,6 @@ class DAOUsers {
         if(data.tipo === 1){
             ev = 0;
         }
-
         this.pool.getConnection((err, con)=>{
             if(err){
                 callback(err);
@@ -426,9 +424,6 @@ class DAOUsers {
                     if(err){
                         callback(err);
                     }else{
-
-                        //console.log(filas);
-                        
                         var sol = [];
                         var row = {};
                         filas.forEach(e=>{
@@ -443,7 +438,6 @@ class DAOUsers {
                             row.numScripts = `${e.numFallos}/${e.numScriptsSol}`;                           
                             row.intentos = e.intentos;
                             row.resultado = e.resultado;
-                          
                             sol.push(row);
                             row = {};
                         });
@@ -454,7 +448,58 @@ class DAOUsers {
             }
         })
     }
+    notasAlumno(idAlumno,callback){
+        console.log("idAlumno");
+        console.log(idAlumno);
+        this.pool.getConnection((err, con)=>{
+            if(err){
+                callback(err);
+            }else{
+                con.query(` SELECT ea.idEjercicio, e.titulo, ea.nota  
+                            FROM (  SELECT ea.idEjercicio,ea.nota FROM alumno a, ejercicioAlumno ea
+                                    WHERE a.idAlumno= ea.idAlumno AND a.idAlumno = ?) ea , ejercicio e 
+                            where ea.idEjercicio = e.idEjercicio`,
+                    [idAlumno], (err, filas)=>{
+                    if(err){
+                        callback(err);
+                    }else{
+                        if(filas.length === 0){
+                            callback(undefined, false);
+                        }else{
+                            console.log(filas);
+                            callback(undefined, filas);
+                        }
+                    }
+                });
+                con.release();
+            }
+        })
+    }
 
+    alumnosPorgrupo(idGrupo,callback){
+        this.pool.getConnection((err, con)=>{
+            if(err){
+                callback(err);
+            }else{
+                //console.log(idGrupo);
+                con.query(`SELECT correo,nombre,apellidos,idAlumno FROM alumno WHERE idGrupo =?`, [Number(idGrupo)], (err, filas)=>{
+                    if(err){
+                        callback(err);
+                    }else{
+                        if(filas.length === 0){
+                            //console.log("filas.length");
+                            //console.log(filas.length);
+                            callback(undefined, false);
+                        }else{
+                            //console.log(filas);
+                            callback(undefined, filas);
+                        }
+                    }
+                });
+                con.release();
+            }
+        })
+    }
 }
    
 module.exports = {
