@@ -1,0 +1,43 @@
+
+.panel-default > .panel-heading {
+    color: white;
+    background-color: #5a8651;
+    border-color: #ddd;
+    width: 213px;
+    height: 21px;
+}
+
+
+.panel-heading {
+    padding: 0px 0px 0px 6px;
+}
+
+
+.container {
+    padding-top: 25px;
+    padding-left: 0px;
+}
+
+.panel-body {
+    border: 1px solid #00000021;
+}
+
+.panel {
+    border: 0px solid transparent;
+}
+
+input{
+    margin:0px !important;
+}
+.input-group-addon, .input-group-btn{
+    width: 0%;
+}
+
+.input-group-addon{
+    padding: 0px 10px;
+}
+
+.form-group {
+    display: flex;
+    justify-content: space-around;
+}

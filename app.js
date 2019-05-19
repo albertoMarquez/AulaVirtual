@@ -699,8 +699,14 @@ app.get("/notasAlumno", (request, response)=>{
 });
 
 app.post("/actualizaComentarioNota", (request, response)=>{
-    //console.log(request.body);
-    daoE.actualizaEjercicioAlumno(request.body, (err, filas)=>{
+    var info = request.body;
+    if(request.body.nota > 100){
+        info.nota = 100;
+    }else if(request.body.nota < 0){
+        info.nota = 0;
+    }
+    // console.log(info);
+    daoE.actualizaEjercicioAlumno(info, (err, filas)=>{
         if(err){
             console.log("err");
             response.status(400);
