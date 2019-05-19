@@ -532,17 +532,47 @@ app.get("/mostrarAlumnos", (request, response)=>{
     })
 });
 
-app.get("/mostrarListaEjer", (request, response)=>{
+
+app.get("/mostrarListaEjerNoAsignados", (request, response) =>{
+    daoE.listarEjerciciosNoAsignados(request.query, (err, filas) =>{
+         if(err){
+            response.status(400);
+            response.end();
+        }else{
+            response.json(filas);
+            response.status(201);
+            response.end();
+        }
+    })
+})
+
+app.get("/mostrarListaEjerAlta", (request, response)=>{
+    //request.query={ tipo: '1', idG: '1', idA: '1', user: '1' }
+    //console.log(request.query);
+    daoE.listarTodoEjerciciosAlta(request.query, (err, filas)=>{
+        if(err){
+            response.status(400);
+            response.end();
+        }else{
+            response.json(filas);
+            response.status(201);
+            response.end();
+        }
+    });
+})
+
+/*app.get("/mostrarListaEjer", (request, response)=>{
     daoE.listarTodosEjercicios((err, filas)=>{
         if(err){
-            console.log("ha habido un error");
+            response.status(400);
+            response.end();
         }else{
             response.status(201);
             response.json(filas);
             response.end();
         }
     })
-});
+});*/
 
 app.get("/getCursoGrupoEjerAlta", (request, response)=>{
     daoA.listarCursoGrupoEjerAlta(request.query, (err, filas) =>{

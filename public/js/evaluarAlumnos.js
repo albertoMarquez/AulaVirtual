@@ -125,24 +125,19 @@ function cargarListaAlumnosEvaluar(idA, idG, tipoEjer, cursoGrupo){
 
            
          //   $('#tablaA').DataTable();
-            tableData = $('#tablaA').DataTable();
+            tableData = $('#tablaA').DataTable({
+                "oLanguage": {
+                    "sSearch": "Filtro de búsqueda:",
+                    "sEmptyTable": "No hay datos para mostrar",
+                    "sInfo": "Hay un total de _TOTAL_ resultados a mostrar (_START_ de _END_)",
+                    "sInfoEmpty": "No hay entradas a mostrar",
+                    "sLengthMenu": "Mostrando _MENU_ resultados"
+                }
+            });
             
             $('.dataTables_length').addClass('bs-select');
             // el orden de la tabla lo he sacado de aqui https://mdbootstrap.com/docs/jquery/tables/sort/ 
-            $(".previous").text(" ");
-            $(".next").text(" ");
-            var img = $("<img>").attr("src", "/images/nextButton.png");
-            img.attr("id", "ne");
-            $(".next").append(img);
-
-            var img2 = $("<img>").attr("src", "/images/previousButton.png");
-            img2.attr("id", "pre");
-            $(".previous").append(img2);
-
-            var elem = $(".dataTables_length select");
-            $(".dataTables_length label").text("Numero de resultados a mostrar: ");
-            $(".dataTables_length").append(elem);
-
+            // edicionTablaDataTable();
 
             $('#tablaA').on('click', 'tbody tr', function(){
                 // console.log('TR cell textContent : ', this);
@@ -283,3 +278,5 @@ function listarCursoYgrupo(idA){
         }
     });
 }
+
+

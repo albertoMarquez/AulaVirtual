@@ -1,3 +1,18 @@
-#tabla{
+#tablaE{
     padding: 30px;
 }
+
+#tablaENA{
+  padding: 30px;
+}
+
+
+
+#filtro{
+    display: flex;
+    margin: 25px;
+    justify-content: space-between;
+  }
+  
+ 
+  
