@@ -182,6 +182,47 @@ class DAOAsignatura {
         });
     }
 
+    listarCursoGrupoSinAlumnos(idAsignatura, idProfe, callback){ //dada un id de asignatura lista curso y grupo
+        var f = new Date();
+        var anioHoy = f.getFullYear();
+        this.pool.getConnection((err, con) =>{
+            if(err){
+                callback(err);
+            }else{
+                var sql = `SELECT * 
+                FROM asignatura a, grupos g, profeGrupo pg 
+                where a.idAsignatura = g.idAsignatura 
+                and g.idGrupo = pg.idGrupo
+                AND a.idAsignatura = ? 
+                and anio >= ? 
+                and pg.idProfesor = ?
+                and g.idGrupo NOT IN (select a.idGrupo from alumno a)`
+                con.query(sql,
+                 [idAsignatura, anioHoy, idProfe],
+                (err, filas) =>{
+                    if(err){
+                        callback(err, undefined);
+                    }else{
+                        var row = {};
+                        var sol = [];
+
+                        filas.forEach(e =>{
+                            row.anio = e.anio;
+                            row.curso = e.curso;
+                            row.idGrupo = e.idGrupo;
+                            row.grupo = e.grupo;
+                            sol.push(row);
+                            row = {};
+                        })
+
+                        callback(undefined, sol);
+                    }
+                })
+            }
+        });
+    }
+
+
     listarCursoGrupoNoAlta(data, callback){ 
         var f = new Date();
         var anioHoy = f.getFullYear();

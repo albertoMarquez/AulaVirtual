@@ -41,3 +41,40 @@ input{
     display: flex;
     justify-content: space-around;
 }
+
+#filtro{
+    display: flex;
+    justify-content: space-around;
+}
+
+#fileAlumnos{
+    justify-content: center;
+    display: flex;
+    padding: 19px;
+}
+
+p{
+    text-align: right;
+    color:#5a8651;
+}
+
+#aclaraciones{
+    display: flex;
+    justify-content: space-between;
+}
+
+#modeloEntrada{
+    color: #5a8651;
+    padding: 13px 31px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 25px;
+    width: 1093px;
+    border: dashed #5a865187;
+    box-shadow: 7px 7px 10px;
+}
+
+#Ejemplo{
+    background-color: #5a86510d;
+    box-shadow: 0px 1px 10px -4px #5a865138;
+}

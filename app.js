@@ -193,7 +193,7 @@ app.post("/eliminarCursoYGrupo",(request, response) =>{
     });
  });
 
- app.get("/cargarCursoYGrupo",(request, response) =>{
+ /*app.get("/cargarCursoYGrupo",(request, response) =>{
     daoU.cargarCursoYGrupo(request.query,(err, op) =>{
         if (err){
             response.status(400); //mal introducido
@@ -207,7 +207,7 @@ app.post("/eliminarCursoYGrupo",(request, response) =>{
             }
         }
     });
- });
+ });*/
 
 app.post("/altaEjercicio", (request, response) =>{
 
@@ -574,6 +574,20 @@ app.get("/mostrarListaEjerAlta", (request, response)=>{
     })
 });*/
 
+app.get("/comprobarBorrado", (request, response) =>{
+    //console.log(request.query);
+    daoE.comprobarBorrado(request.query.ejer, (err, sol) =>{
+        if(err){
+            response.status(400);
+            response.end();
+        }else{
+            response.json(sol);
+            response.status(200);
+            response.end();
+        }
+    })
+})
+
 app.get("/getCursoGrupoEjerAlta", (request, response)=>{
     daoA.listarCursoGrupoEjerAlta(request.query, (err, filas) =>{
         if(err){
@@ -601,6 +615,22 @@ app.get("/getCursoGrupo", (request, response) =>{
         }
     })
 });
+
+app.get("/getCursoGrupoSinAlumnos", (request, response) =>{
+    let id = Number(request.query.id);
+    var idProfe = Number(request.query.idP);
+    daoA.listarCursoGrupoSinAlumnos(id, idProfe, (err, filas) =>{
+        if(err){
+            response.status(400);
+            response.end();
+        }else{
+            response.status(200);
+            response.json(filas);
+            response.end();
+        }
+    })
+});
+
 app.get("/getCursoGrupoNoAlta", (request, response) =>{
    // console.log(request.query);
     daoA.listarCursoGrupoNoAlta(request.query, (err, filas) =>{

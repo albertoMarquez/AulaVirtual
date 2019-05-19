@@ -142,24 +142,24 @@ class DAOUsers {
         });
     }
 
-    cargarCursoYGrupo(datos, callback){
-        this.pool.getConnection((err, con) =>{
-            if(err){
-                callback(err);
-            }else{
-                con.query(`SELECT * from profegrupo pg, grupos g, asignatura a where pg.idProfesor = ? and g.idGrupo = pg.idGrupo and a.idAsignatura = g.idAsignatura`,
-                [datos.idProfesor], (err, resultado) =>{
-                    if(err || resultado.length === 0){
-                        callback(err, undefined);
-                    }
-                    else{   
-                        callback(undefined, resultado)
-                    }
-                })
-                con.release();
-            }
-        });
-    }
+    // cargarCursoYGrupo(datos, callback){
+    //     this.pool.getConnection((err, con) =>{
+    //         if(err){
+    //             callback(err);
+    //         }else{
+    //             con.query(`SELECT * from profegrupo pg, grupos g, asignatura a where pg.idProfesor = ? and g.idGrupo = pg.idGrupo and a.idAsignatura = g.idAsignatura`,
+    //             [datos.idProfesor], (err, resultado) =>{
+    //                 if(err || resultado.length === 0){
+    //                     callback(err, undefined);
+    //                 }
+    //                 else{   
+    //                     callback(undefined, resultado)
+    //                 }
+    //             })
+    //             con.release();
+    //         }
+    //     });
+    // }
 
     createProfesor(datos, callback){ //////////////////////////////// revisar
         //console.log(datos);

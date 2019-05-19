@@ -28,14 +28,14 @@ if(user != "undefined"){
     
         $("#btnGuardar").click(function(event) {
             event.preventDefault();
-            baja();
+
+            comprobarBorrado();
         });
     
         listarEjerciciosAlta(); 
 
         $("#ejercicio").on('change', function(e){
             idE = $(this).find(':selected').data('idEj');
-            
             listarAsignaturas(idE);
         });
 
@@ -147,6 +147,36 @@ function baja(){
         success: function() {
            alert("Ejercicio dado de baja correctamente");
            location.reload();
+        },
+        error: function() {
+            alert("Error al dar de baja un ejercicio");
+        }
+    });
+}
+
+function comprobarBorrado(){
+    var info = {};
+    info.idEjercicio = idE;
+    info.idAsignatua =  idA;
+    info.idGrupo = $("#curso").find(':selected').data('idGrupo');
+    $.ajax({
+        method: "GET",
+        url: "/comprobarBorrado",
+        contentType: "application/json",
+        data:{ejer:info},
+        success: function(data) {
+            console.log(data);
+            if(data === true){
+                baja();
+            }else{
+                var mensaje = `El ejercicio ha sido intentado por al menos un alumno, ¿Estás seguro de querer darlo de baja? 
+
+Nota: Los ejercicios de los alumnos que intentaron este ejercicio tambien se eliminarán de la base de datos por lo que no podrán recuperar sus soluciones ni comentarios.`;
+                var opcion = confirm(mensaje);
+                if (opcion === true) {
+                    baja();
+                }
+            }
         },
         error: function() {
             alert("Error al dar de baja un ejercicio");

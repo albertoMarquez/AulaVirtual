@@ -486,6 +486,7 @@ class DAOEjercicio {
     }
 
     bajaEjercicio(data, callback){
+        console.log(data);
         this.pool.getConnection((err, con) =>{
             if(err){
                 callback(err);
@@ -497,11 +498,18 @@ class DAOEjercicio {
                         callback(err, undefined);
                     }
                     else{
-                        callback(undefined, true);
+                        con.query(`DELETE from ejercicioalumno where idEjercicio = ? and idGrupo = ?`,
+                        [data.idEjercicio, data.idGrupo], (err)=>{
+                            if(err){
+                                callback(err, undefined);
+                            }else{
+                                callback(undefined, true);
+                            }
+                        });
+                        con.release();
                     }
                 });  
             }
-            con.release();
         });
     }
 
@@ -712,6 +720,30 @@ class DAOEjercicio {
                         });
 
                         callback(undefined, sol);
+                    }
+                });
+                con.release();
+            }
+        })
+    }
+
+    comprobarBorrado(datos, callback){
+        // console.log(datos);
+        this.pool.getConnection((err, con) =>{
+            if(err){
+                callback(err);
+            }else{
+                var sql=`select * from ejercicioalumno ea where ea.idEjercicio = ? and idGrupo = ?`
+                con.query(sql, [Number(datos.idEjercicio), Number(datos.idGrupo)], (err, sol) =>{
+                    if(err){
+                        callback(err, undefined);
+                    }else{
+                        //no hay ningun alumno que haya resuelto el ejercicio
+                        if(sol.length === 0){
+                            callback(err, true);
+                        }else{ //al menos hay uno
+                            callback(err, false);
+                        }
                     }
                 });
                 con.release();

@@ -29,18 +29,44 @@
         <div class ="datosFormulario">
             <div class="container">
                 <div class="panel-group">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Alunnos</div>
-                    <div class="panel-body">
-                        <label for="txt_scriptAlumnos">Script para cargar los alumnos en la base de datos: </label>
-                        <input type="file" name="uploadedfile" id="scriptAlumnos"class="files">
-                        <label for="curso" class="form_label">Curso y Grupo</label>
-                        <select id="cargarCursoYGrupo" class="">
-                        </select>
-                        <button type="submit" value="Submit" class="btn btn-default" id="subir">SUBIR</button>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Alumnos</div>
+                            <div class="panel-body">
+
+                                <div id="filtro">
+                                        <!--select para elegir la asignatura-->
+                                        <div id="asig">
+                                            <label>Asignatura: </label>
+                                            <select id ="asignatura" class="autocomplete">
+                                                <option value="0" class="templateAsignatura">-- Selecciona una asignatura --</option>
+                                            </select>
+                                        </div>
+                            
+                                            <!--select para elegir el curso y grupo-->
+                                        <div id="cyg">
+                                            <label>Curso y grupo: </label>
+                                            <select id ="cursoGrupo" class="autocomplete">
+                                                <option value="0" class="templateCursoGrupo">-- Selecciona un curso y grupo --</option>
+                                            </select>
+                                        </div>
+                                </div>
+
+                                <div id="fileAlumnos">
+                                    <label for="txt_scriptAlumnos">Script para cargar los alumnos en la base de datos: </label>
+                                    <input type="file" name="uploadedfile" id="scriptAlumnos"class="files">
+                                </div>
+                                
+                                <!-- <label for="curso" class="form_label">Curso y Grupo</label>
+                                <select id="cargarCursoYGrupo" class="">
+                                </select> -->
+                                <div id="aclaraciones">
+                                    <p>(*)Ten en cuenta que NO se van a listar grupos donde haya alumnos asignados</p>
+                                    <button type="submit" value="Submit" class="btn btn-default" id="subir">SUBIR</button>
+                                </div>
+                                
+                            </div>
+                        </div>
                     </div>
-                    </div>
-                </div>
                 </div>
             </div>    
         </div>
@@ -48,8 +74,8 @@
         <div id="modeloEntrada">
             <h4>Los datos de los alumnos se deben introducir con el formato que se especifica</h4>
             <ul id="lista">
-                <li>Los datos deben estar separados por una coma(,)</li>
-                <li>se deben introducir los datos segun este orden:
+                <li>Los alumnos deben estar separados por una coma(,) y como separación entre alumnos un punto y coma (;)</li>
+                <li>se deben introducir segun este orden:
                     <ul>
                         <li>Correo</li>
                         <li>Nombre</li>
