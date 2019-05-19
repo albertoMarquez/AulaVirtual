@@ -83,10 +83,19 @@
             <div class="modal-content">
               <span class="close">&times;</span>
               <span id="nombreModal"></span>
-              <label id="notaLabelM">Codigo del alumno:</label>
-              <textarea id="solucionAlumnoModal"></textarea>
+              <div id="codigoAlumno">
+                    <div>
+                        <label id="notaLabelM">Codigo del alumno:</label>
+                        <textarea id="solucionAlumnoModal"></textarea>
+                    </div>
+                    <div id="codigoComentado">
+                        <label id="notaLabelM">Código del alumno comentado:</label>
+                        <textarea id="solucionAlumnoComentada" disabled></textarea>
+                    </div>
+              </div>
               <label id="notaLabelM">Respuesta Oracle:</label>
-              <textarea id="solucionOracleAlumno"></textarea>
+              <textarea id="solucionOracleAlumno" disabled></textarea>
+              
               <div id="notaDiv">
                 <div>
                     <label id="notaLabelM">Nota (entre 0 y 100): </label>
