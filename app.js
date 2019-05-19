@@ -714,7 +714,7 @@ app.get("/alumnosPorgrupo", (request, response)=>{
 });
 ///////////COMPROBAR
 app.get("/notasAlumno", (request, response)=>{
-    console.log(request.query.idAlumno);
+    //console.log(request.query.idAlumno);
     daoU.notasAlumno(request.query.idAlumno, (err, filas)=>{
         if(err){
             response.status(400);

@@ -134,7 +134,7 @@ function cargarListaAlumnos(idGrupo){
 }
 
 
-
+//ARREGLAR DUPLICADOS
 function abrirModal(info){
     // Get the modal
     console.log(info);
@@ -183,6 +183,16 @@ function abrirModal(info){
                 a.attr("class", "elem");
                 $("#bodyNotas #template").after(a);
             });
+            /*tableData = $('#tablaN').DataTable({
+                "oLanguage": {
+                    "sSearch": "Filtro de búsqueda:",
+                    "sEmptyTable": "No hay datos para mostrar",
+                    "sInfo": "Hay un total de _TOTAL_ resultados a mostrar (_START_ de _END_)",
+                    "sInfoEmpty": "No hay entradas a mostrar",
+                    "sLengthMenu": "Mostrando _MENU_ resultados"
+                }
+            });*/
+            //$('.dataTables_length').addClass('bs-select');
         },
         error: function(){
             alert("Error al actualizar");
