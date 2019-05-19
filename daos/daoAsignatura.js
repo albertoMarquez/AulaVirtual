@@ -8,8 +8,71 @@ class DAOAsignatura {
     constructor(pool) {
         this.pool = pool;
     }
+    crearAsignatura(datos, callback){ 
+        //console.log(datos);
+        this.pool.getConnection((err, con) =>{
+            if(err){
+                callback(err);
+            }else{
+                con.query(`INSERT INTO asignatura (descripcion, curso) VALUES (?,?)`,
+                [datos.asignatura, datos.curso], (err, filas) =>{
+                    if(err){
+                        console.log("no ha podido insertar");
+                        callback(err, undefined);
+                    }
+                    else{
+                        callback(undefined, filas.insertId);
+                    }
+                })
+                con.release();
+            }
+        });
+    }
+    
+    //CArga todas las asignaturas
+    cargarAsignaturas(callback){ 
+        //console.log( "dao"+datos.idProfesor);
+        this.pool.getConnection((err, con) =>{
+            if(err){
+                callback(err);
+            }else{//SELECT `descripcion`, `idAsignatura` FROM `asignatura` a
+                con.query(`SELECT descripcion, idAsignatura FROM asignatura a`,
+                (err, resultado) =>{
+                    if(err || resultado.length === 0){
+                        //console.log("error consulta");
+                        callback(err, undefined);
+                    }
+                    else{
+                        //console.log("Hola" +resultado);
+                        callback(undefined, resultado)
+                    }
+                })
+                con.release();
+            }
+        });
+    }
 
-    //lista las asignaturas de un profesor en el curso actual
+    eliminarAsignatura(datos, callback){ 
+       // console.log("eliminar"+ datos.asignatura);
+        this.pool.getConnection((err, con) =>{
+            if(err){
+                callback(err);
+            }else{
+                con.query(`DELETE FROM asignatura WHERE asignatura.idAsignatura = ?`,
+                [datos.asignatura], (err, filas) =>{
+                    if(err){
+                        //console.log("no ha podido borrar");
+                        callback(err, undefined);
+                    }
+                    else{
+                        callback(undefined, filas.insertId);
+                    }
+                })
+                con.release();
+            }
+        });
+    }
+    //lista las asignaturas de un profesor a partir del curso actual
     listarAsignaturas(idProfe, callback){
         var fecha = new Date();
         this.pool.getConnection((err, con) =>{
@@ -21,7 +84,7 @@ class DAOAsignatura {
                         on a.idAsignatura = g.idAsignatura 
                         and pg.idGrupo = g.idGrupo 
                         and pg.idProfesor = ? 
-                        and g.anio = ?
+                        and g.anio >= ?
                         group by g.idAsignatura`;
                 con.query(sql,
                 [idProfe, fecha.getFullYear()], (err, filas)=>{
@@ -94,7 +157,7 @@ class DAOAsignatura {
             if(err){
                 callback(err);
             }else{
-                con.query(`SELECT * FROM asignatura a, grupos g, profeGrupo pg where a.idAsignatura = g.idAsignatura and g.idGrupo = pg.idGrupo AND a.idAsignatura = ? and anio = ? and pg.idProfesor = ?`,
+                con.query(`SELECT * FROM asignatura a, grupos g, profeGrupo pg where a.idAsignatura = g.idAsignatura and g.idGrupo = pg.idGrupo AND a.idAsignatura = ? and anio >= ? and pg.idProfesor = ?`,
                  [idAsignatura, anioHoy, idProfe],
                 (err, filas) =>{
                     if(err){
@@ -150,7 +213,6 @@ class DAOAsignatura {
                             sol.push(row);
                             row = {};
                         })
-
                         callback(undefined, sol);
                     }
                 })

@@ -8,8 +8,7 @@
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.css" rel="stylesheet"/>
         <link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.css" rel="stylesheet"/>
-        <link rel="stylesheet" href="/css/main_style.css" type="text/css" /> 
-        <link rel="stylesheet" href="css/altaEjercicio.css" type="text/css" /> 
+        <link rel="stylesheet" href="/css/main_style.css" type="text/css" />  
         <link rel="stylesheet" href="css/grupos.css" type="text/css" /> 
         <!--<link rel="stylesheet" href="/css/subirEjercicio.css" type="text/css" />-->
         
@@ -31,15 +30,24 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Crear Curso Y Grupo</div>
                     <div class="panel-body">
-                        <label for="curso" class="form_label">Asignatura:</label>
-                        <select id="sMostrarAsignatura" class="">
+                        <div>
+                            <label for="curso" class="form_label" id="styAs">Asignatura:</label>
+                            <select id="sMostrarAsignatura" class="">
+                            </select>
+                        </div>
+                        <div>
+                            <label for="curso" class="form_label" id="styGr">Grupo:</label>
+                            <input type="text" placeholder="letra" id="letra">
+                        </div>
+                        <div>
+                            <label for="anio" class="form_label" id="styAn">Año:</label>
+                            <select id="sMostrarAnios" class="">
                         </select>
-                        <label for="curso" class="form_label">Letra y año actual:</label>
-                        <input type="text" placeholder="letra" id="letra">
-                        <input type="text" placeholder="año" id="anio">
-                        <button type="submit" value="Submit" class="btn btn-default" id="subirCursoYGrupo">Crear</button>
+                        </div>
+                        <button type="submit" value="Submit" class="btn btn-default" id="crearCursoYGrupo">Crear</button>
                     </div>
                     </div>
+                </div>
                 </div>
             </div>
             <div class="container">
@@ -47,16 +55,26 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Eliminar curso y grupo</div>
                     <div class="panel-body">
-                        <label for="curso" class="form_label">Curso y Grupo:</label>
-                        <select id="eliminarCursoYGrupo" class="">
-                        </select>
-                        <button type="submit" value="Submit" class="btn btn-default" id="eliminar">Eliminar</button><!--ojo id cambiado comprobar-->
-                    </div>
+                        <!--select para elegir la asignatura-->
+                        <div id="asig">
+                            <label id = "styAs2">Asignatura: </label>
+                            <select id ="asignatura" class="autocomplete">
+                                <option value="0" class="templateAsignatura">-- Selecciona una asignatura --</option>
+                            </select>
+                        </div>
+                        <!--select para elegir el curso y grupo-->
+                        <div id="cyg">
+                                <label>Curso y grupo: </label>
+                                <select id ="cursoGrupo" class="autocomplete">
+                                    <option value="0" class="templateCursoGrupo">-- Selecciona un curso y grupo --</option>
+                                </select>
+                            </div>
+                            <button type="submit" value="Submit" class="btn btn-default" id="eliminar">Eliminar</button>
+                        </div>
                     </div>
                 </div>
                 </div>
             </div>    
-        </div>
         </div>
     </body>
 </html>

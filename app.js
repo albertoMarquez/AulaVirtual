@@ -180,6 +180,7 @@ app.post("/crearCursoYGrupo",(request, response) =>{
 });
 
 app.post("/eliminarCursoYGrupo",(request, response) =>{
+    console.log(request.body);
     daoU.eliminarCursoYGrupo(request.body,(err, op) =>{
         if (err){
             response.status(400); //mal introducido
@@ -285,8 +286,8 @@ app.get("/getAsignaturasOtrosAnios", (request, response) =>{
             response.status(400);
             response.end();
         }else{
-            console.log("getAsignaturasOtrosAnios");
-            console.log(filas);
+            //console.log("getAsignaturasOtrosAnios");
+            //console.log(filas);
             response.json(filas);
             response.status(201);
             response.end();
@@ -332,6 +333,7 @@ app.get("/getEjercicios", (request, response) =>{
 
 app.get("/getAsignaturas", (request, response) =>{
     daoA.listarAsignaturas(request.query.id, (err, filas) =>{
+        //console.log(filas);
         if(err){
             response.status(400);
             response.end();
@@ -584,7 +586,7 @@ app.get("/getCursoGrupoNoAlta", (request, response) =>{
 });
 
 app.post("/crearAsignatura",(request, response) =>{
-    daoU.crearAsignatura(request.body,(err, op) =>{
+    daoA.crearAsignatura(request.body,(err, op) =>{
         if (err){
             response.status(400); //mal introducido
             response.end();
@@ -597,7 +599,7 @@ app.post("/crearAsignatura",(request, response) =>{
 });
 
 app.post("/cargarAsignaturas",(request, response) =>{
-    daoU.cargarAsignaturas((err, op) =>{
+    daoA.cargarAsignaturas((err, op) =>{
         if (err){
             response.status(400); //mal introducido
             response.end();
@@ -611,7 +613,7 @@ app.post("/cargarAsignaturas",(request, response) =>{
 });
  
 app.post("/eliminarAsignatura",(request, response) =>{
-    daoU.eliminarAsignatura(request.body,(err, op) =>{
+    daoA.eliminarAsignatura(request.body,(err, op) =>{
         if (err){
             response.status(400); //mal introducido
             response.end();

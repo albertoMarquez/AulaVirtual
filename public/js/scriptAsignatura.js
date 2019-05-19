@@ -60,27 +60,26 @@ function crearAsignatura(){
             window.location = res[1] + "/crearAsignatura.html";
         },
         error: function() {
-            alert("Error al crear la asignatura.");
+            alert("No se ha podido crear la asignatura.");
         }
     }) 
 }
 
 function eliminarAsignatura(){
     var asignatura = $("#sEliminarAsignatura").val();
-    alert(asignatura);
     $.ajax({
         method: "POST",
         url: "/eliminarAsignatura",
         contentType: "application/json",
         data: JSON.stringify({ asignatura: asignatura}),
         success: function(){
-            alert("se ha eliminado correctamente");
+            alert("Se ha eliminado correctamente la asignatura");
             var link = window.location.href;
             var res = link.split("/");
             window.location = res[1] + "/crearAsignatura.html";
         },
         error: function() {
-            alert("Error al eliminar la asignatura.");
+            alert("La asignatura tiene grupos asociados. Elimine primero los grupos asociados a esta asignatura.");
         }
     }) 
 }

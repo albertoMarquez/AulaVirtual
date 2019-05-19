@@ -80,73 +80,9 @@ class DAOUsers {
             } 
         });
     }
-
-    crearAsignatura(datos, callback){ 
-        //console.log(datos);
-        this.pool.getConnection((err, con) =>{
-            if(err){
-                callback(err);
-            }else{
-                con.query(`INSERT INTO asignatura (descripcion, curso) VALUES (?,?)`,
-                [datos.asignatura, datos.curso], (err, filas) =>{
-                    if(err){
-                        console.log("no ha podido insertar");
-                        callback(err, undefined);
-                    }
-                    else{
-                        callback(undefined, filas.insertId);
-                    }
-                })
-                con.release();
-            }
-        });
-    }
     
-
-    cargarAsignaturas(callback){ 
-        //console.log( "dao"+datos.idProfesor);
-        this.pool.getConnection((err, con) =>{
-            if(err){
-                callback(err);
-            }else{//SELECT `descripcion`, `idAsignatura` FROM `asignatura` a
-                con.query(`SELECT descripcion, idAsignatura FROM asignatura a`,
-                (err, resultado) =>{
-                    if(err || resultado.length === 0){
-                        //console.log("error consulta");
-                        callback(err, undefined);
-                    }
-                    else{
-                        //console.log("Hola" +resultado);
-                        callback(undefined, resultado)
-                    }
-                })
-                con.release();
-            }
-        });
-    }
-
-    eliminarAsignatura(datos, callback){ 
-       // console.log("eliminar"+ datos.asignatura);
-        this.pool.getConnection((err, con) =>{
-            if(err){
-                callback(err);
-            }else{
-                con.query(`DELETE FROM asignatura WHERE asignatura.idAsignatura = ?`,
-                [datos.asignatura], (err, filas) =>{
-                    if(err){
-                        console.log("no ha podido borrar");
-                        callback(err, undefined);
-                    }
-                    else{
-                        callback(undefined, filas.insertId);
-                    }
-                })
-                con.release();
-            }
-        });
-    }
-
-    crearCursoYGrupo(datos, callback){ 
+    crearCursoYGrupo(datos, callback){
+        console.log("datos");
         console.log(datos);
         this.pool.getConnection((err, con) =>{
             if(err){
@@ -155,14 +91,14 @@ class DAOUsers {
                 con.query(`INSERT INTO grupos (idAsignatura, anio, grupo) VALUES (?,?,?)`,
                 [datos.asig,datos.anio, datos.letra], (err, filas) =>{
                     if(err){
-                        //console.log("no ha podido insertar");
+                        console.log("no ha podido insertar 1");
                         callback(err, undefined);
                     }
                     else{
                         con.query(`INSERT INTO profegrupo (idGrupo, idProfesor) VALUES (?,?)`,
                         [filas.insertId, datos.idProfesor], (err, filas) =>{
                             if(err){
-                                //console.log("no ha podido insertar");
+                                console.log("no ha podido insertar 2");
                                 callback(err, undefined);
                             }
                             else{
@@ -181,15 +117,18 @@ class DAOUsers {
             if(err){
                 callback(err);
             }else{
+                console.log(datos.idProfesor+" "+ datos.idGrupo);
                 con.query(`DELETE FROM grupos WHERE idGrupo = ?`,
-                [datos.idGrupo], (err, filas) =>{
+                [Number(datos.idGrupo)], (err, filas) =>{
                     if(err){
+                        console.log(err);
                         callback(err, undefined);
                     }
                     else{
-                        con.query('DELETE FROM profegrupo pg WHERE idProfesor = ? AND idGrupo = ?',
+                        con.query('DELETE FROM profegrupo WHERE idProfesor = ? AND idGrupo = ?',
                         [datos.idProfesor, Number(datos.idGrupo)], (err, f)=>{
                             if(err){
+                                console.log(err);
                                 callback(err, undefined);
                             }else{
                                 callback(undefined, f.insertId);

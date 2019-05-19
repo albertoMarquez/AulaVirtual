@@ -248,7 +248,6 @@ function cargarAsignatura(){
             elem.attr("value", cont);
             $(".templateAsignatura").before(elem);
             cont = cont + 1;
-
            });
         },
         error: function() {
