@@ -9,7 +9,8 @@
         <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.css" rel="stylesheet"/>
         <link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.css" rel="stylesheet"/>
         <link rel="stylesheet" href="/css/main_style.css" type="text/css" /> 
-        <link rel="stylesheet" href="css/altaEjercicio.css" type="text/css" /> 
+        <link rel="stylesheet" href="/css/cargarAlumnos.css" type="text/css" /> 
+        <!-- <link rel="stylesheet" href="css/altaEjercicio.css" type="text/css" />  -->
         <!--<link rel="stylesheet" href="/css/subirEjercicio.css" type="text/css" />-->
         
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
@@ -43,6 +44,26 @@
                 </div>
             </div>    
         </div>
-        
+
+        <div id="modeloEntrada">
+            <h4>Los datos de los alumnos se deben introducir con el formato que se especifica</h4>
+            <ul id="lista">
+                <li>Los datos deben estar separados por una coma(,)</li>
+                <li>se deben introducir los datos segun este orden:
+                    <ul>
+                        <li>Correo</li>
+                        <li>Nombre</li>
+                        <li>Apellidos</li>
+                        <li>DNI, NIE o numero Erasmus</li>
+                    </ul>
+                </li>
+            </ul>
+            <div id="Ejemplo">
+                <span>Ejemplo:</span>
+
+                <span>alberto@ucm.es,Alberto,Marquez Gomez,01234567A;</span>  
+                <span>marta@ucm.es,Marta,Rodríguez Couñago,51234856B;</span> 
+            </div>
+        </div>
     </body>
 </html>

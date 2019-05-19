@@ -171,6 +171,7 @@ function abrirModal(info){
             //console.log(info);
             $("#nombreModal").text(info[1]);
             $("#notaModal").val(info[8]);
+            
             // When the user clicks on <span> (x), close the modal
             $("#solucionAlumnoModal").val(ultimaEntrega.solAlumno);
             $("#solucionOracleAlumno").val(info[7]);
