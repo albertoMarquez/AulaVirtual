@@ -153,7 +153,6 @@ function cargarListaAlumnosEvaluar(idA, idG, tipoEjer, cursoGrupo){
 }
 
 
-
 function abrirModal(info){
     // Get the modal
     console.log(info);
@@ -164,6 +163,7 @@ function abrirModal(info){
         dataType:"JSON",
         contentType: "application/json",
         success: function(ultimaEntrega) {
+            console.log(ultimaEntrega);
             var modal = document.getElementById('myModal');
             var span = document.getElementsByClassName("close")[0];
             modal.style.display = "block";
@@ -174,6 +174,15 @@ function abrirModal(info){
             
             // When the user clicks on <span> (x), close the modal
             $("#solucionAlumnoModal").val(ultimaEntrega.solAlumno);
+            if(ultimaEntrega.comentarioProfe === null){
+                $("#codigoComentado").addClass("hidden");
+                $("#solucionAlumnoModal").css("width", "845px");
+            }else{
+                $("#codigoComentado").removeClass("hidden");
+                $("#solucionAlumnoModal").css("width", "-webkit-fill-available");
+                $("#solucionAlumnoComentada").val(ultimaEntrega.comentarioProfe);
+            }
+            
             $("#solucionOracleAlumno").val(info[7]);
             span.onclick = function() {
                 modal.style.display = "none";
