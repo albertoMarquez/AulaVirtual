@@ -105,6 +105,76 @@ class DAOEjercicio {
         });
     }
 
+    listarTodoEjerciciosAlta(datos, callback){
+        this.pool.getConnection((err, con) =>{
+            if(err){
+                callback(err);
+            }else{
+                var sql = `select e.titulo, e.idEjercicio, ae.evaluacion, ae.numeroIntentos, ae.ini 
+                from ejercicio e join altaejercicio ae join profegrupo pg 
+                ON ae.idGrupo = pg.idGrupo 
+                and e.idEjercicio = ae.idEj 
+                and ae.idGrupo = ? 
+                and pg.idProfesor = ?`
+                con.query(sql, [datos.idG, datos.user], (err, filas) =>{
+                    if(err){
+                        callback(err, undefined);
+                    }else{
+                       
+                        var sol = [];
+                        var row = {};
+                        filas.forEach(e =>{
+                            row.titulo = e.titulo;
+                            row.idEjercicio = e.idEjercicio;
+                            if(e.evaluacion === 0){
+                                row.evaluacion = "EJERCICIO";
+                            }else{
+                                row.evaluacion = "EXAMEN";
+                            }
+                            row.numIntentos = e.numeroIntentos;
+                            var fecha = new Date(e.ini);
+                            row.ini = `${fecha.getDate()}-${fecha.getMonth() + 1}-${fecha.getFullYear()}`;
+                            sol.push(row);
+                            row = {};
+                        });
+                        callback(undefined, sol);
+                    }
+                });
+                con.release();
+            }
+        })
+    }
+
+    listarEjerciciosNoAsignados(datos, callback){
+        this.pool.getConnection((err, con) =>{
+            if(err){
+                callback(err);
+            }else{
+                var sql = `select e.titulo, e.idEjercicio, e.numScriptsSol
+                from ejercicio e
+                where e.idEjercicio NOT IN (SELECT ae.idEj from altaejercicio ae group by ae.idEj)`
+                con.query(sql, (err, filas) =>{
+                    if(err){
+                        callback(err, undefined);
+                    }else{
+                       
+                        var sol = [];
+                        var row = {};
+                        filas.forEach(e =>{
+                            row.titulo = e.titulo;
+                            row.idEjercicio = e.idEjercicio;
+                            row.numScripts = e.numScriptsSol;
+                            sol.push(row);
+                            row = {};
+                        });
+                        callback(undefined, sol);
+                    }
+                });
+                con.release();
+            }
+        })
+    }
+
     listarEjerciciosAltaAniosPasados(datos, callback){
         var fecha = new Date();
         this.pool.getConnection((err, con)=>{
@@ -308,6 +378,7 @@ class DAOEjercicio {
             }
         });
     }
+
     getUltimaEntrega(datos, callback){
         this.pool.getConnection((err, con)=>{
             if(err){

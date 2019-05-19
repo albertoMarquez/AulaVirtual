@@ -1,4 +1,6 @@
 var user;
+
+$(document).ready(function() {
 var options={}
 $.galleta(options);
 user = $.galleta().getc("usuario");
@@ -48,7 +50,7 @@ if(user != "undefined"){
         var res = link.split("/");
         window.location = res[1] + "/";
     }
-    
+});
 
 
 

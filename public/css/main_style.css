@@ -258,6 +258,7 @@ a:hover, a:focus {
 div.dataTables_wrapper div.dataTables_paginate {
     display: flex;
     justify-content: center;
+    width: -webkit-fill-available;
 }
 .radios{
     display: flex;

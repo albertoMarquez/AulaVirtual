@@ -88,6 +88,11 @@ input[type=text] {
     cursor: pointer;
   }
 
+
+  /*
+  Tabla de resultados (DataTable)
+  */
+
 #filtro{
   display: flex;
   margin: 25px;
