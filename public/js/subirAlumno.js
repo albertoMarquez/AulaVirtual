@@ -199,13 +199,15 @@ function ejecutaProcedimiento(info){
                 $("#alertas").append(elem);
             });
             resultado.ok.forEach(e=>{
-                var elem = $("#plantilla2").clone();
-                elem.removeClass("hidden");
-                elem.removeClass("template");
-                elem.removeAttr("id", "plantilla2");
-                elem.addClass("resultados");
-                elem.text(e);
-                $("#alertas").append(elem);
+                formatearResultado(e,(texto)=>{
+                    var elem = $("#plantilla2").clone();
+                    elem.removeClass("hidden");
+                    elem.removeClass("template");
+                    elem.removeAttr("id", "plantilla2");
+                    elem.addClass("resultados");
+                    elem.html(texto);
+                    $("#alertas").append(elem);
+                });
             });
             console.log(`exito!!`);
             $( "#evaluar" ).prop( "disabled", false );
@@ -250,6 +252,21 @@ function getIntentosAlumno(idEjercicio, idAlumno, callback){
             alert("error al cargar el numero de intentos del alumno");
         }
     });
+}
+function formatearResultado(texto, callback){
+    console.log("texto");
+    //console.log(texto);
+    var t = texto.split("-- ");
+    t.forEach(e => {
+        texto += e+"<br>";
+    });
+    var t = texto.split("\n");
+    texto="";
+    console.log(texto);
+    
+    console.log("texto2");
+    console.log(texto);
+    callback(texto);
 }
 
 function leerArchivo(callback) {

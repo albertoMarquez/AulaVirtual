@@ -19,13 +19,14 @@ BEGIN
   DBMS_OUTPUT.PUT_LINE('-- PRUEBA 1: Ejecucion correcta del procedimiento.');
   DBMS_OUTPUT.PUT_LINE('-- Ejecucion con datos, comprobacion de calculos y de excepciones.');
   DBMS_OUTPUT.PUT_LINE('-- --------------------------------------------------------------');
+  DBMS_OUTPUT.PUT_LINE('-- ');
   
   UPDATE taquillas SET ventas = 0;
   
   SELECT SUM(precio) INTO v_ventasTicketsAntes
   FROM tickets JOIN taquillas USING (taquilla)
   WHERE puerta = v_acceso;
-  
+
   ventas_por_puerta('Este');
 
   SELECT SUM(precio) INTO v_ventasTicketsDespues
