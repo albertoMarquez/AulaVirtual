@@ -5,7 +5,8 @@ $(document).ready(function() {
         if(statusTxt == "success"){
             $("#nombre").addClass('hidden');
             $("#roll").addClass('hidden');
-            $("#desconectar").addClass('hidden')
+            $("#desconectar").addClass('hidden');
+            $("#aYG").addClass("hidden");
         }
     });
     
