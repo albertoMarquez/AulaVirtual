@@ -750,6 +750,24 @@ class DAOEjercicio {
             }
         })
     }
+
+    eliminarEjercicio(idEjercicio, callback){
+        this.pool.getConnection((err, con) =>{
+            if(err){
+                callback(err);
+            }else{
+                var sql=`Delete from ejercicio where idEjercicio = ?`
+                con.query(sql, [Number(idEjercicio)], (err, sol) =>{
+                    if(err){
+                        callback(err, undefined);
+                    }else{
+                        callback(false, true);
+                    }
+                });
+                con.release();
+            }
+        })
+    }
 }
 module.exports = {
     DAOEjercicio: DAOEjercicio

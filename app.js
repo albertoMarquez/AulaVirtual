@@ -535,7 +535,7 @@ app.get("/mostrarAlumnos", (request, response)=>{
 
 app.get("/mostrarListaEjerNoAsignados", (request, response) =>{
     daoE.listarEjerciciosNoAsignados(request.query, (err, filas) =>{
-         if(err){
+        if(err){
             response.status(400);
             response.end();
         }else{
@@ -907,6 +907,19 @@ app.post("/crearAlumno", (request, response)=>{
             response.end();
         }
     });
+});
+
+app.post("/eliminarEjercicio", (request, response)=>{
+    console.log("numeroDeIntentos "+request.body.idEjercicio);
+    daoE.eliminarEjercicio(request.body.idEjercicio, (err, filas)=>{
+        if(err){
+            response.status(400);
+            response.end();
+        }else{
+            response.status(201);
+            response.end();
+        }
+    })
 });
 
 app.listen(config.port, function(err) {
