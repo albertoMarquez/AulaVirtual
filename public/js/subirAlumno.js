@@ -257,16 +257,17 @@ function formatearResultado(texto, callback){
     console.log("texto");
     //console.log(texto);
     var t = texto.split("-- ");
+    texto="";
     t.forEach(e => {
         texto += e+"<br>";
     });
-    var t = texto.split("\n");
-    texto="";
     console.log(texto);
+    var t = texto.split("\n");
+    
     
     console.log("texto2");
     console.log(texto);
-    callback(texto);
+    callback(t);
 }
 
 function leerArchivo(callback) {

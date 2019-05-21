@@ -394,8 +394,11 @@ class DAOEjercicio {
                        if(filas.length === 0){
                            callback(undefined, undefined);
                        }else{
+                        
                         sol.solAlumno = filas[0].solucion;
+                        
                         sol.comentarioProfe = filas[0].correccionProfesor;
+                        
                         callback(undefined, sol);
                        }
                     
@@ -767,6 +770,45 @@ class DAOEjercicio {
                         callback(err, undefined);
                     }else{
                         callback(false, true);
+                    }
+                });
+                con.release();
+            }
+        })
+    }
+    solucionScriptsPorfesor(idEjercicio, callback){
+        this.pool.getConnection((err, con) =>{
+            if(err){
+                callback(err);
+            }else{
+                var sql=`SELECT solucionPrueba FROM ejercicio , scriptspruebas WHERE ejercicio.idEjercicio= scriptspruebas.idEjercicio and ejercicio.idEjercicio= ?`
+                con.query(sql, [Number(idEjercicio)], (err, sol) =>{
+                    if(err){
+                        console.log(err);
+                        callback(err, undefined);
+                    }else{
+                        // console.log("profeDAO");
+                        // console.log(sol);
+                        callback(false, sol);
+                    }
+                });
+                con.release();
+            }
+        })
+    }
+    solucionScriptsAlumnos(idEjercicio, callback){
+        this.pool.getConnection((err, con) =>{
+            if(err){
+                callback(err);
+            }else{
+                var sql=`SELECT resultado FROM ejercicioalumno WHERE idEjercicio= ?`
+                con.query(sql, [Number(idEjercicio)], (err, sol) =>{
+                    if(err){
+                        console.log(err);
+                        callback(err, undefined);
+                    }else{
+                        //console.log(sol);
+                        callback(false, sol[0].resultado);
                     }
                 });
                 con.release();

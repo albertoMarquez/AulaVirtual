@@ -185,8 +185,20 @@ function abrirModal(info){
                 $("#solucionAlumnoModal").css("width", "-webkit-fill-available");
                 $("#solucionAlumnoComentada").val(ultimaEntrega.comentarioProfe);
             }
+            $.ajax({
+                method: "POST",
+                url: "/solucionOracleAlumno",
+                contentType: "application/json",
+                data: JSON.stringify({idEjercicio:info[2]}),
+                success: function(data) {
+                   // alert("Actualizado correctamente");
+                   $("#solucionOracleAlumno").val(data);
+                },
+                error: function(){
+                    alert("Error al actualizar");
+                }
+            });
             
-            $("#solucionOracleAlumno").val(info[7]);
             span.onclick = function() {
                 modal.style.display = "none";
             }
