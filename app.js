@@ -533,6 +533,40 @@ app.get("/mostrarAlumnos", (request, response)=>{
     })
 });
 
+app.get("/getDataEjercicio", (request, response) =>{
+    daoE.getEjercicio(request.query.idEjercicio, (err, sol) =>{
+        if(err){
+            response.status(400);
+            response.end();
+        }else{
+            response.json(sol);
+            response.status(201);
+            response.end();
+        }
+    })
+});
+
+app.post("/deleteScripts", (request, response)=>{
+    // console.log(request.body.data);
+    if(request.body.data.scriptsDelete.length === 0){
+        response.status(200);
+        response.end();
+    }else{
+        daoE.deleteScripts(request.body.data.idEjercicio, request.body.data.scriptsDelete, (err) =>{
+            if(err){
+                response.status(400);
+                response.end();
+            }else{
+                response.status(200);
+                response.end();
+            }
+        });
+    }    
+});
+
+app.post("/actualizarEjercicio", (request, response)=>{
+    console.log(request.body);
+});
 
 app.get("/mostrarListaEjerNoAsignados", (request, response) =>{
     daoE.listarEjerciciosNoAsignados(request.query, (err, filas) =>{
@@ -545,7 +579,7 @@ app.get("/mostrarListaEjerNoAsignados", (request, response) =>{
             response.end();
         }
     })
-})
+});
 
 app.get("/mostrarListaEjerAlta", (request, response)=>{
     //request.query={ tipo: '1', idG: '1', idA: '1', user: '1' }
@@ -560,7 +594,7 @@ app.get("/mostrarListaEjerAlta", (request, response)=>{
             response.end();
         }
     });
-})
+});
 
 /*app.get("/mostrarListaEjer", (request, response)=>{
     daoE.listarTodosEjercicios((err, filas)=>{

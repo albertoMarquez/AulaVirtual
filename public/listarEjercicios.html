@@ -51,7 +51,7 @@
                 <label>Tipo de problema: </label>
                 <select id ="problema" class="autocomplete">
                     <option value="0" class="templateProblema">-- Selecciona un tipo de problema --</option>
-                    <option value="1" class="templateProblema">Ejercicios dados de alta</option>
+                    <option value="1" class="templateProblema">Ejercicios asignados a un grupo</option>
                     <option value="2" class="templateProblema">Ejercicios no asignados</option>
                 </select>
             </div>
@@ -72,7 +72,6 @@
                 </tbody>
             </table>
         </div> 
-        
         <div id="tablaENA"class="hidden">
             <table id=tablaEjerciciosNA class="table table-striped table-bordered table-sm">
                 <thead>
@@ -86,6 +85,58 @@
                 </tbody>
             </table>
         </div> 
+
+        <div id="myModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #5a86512b;">
+                    <span class="close">&times;</span>
+                    <h2 id="tituloEjer"></h2>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <label>Titulo del ejercicio: </label>
+                        <input type="text"id="tituloInput">
+                    </div>
+                    <div id="divEnun">
+                        <label>Enunciado nuevo: </label>
+                        <input type="file"id="FileEnunciado">
+                    </div>
+                    <div id="scriptSolTablas">
+                        <div class="textAreaScripts">
+                            <label>Script para crear el entorno (tablas): </label>
+                            <textarea id="scriptTablas"></textarea>
+                        </div>
+                        <div class="textAreaScripts">
+                            <label>Script con la solución: </label>
+                            <textarea id="scriptSolucion"></textarea>
+                        </div>
+                    </div>
+                    <div id="divNuevoScript">
+                        <label>Subir un nuevo script para las pruebas: </label>
+                        <input type="file"id="FileScript">
+                    </div>
+                    <div id="scripts">
+                        <hr style="color: #5a8651;" />
+                        <label>Scripts para la comprobarción del ejercicio:</label>
+                        <div id="pruebas">
+                            <div class="templateModal template hidden">
+                                <div id="nomrePrueba">
+                                    <span id="idPrueba">Prueba 1</span>
+                                    <label><input type="checkbox" class="checkPrueba" name="prueba">Marca para eliminar</label>
+                                </div>
+                                <textarea id="prueba" disabled></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <input type="button" id="actualizar" value="Actualizar">
+                </div>
+            </div>
+
+        </div>
 
     </body>
 </html>
