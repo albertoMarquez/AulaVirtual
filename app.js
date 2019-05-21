@@ -463,7 +463,7 @@ app.get("/subirAlumno/:id/:idAlumno", (request, response) => {
     if(!isNaN(data.idEjercicio)){
         daoE.seleccionarEjercicio(data.idEjercicio,  data.idAlumno, (error, res) =>{
             if(error){
-                alert(err);
+                //alert(err);
             }else{
                daoE.entregaRetrasada(data.idEjercicio, (err, infoAlta)=>{
                     if(err){

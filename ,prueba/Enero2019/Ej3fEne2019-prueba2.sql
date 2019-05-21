@@ -12,6 +12,7 @@ BEGIN
   DBMS_OUTPUT.PUT_LINE('-- debe capturar excepcion para indicar que la puerta no existe.');
   DBMS_OUTPUT.PUT_LINE('-- Ademas se comprueba si se han modificado las ventas de las taquillas.');
   DBMS_OUTPUT.PUT_LINE('-- --------------------------------------------------------------');
+  DBMS_OUTPUT.PUT_LINE('-- ');
   
   SELECT SUM(ventas) INTO v_ventasTaquillasAntes
   FROM taquillas WHERE puerta = v_acceso;
