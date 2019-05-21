@@ -28,7 +28,6 @@ class DAOAsignatura {
             }
         });
     }
-    
     //CArga todas las asignaturas
     cargarAsignaturas(callback){ 
         //console.log( "dao"+datos.idProfesor);
@@ -222,7 +221,6 @@ class DAOAsignatura {
         });
     }
 
-
     listarCursoGrupoNoAlta(data, callback){ 
         var f = new Date();
         var anioHoy = f.getFullYear();
@@ -299,6 +297,34 @@ class DAOAsignatura {
                 })
             }
         });
+    }
+
+    listarCursoGrupoAlumnoAniosPasados(data, callback){
+        var fecha = new Date();
+        this.pool.getConnection((err, con) =>{
+            if(err){
+                callback(err);
+            }else{
+                var sql=`select * from grupos g where g.anio < ?
+                 and g.idAsignatura = ?`;
+                con.query(sql, [fecha.getFullYear(), data.idA], (err, filas)=>{
+                    if(err){
+                        callback(err, undefined);
+                    }else{
+                        var sol = [];
+                        var row = {};
+                        filas.forEach(e =>{
+                            row.grupo = e.grupo;
+                            row.idGrupo = e.idGrupo;
+                            sol.push(row);
+                            row = {};
+                        });
+                        callback(undefined, sol);
+                    }
+                });
+                con.release();
+            }
+        })
     }
 
 }

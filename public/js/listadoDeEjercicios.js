@@ -1,4 +1,5 @@
 var user;
+let valAsig, curso, idGrupo;
 $(document).ready(function() {
     var options={}
     $.galleta(options);
@@ -28,22 +29,23 @@ $(document).ready(function() {
         });
     
         listarAsignaturas();
-        let valAsig;
+        $("#asig").val(0).change();
+        $("#anioSelect").val(0).change();
+
+        
 
         $('#asig').on('change', function() {
             valAsig = $(this).find(':selected').data('idAsig');
+            curso =  $(this).find(':selected').data('curso');
             //console.log(valor);
-            listarAnios(valAsig);
+            listarAnios(valAsig, curso);
         });
 
         $("#anioSelect").on('change', function(){
-            let valor = $(this).find(':selected').text();
-            let anio = valor.split("/");
-            cargarTablaEjercicios(valAsig, anio[0]);
+            idGrupo = $(this).find(':selected').data('idGrupo');
+            cargarTablaEjercicios(valAsig);
         });
 
-        $("#asig").val('0');
-        $("#anioSelect").val('0');
 
         
     }else{
@@ -64,11 +66,13 @@ function listarAsignaturas(){
         contentType: "application/json",
         data:{idA: user.idAlumno},
         success: function(data) {
+            // console.log(data);
             var cont = 1;
             data.forEach(e => {
              var elem = $(".templateAsignatura").clone();
-             elem.text(e.descripcion);
-             elem.data("idAsig", e.id);
+             elem.text(`${e.descripcion} - ${e.anio}`);
+             elem.data("idAsig", e.idAsignatura);
+             elem.data("curso", e.curso);
              elem.removeClass("hidden");
              elem.removeClass("templateAsignatura");
              elem.attr("value", cont);
@@ -79,50 +83,36 @@ function listarAsignaturas(){
         error: function() {
             alert("Error al cargar las asignaturas");
         }
-
-
     });
-
 }
 
-function onlyUnique(value, index, self) { 
-    return self.indexOf(value) === index;
-}
-
-function listarAnios(id){
+function listarAnios(id, curso){
 
     $(".anioClass").remove();
     $.ajax({
         method: "GET",
-        url: "/getCursoGrupo/"+ id,
+        url: "/getCursoGrupoAlumnoAniosPasados",
         contentType: "application/json",
+        data:{idA:id, idP:user.idAlumno},
         success: function(data) {
-
-            var anios = [];
-           
-            data.forEach(e=>{
-                anios.push(e.anio);
-            });
-
-            var unique = anios.filter( onlyUnique );
-
+            // console.log(data);          
             var cont = 1;
-            unique.forEach(e => {
-             var elem = $(".templateAnio").clone();
-             elem.text(`${e}/${e+1}`);
-             //elem.data("idAsig", e.id);
-             elem.removeClass("hidden");
-             elem.removeClass("templateAnio");
-             elem.addClass("anioClass");
-             elem.attr("value", cont);
-             $(".templateAnio").before(elem);
-             cont = cont + 1;
+            data.forEach(e => {
+                var elem = $(".templateAnio").clone();
+                elem.text(`${curso}º ${e.grupo}`);
+                elem.data("idGrupo", e.idGrupo);
+                elem.removeClass("hidden");
+                elem.removeClass("templateAnio");
+                elem.addClass("anioClass");
+                elem.attr("value", cont);
+                $(".templateAnio").before(elem);
+                cont = cont + 1;
             });
 
            
         },
         error: function() {
-            alert("Error al cargar las asignaturas");
+            alert("Error al cargar el curso");
         }
 
 
@@ -135,27 +125,51 @@ function parserFecha(f){
     return fecha;
 }
 
-function cargarTablaEjercicios(idAsignatura, textAnio){
+function cargarTablaEjercicios(){
 
     $.ajax({
         method: "GET",
         url: "/getTablaEjerciciosAtrasados",
         contentType: "application/json",
-        data:{idA:idAsignatura, anio:textAnio},
+        data:{idG:idGrupo},
         success: function(data) {
+
+            $("#tablaDeEjercicios").DataTable().clear().destroy();
+
+            var el = $("<tr>").attr("id", "template");
+            el.addClass("hidden");
+            var row = $("<td>").attr("id", "titulo");
+            el.append(row);
+            row = $("<td>").attr("id", "autor");
+            el.append(row);
+            row = $("<td>").attr("id", "fecha");
+            el.append(row);
+            row = $("<td>").attr("id", "idEjercicio");
+            el.append(row);
+            
+            $("tbody").append(el);
+
+            
             data.forEach(e=>{
                 var elem = $("#template").clone();
                 elem.find("#titulo").text(e.titulo);
                 elem.find("#autor").text(e.autor);
-                elem.find("#id").text(e.idEj);
+                elem.find("#idEjercicio").text(e.idEj);
                 elem.find("#fecha").text(parserFecha(e.fecha));
                 elem.removeClass("hidden");
                 elem.removeAttr("id", "template");
                 elem.attr("class", "elem");
-                //elem.data("idEj", e.idEj);
                 $("#template").before(elem);
            });
-           var table = $('#tablaDeEjercicios').DataTable();
+           var table = $('#tablaDeEjercicios').DataTable({
+                "oLanguage": {
+                    "sSearch": "Filtro de búsqueda:",
+                    "sEmptyTable": "No hay datos para mostrar",
+                    "sInfo": "Hay un total de _TOTAL_ resultados a mostrar (_START_ de _END_)",
+                    "sInfoEmpty": "No hay entradas a mostrar",
+                    "sLengthMenu": "Mostrando _MENU_ resultados"
+                }
+            });
            
            $('.dataTables_length').addClass('bs-select');
 

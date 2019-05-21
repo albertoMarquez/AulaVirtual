@@ -441,6 +441,7 @@ function highlight(newElem, oldElem){
 }
 
 app.get("/getTablaEjerciciosAtrasados", (request, response) =>{
+    // console.log(request.query);
     daoE.cargarEjerciciosAtrasados(request.query, (err, sol)=>{
         if(err){
             response.status(400);
@@ -599,6 +600,21 @@ app.get("/getCursoGrupoEjerAlta", (request, response)=>{
             response.end();
         }
     })
+});
+
+app.get("/getCursoGrupoAlumnoAniosPasados", (request, response) =>{
+    // console.log("getCursoGrupoAlumnoAniosPasados");
+    // console.log(request.query);
+    daoA.listarCursoGrupoAlumnoAniosPasados(request.query, (err, filas) =>{
+        if(err){
+            response.status(400);
+            response.end();
+        }else{
+            response.json(filas);
+            response.status(201);
+            response.end();
+        }
+    })   
 })
 
 app.get("/getCursoGrupo", (request, response) =>{

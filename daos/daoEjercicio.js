@@ -175,6 +175,7 @@ class DAOEjercicio {
         })
     }
 
+    //lista asignaturas a las que el alumno ha pertenecido años anteriores
     listarEjerciciosAltaAniosPasados(datos, callback){
         var fecha = new Date();
         this.pool.getConnection((err, con)=>{
@@ -182,25 +183,25 @@ class DAOEjercicio {
                 callback(err);
             }else{
                 var sql = `select * 
-                        from (select g.idAsignatura 
-                            from alumno a join grupos g 
-                            on a.idGrupo = g.idGrupo 
-                            and a.idAlumno = ? and g.anio < ?) tb1 join asignatura asig 
-                        ON tb1.idAsignatura = asig.idAsignatura`;
-                con.query(sql, [datos, fecha.getFullYear()-1], (err, filas) =>{
+                        from grupos g join asignatura a
+                        ON a.idAsignatura = g.idAsignatura and g.anio < ?`;
+                con.query(sql, [fecha.getFullYear()], (err, filas) =>{
                     if(err){
                         callback(err, undefined);
                     }else{
-                        console.log(filas);
+                        // console.log(filas);
                         var sol = [];
                         var row = {};
                         filas.forEach(e =>{
                             row.idAsignatura = e.idAsignatura;
                             row.descripcion = e.descripcion;
+                            row.anio = e.anio;
+                            row.curso = e.curso;
                             sol.push(row);
                             row = {};
                         });
-                        callback(undefined, filas);
+                        // console.log(sol);
+                        callback(undefined, sol);
                     }
                 });
                 con.release();
@@ -699,10 +700,14 @@ class DAOEjercicio {
             if(err){
                 callback(err);
             }else{
-                var sql = `select * from (select e.fecha, e.titulo, p.idProfesor, e.idEjercicio, p.nombre from ejercicio e inner join profesor p on e.idProfesor = p.idProfesor) a inner join (
-                    select g.idGrupo, pg.idProfesor from profegrupo pg inner join grupos g on g.idGrupo = pg.idGrupo and g.idAsignatura = ? and g.anio = ?) b
-                    on a.idProfesor = b.idProfesor GROUP by idEjercicio`;
-                con.query(sql, [datos.idA, datos.anio], (err, filas)=>{
+                var sql = `select * 
+                        from (select * 
+                            from ejercicio e join altaejercicio ae 
+                            on e.idEjercicio = ae.idEj 
+                            where ae.idGrupo = ?) tb1 join profesor p 
+                        on p.idProfesor = tb1.idProfesor`;
+                con.query(sql, [datos.idG], (err, filas)=>{
+                    
                     if(err){
                         callback(err, undefined);
                     }else{

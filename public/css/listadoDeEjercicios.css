@@ -13,7 +13,7 @@
 
 tbody tr:hover{
     cursor: pointer;
-    background-color: green !important;
+    background-color: #5a8651 !important;
 }
 h3{
     text-align: center;
