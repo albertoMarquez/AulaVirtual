@@ -5,10 +5,11 @@
         <title>Inicio</title>
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.css" rel="stylesheet"/>
-        <link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.css" rel="stylesheet"/>
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/css/dataTables.bootstrap.min.css" rel="stylesheet">
+        <!-- <link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.css" rel="stylesheet"/> -->
+        <link href="//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/css/dataTables.bootstrap.min.css" rel="stylesheet">
+
+        <link rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" type="text/css" />
         <link rel="stylesheet" href="/css/main_style.css" type="text/css" />
-        <link rel="stylesheet" href="/css/altaEjercicio.css" type="text/css" />
         <link rel="stylesheet" href="/css/listadoDeEjercicios.css" type="text/css" />
 
 
@@ -16,8 +17,9 @@
         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.2/moment.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+        <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script> -->
         <script src="//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js"></script>
+        
         <script src="js/listadoDeEjercicios.js"></script>
         <script src="js/cookie.js"></script>
     </head>
@@ -52,16 +54,9 @@
                             <th scope="col" class="th-sm">Autor</th>
                             <th scope="col" class="th-sm">Fecha</th>
                             <th scope="col" class="th-sm">Id ejercicio</th>
-                          
                         </tr>
                     </thead>
                     <tbody>
-                        <tr id="template"class="hidden">
-                            <td id="titulo">Titulo 1</td>
-                            <td id="autor">Jesus Correas</td>
-                            <td id="fecha">29-12-1994</td>
-                            <td id="id">1</td>
-                        </tr>
                     </tbody>
                 </table>
             </div>
