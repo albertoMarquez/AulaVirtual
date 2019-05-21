@@ -401,42 +401,56 @@ app.post("/subirEjercicio", (request, response) =>{
     });
 });
 
-function highlight(newElem, oldElem){ 
+function highlight(newElem, oldElem,tipo){ 
     var text = "";
-    if(newElem === undefined || oldElem === undefined){
-        text = "<span>No tienes comentarios</span>";
-    }else{
+    console.log("oldElem");
+    console.log(oldElem);
+    console.log("newElem");
+    console.log(newElem);
+    if(tipo==="texto"){
         var d = diff.diffWordsWithSpace(oldElem, newElem);
         d.forEach(elem =>{
-         
-            /*if(elem.value === '\n' || elem.value === '\r\n' || elem.value === '\r\n \r\n' || 
-            elem.value === '\r\n  ' || elem.value === '\n \n' || elem.value === '\n    ' ||
-            elem.value === '\r\n    ' || elem.value === '\n  ' || elem.value === '\n  ' || 
-            elem.value === '\r\n  ' || elem.value === '\r\n\r\n' || elem.value === '\n \n  ' ||
-            elem.value === '\n  \n    ' || elem.value === '\r\n       \t' || elem.value === '\r\n            ' ||
-            elem.value === '\n\n    '){
-                text += "<br>";
-            }*/
-            if(elem.value === '\n' || elem.value === '\r'){
-                text += "<br>";
-            }else if(elem.value === '\r\n\r\n'|| elem.value === '\r\n \r\n'){
-                text += "<br><br>";
+            if(elem.added === undefined && elem.removed === undefined){
+                text += elem.value;
             }else{
-                if(elem.added === undefined && elem.removed === undefined){
-                    text += "<span>" + elem.value + "</span>";
-                }else{
-                    if(elem.added === true){
-                        text += "<span class='highlight'>" + elem.value + "</span>";
-                        if(elem.value.indexOf('\n') !== -1){
-                            text += "<br>";
-                        }
-                    }
+                if(elem.added === true){
+                    text += "****" + elem.value;
                 }
             }
         });
+    }else{
+        if(newElem === undefined || oldElem === undefined){
+            text = "<span>No tienes comentarios</span>";
+        }else{
+            var d = diff.diffWordsWithSpace(oldElem, newElem);
+            d.forEach(elem =>{
+            
+                if(elem.value === '\n' || elem.value === '\r\n' || elem.value === '\r\n \r\n' || 
+                elem.value === '\r\n  ' || elem.value === '\n \n' || elem.value === '\n    ' ||
+                elem.value === '\r\n    ' || elem.value === '\n  ' || elem.value === '\n  ' || 
+                elem.value === '\r\n  ' || elem.value === '\r\n\r\n' || elem.value === '\n \n  ' ||
+                elem.value === '\n  \n    ' || elem.value === '\r\n       \t' || elem.value === '\r\n            ' ||
+                elem.value === '\n\n    '){
+                    text += "<br>";
+                // if(elem.value === '\n' || elem.value === '\r'){
+                //     text += "<br>";
+                // }else if(elem.value === '\r\n\r\n'|| elem.value === '\r\n \r\n'){
+                //     text += "<br><br>";
+                }else{
+                    if(elem.added === undefined && elem.removed === undefined){
+                        text += "<span>" + elem.value + "</span>";
+                    }else{
+                        if(elem.added === true){
+                            text += "<span class='highlight'>" + elem.value + "</span>";
+                            if(elem.value.indexOf('\n') !== -1){
+                                text += "<br>";
+                            }
+                        }
+                    }
+                }
+            });
+        }
     }
-   
-
    return text;
 }
 
@@ -570,7 +584,7 @@ app.post("/actualizarEjercicio", (request, response)=>{
 
 app.get("/mostrarListaEjerNoAsignados", (request, response) =>{
     daoE.listarEjerciciosNoAsignados(request.query, (err, filas) =>{
-         if(err){
+        if(err){
             response.status(400);
             response.end();
         }else{
@@ -957,6 +971,56 @@ app.post("/crearAlumno", (request, response)=>{
             response.end();
         }
     });
+});
+
+app.post("/eliminarEjercicio", (request, response)=>{
+    //console.log("numeroDeIntentos "+request.body.idEjercicio);
+    daoE.eliminarEjercicio(request.body.idEjercicio, (err, filas)=>{
+        if(err){
+            response.status(400);
+            response.end();
+        }else{
+            response.status(201);
+            response.end();
+        }
+    })
+});
+
+app.post("/solucionOracleAlumno", (request, response)=>{
+    console.log("numeroDeIntentos "+request.body.idEjercicio);
+    daoE.solucionScriptsPorfesor(request.body.idEjercicio, (err, solProfesor)=>{
+        if(err){
+            console.log(err);
+            response.status(400);
+            response.end();
+        }else{
+            daoE.solucionScriptsAlumnos(request.body.idEjercicio, (err, solAlumno)=>{
+                if(err){
+                    //console.log(err);
+                    response.status(400);
+                    response.end();
+                }else{
+                    // console.log("solAlumno");
+                    // console.log(solAlumno);
+                    //solAlumno.split("\r\n\r\n");//\r\n\r\n
+                    solProfesorAux="";
+                    solProfesor.forEach(e=> {
+                        solProfesorAux +=e.solucionPrueba;
+                    });
+                    // console.log("solProfesor");
+                    // console.log(solProfesorAux);
+                    // console.log("solAlumno");
+                    // console.log(solAlumno);
+                    let solResaltada = highlight(solAlumno,solProfesorAux,"texto");
+                    console.log("solResaltada");
+                    console.log(solResaltada);
+                    response.json(solResaltada);
+                    response.status(201);
+                    response.end();
+                }
+            })
+        }
+    })
 });
 
 app.listen(config.port, function(err) {
