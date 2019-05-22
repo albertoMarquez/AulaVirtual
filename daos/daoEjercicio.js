@@ -174,7 +174,6 @@ class DAOEjercicio {
             }
         })
     }
-
     //lista asignaturas a las que el alumno ha pertenecido años anteriores
     listarEjerciciosAltaAniosPasados(datos, callback){
         var fecha = new Date();
@@ -485,6 +484,7 @@ class DAOEjercicio {
                         callback(undefined, sol);
                     }
                 });
+                con.release();
             }
         })
     }
@@ -631,7 +631,8 @@ class DAOEjercicio {
                         script = new Buffer.from(script[1], 'base64').toString('ascii');
                         callback(undefined, script);
                     }
-                })
+                });
+                con.release();
             }
         })
     }
@@ -752,6 +753,76 @@ class DAOEjercicio {
                         }else{ //al menos hay uno
                             callback(err, false);
                         }
+                    }
+                });
+                con.release();
+            }
+        })
+    }
+
+    getEjercicio(idEjercicio, callback){
+        this.pool.getConnection((err, con)=>{
+            if(err){
+                callback(err);
+            }else{
+                var sql = `select * from ejercicio where idEjercicio = ?`;
+                con.query(sql, [idEjercicio], (err, filas) =>{
+                    if(err){
+                        callback(err, undefined);
+                    }else{
+                        var row = {};
+
+                        row.creacionTablas = new Buffer.from(filas[0].creacionTablas.split(",")[1], 'base64').toString('ascii');
+                        row.solucionProfesor = new Buffer.from(filas[0].solucionProfesor.split(",")[1], 'base64').toString('ascii');
+                        row.titulo = filas[0].titulo;
+                        row.enunciado = filas[0].enunciado;
+                        row.scripts = [];
+
+                        var sql2 = `select idPrueba, script from scriptspruebas where idEjercicio = ?`;
+                        con.query(sql2, [idEjercicio], (err, sol)=>{
+                            if(err){
+                                callback(err, undefined);
+                            }else{
+                                var scr = {};
+                                sol.forEach(e =>{
+                                    scr.idPrueba = e.idPrueba;
+                                    scr.script = new Buffer.from(e.script.split(",")[1], 'base64').toString('ascii');
+                                    row.scripts.push(scr);
+                                    scr = {};
+                                });
+                                callback(undefined, row);
+                            }
+                        });
+                        con.release();
+                    }
+                });
+            }
+        });
+    }
+
+    deleteScripts(idEjercicio, listScripts, callback){
+        // console.log(listScripts);
+        this.pool.getConnection((err, con) =>{
+            if(err){
+                callback(err);
+            }else{
+                var lista = [];
+                lista.push(idEjercicio);
+                var sql=`delete from scriptspruebas where idEjercicio = ? and `;
+                for(var i = 0; i < listScripts.length; i++){
+                    lista.push(listScripts[i]);
+                    sql += 'idPrueba = ?';
+                    if(i < listScripts.length - 1){
+                        sql += ' and ';
+                    }
+                }
+                // console.log(lista);
+                // console.log(sql);
+                con.query(sql, lista, (err)=>{
+                    if(err){
+                        callback(err);
+                    }else{
+                        callback(undefined);
                     }
                 });
                 con.release();

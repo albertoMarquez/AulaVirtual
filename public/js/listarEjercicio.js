@@ -126,7 +126,14 @@ function mostrarListaEjerciciosAlta(){
         });
             
            $('.dataTables_length').addClass('bs-select');
-           // el orden de la tabla lo he sacado de aqui https://mdbootstrap.com/docs/jquery/tables/sort/ 
+           // el orden de la tabla lo he sacado de aqui https://mdbootstrap.com/docs/jquery/tables/sort/
+
+           $("#tablaEjercicios").on('click', 'tbody tr', function(){
+            // console.log('TR cell textContent : ', this);
+            var data = tableData.row( this ).data();
+            //console.log(data);
+            abrirModal(data);
+        }); 
            
         },
         error: function() {
@@ -239,6 +246,147 @@ function listarCursoYgrupo(idA){
             $(".templateCursoGrupo").before(elem);
             cont = cont + 1;
            });
+        },
+        error: function() {
+            alert("Error al mostrar los ejercicios");
+        }
+    });
+}
+
+function abrirModal(info){
+    // Get the modal
+    // console.log(info);
+    $(".scri").remove();
+    $.ajax({
+        method: "GET",
+        url: "/getDataEjercicio",
+        data:{idEjercicio:info[0]},
+        dataType:"JSON",
+        contentType: "application/json",
+        success: function(ejercicio) {
+            // console.log(ejercicio);
+            var modal = document.getElementById('myModal');
+            var span = document.getElementsByClassName("close")[0];
+            modal.style.display = "block";
+
+            $("#tituloEjer").text(ejercicio.titulo);
+            $("#tituloInput").attr("value", ejercicio.titulo);
+            $("#scriptTablas").val(ejercicio.creacionTablas);
+            $("#scriptSolucion").val(ejercicio.solucionProfesor);
+
+            var cont = 1;
+            ejercicio.scripts.forEach(e=>{
+                var elem = $(".templateModal").clone();
+                elem.find("#idPrueba").text("Prueba " + cont);
+                elem.find("#prueba").val(e.script);
+                elem.find("input").attr("value", e.idPrueba);
+                elem.removeClass("hidden");
+                elem.removeClass("templateModal");
+                elem.addClass("scri");
+
+                $(".templateModal").before(elem);
+                cont = cont + 1;
+
+            });
+
+            $("#actualizar").on('click', function(e){
+                //primero elimino los scripts
+                var sol = {};
+                sol.idEjercicio = info[0];
+                var selectedValues = $('input[type=checkbox]:checked').map(function(){return this.value;});
+                sol.scriptsDelete = selectedValues;
+
+                $.ajax({
+                    method: "POST",
+                    url: "/deleteScripts",
+                    data:JSON.stringify({data:sol}),
+                    contentType: "application/json",
+                    success: function() {
+                        //los scripts se han borrado satisfactoriamente
+                        //actualizar el resto de información
+                       actualizarInformacion();
+                        
+                    },
+                    error: function() {
+                        alert("Error al mostrar los ejercicios");
+                    }
+                })
+                
+            });
+
+
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
+       },
+        error: function(){
+            alert("Error al recuperar entrega");
+        }
+    })
+}
+
+function actualizarInformacion(){
+    var  enun = $('input[type=file]')[0].files[0];
+    var script = $('input[type=file]')[1].files[0];
+    var titulo = $("#tituloInput").val();
+    var scriptTablas = $("#scriptTablas").val();
+    var scriptSolucion = $("#scriptSolucion").val();
+  
+
+    var scriptTablas64 = "data:text/plain;base64,";
+    scriptTablas64 += utf8_to_b64(scriptTablas);
+    var scrSol64 = "data:text/plain;base64,"
+    scriptSolucion += utf8_to_b64(scriptSolucion);
+    var info;
+    if(enun !== undefined){ //hay enunciado
+        getBase64(enun).then(enunciado =>{
+            var enun64 = enunciado;
+            if(script !== undefined){ // hay script
+                getBase64(script).then(script =>{
+                    var script64 = script;
+                    info = {titulo:titulo, scriptTablas:scriptTablas64, srcSolucion:scrSol64, enun:enun64, script:script64};
+                    actualizarEjercicio(info);
+                });
+            }else{ // hay enunciado pero no script
+                info = {titulo:titulo, scriptTablas:scriptTablas64, srcSolucion:scrSol64, enun:enun64};
+                actualizarEjercicio(info);
+            }
+        });
+    }else{ // no hay enunciado
+        if(script !== undefined){ // hay escript
+            getBase64(script).then(script =>{
+                var script64 = script;
+                info = {titulo:titulo, scriptTablas:scriptTablas64, srcSolucion:scrSol64, script:script64};
+                actualizarEjercicio(info);
+            });
+        }else{
+            info = {titulo:titulo, scriptTablas:scriptTablas64, srcSolucion:scrSol64};
+            actualizarEjercicio(info);
+        }
+    }     
+}
+
+function utf8_to_b64(str) {
+    return window.btoa(unescape(encodeURIComponent( str )));
+}
+
+function getBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
+}
+
+function actualizarEjercicio(info){
+    $.ajax({
+        method: "POST",
+        url: "/actualizarEjercicio",
+        data:JSON.stringify({info:info}),
+        contentType: "application/json",
+        success: function() {
+            
         },
         error: function() {
             alert("Error al mostrar los ejercicios");
