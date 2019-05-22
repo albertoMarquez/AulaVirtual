@@ -403,10 +403,10 @@ app.post("/subirEjercicio", (request, response) =>{
 
 function highlight(newElem, oldElem,tipo){ 
     var text = "";
-    console.log("oldElem");
-    console.log(oldElem);
-    console.log("newElem");
-    console.log(newElem);
+    // console.log("oldElem");
+    // console.log(oldElem);
+    // console.log("newElem");
+    // console.log(newElem);
     if(tipo==="texto"){
         var d = diff.diffWordsWithSpace(oldElem, newElem);
         d.forEach(elem =>{
@@ -928,7 +928,7 @@ function numeroDeErrores(resultado){
 app.post("/crearAlumno", (request, response)=>{
     oracleProfesor.altaUsuario(request.body.usuario,(err,sol) =>{
         if(sol){
-            console.log(sol);
+            //console.log(sol);
             response.status(201);
             response.end();
         }else{
@@ -953,7 +953,7 @@ app.post("/eliminarEjercicio", (request, response)=>{
 });
 
 app.post("/solucionOracleAlumno", (request, response)=>{
-    console.log("numeroDeIntentos "+request.body.idEjercicio);
+    //console.log("numeroDeIntentos "+request.body.idEjercicio);
     daoE.solucionScriptsPorfesor(request.body.idEjercicio, (err, solProfesor)=>{
         if(err){
             console.log(err);

@@ -181,22 +181,26 @@ function ejecutaProcedimiento(info){
             //console.log("subirAlumno");
             //console.log(resultado);
             resultado.errores.forEach(e=>{
-                var elem = $("#plantilla1" ).clone();
-                elem.removeClass("hidden");
-                elem.removeAttr("id", "plantilla");
-                elem.removeClass("template");
-                elem.addClass("resultados");
-                elem.text(e);
-                $("#alertas").append(elem);
+                formatearResultado(e,(texto)=>{
+                    var elem = $("#plantilla1" ).clone();
+                    elem.removeClass("hidden");
+                    elem.removeAttr("id", "plantilla");
+                    elem.removeClass("template");
+                    elem.addClass("resultados");
+                    elem.html(texto);
+                    $("#alertas").append(elem);
+                }); 
             });
             resultado.avisos.forEach(e=>{
-                var elem = $("#plantilla3").clone();
-                elem.removeClass("hidden");
-                elem.removeClass("template");
-                elem.removeAttr("id", "plantilla2");
-                elem.addClass("resultados");
-                elem.text(e);
-                $("#alertas").append(elem);
+                formatearResultado(e,(texto)=>{
+                    var elem = $("#plantilla3").clone();
+                    elem.removeClass("hidden");
+                    elem.removeClass("template");
+                    elem.removeAttr("id", "plantilla2");
+                    elem.addClass("resultados");
+                    elem.html(texto);
+                    $("#alertas").append(elem);
+                });
             });
             resultado.ok.forEach(e=>{
                 formatearResultado(e,(texto)=>{
@@ -210,8 +214,7 @@ function ejecutaProcedimiento(info){
                 });
             });
             console.log(`exito!!`);
-            $( "#evaluar" ).prop( "disabled", false );
-            
+            $( "#evaluar" ).prop( "disabled", false ); 
         },
         error: function(error){
              console.log("Error!!!");
