@@ -23,7 +23,7 @@ function nuevoUser() {
         data: JSON.stringify({ nombre: nombreUsuario, password: passwordUsuario, correo: correoUsuario}),
         success: function() {
            alert("Profesor creado correctamente");
-
+           location.reload();
         },
         error: function() {
             alert("Error al crear nuevo usuario.");

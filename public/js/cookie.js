@@ -18,7 +18,7 @@
             var expires = "expires=" + d.toGMTString();
             return document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
         }
-        ///ver como cojo la cucki sin tanto follon
+
         var getCookie = function(cname) {
             var name = cname + "=";
             var decodedCookie = decodeURIComponent(document.cookie);
@@ -34,6 +34,7 @@
             }
             return "";
         }
+        
         var checkCookie = function() {
             var user=getCookie("username");
             if (user != "") {
