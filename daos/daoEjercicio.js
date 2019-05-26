@@ -543,7 +543,8 @@ class DAOEjercicio {
             }else{
                 con.query(`SELECT numeroIntentos FROM altaejercicio WHERE idEj =?`,[idEjercicio],(err, filas)=>{
                     if(err){
-                        //console.log("err");
+                        console.log("err");
+                        console.log(err);
                         callback(err);
                     }else{
                         //if(filas.length === 0){callback(undefined, false);}else{
@@ -595,10 +596,12 @@ class DAOEjercicio {
                                     callback(err, undefined);
                                 }
                                 else{
+                                    //console.log("INSERT :");
                                     callback(undefined,true);
                                 }
                             });
                         }else{
+                          
                             var sql = `UPDATE ejercicioalumno SET solucion=?, numFallos=?, entregaRetrasada=?,intentos=?,resultado=? WHERE idEjercicio = ? AND idAlumno = ? ;`
                             con.query(sql,[datos.solucion, nErr, datos.entregaRetrasada, datos.intentos, resultado, datos.idEjercicio,  datos.idAlumno], (err) =>{
                                 if(err){
@@ -673,18 +676,19 @@ class DAOEjercicio {
     }
 
     getIntentosAlumno(datos, callback){
+        // console.log("datos");
+        // console.log(datos);
         this.pool.getConnection((err, con)=>{
             if(err){
                 callback(err);
             }else{
                 var sql=`SELECT intentos FROM ejercicioalumno WHERE idAlumno = ? AND idEjercicio=?`;
-                con.query(sql, [datos.idA, datos.idEjercicio], (err, filas)=>{
+                con.query(sql, [datos.idAlumno, datos.idEjercicio], (err, filas)=>{
                     if(err){
+                        console.log(err);
                         callback(err, undefined);
                     }
                     else{
-                        //console.log("sol  " + filas);
-                        //console.log(filas);
                         var sol = 0;
                         if(filas.length === 0){
                             sol = 0;

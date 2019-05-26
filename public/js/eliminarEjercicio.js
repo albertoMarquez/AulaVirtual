@@ -1,3 +1,5 @@
+
+
 var user;
 $(document).ready(function() {
     var options={}
@@ -26,6 +28,7 @@ $(document).ready(function() {
                 });
             }  
         });
+        
         
         mostrarListaEjerciciosNoAsignados();
 

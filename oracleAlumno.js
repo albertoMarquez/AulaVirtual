@@ -9,7 +9,7 @@ let allErr;
 //NO BORRAR REFERENCIA POR AHORA
 async function connect(tablas,sql,datos, callback){
   try {
-    console.log("Oracle ALUMNO connect");
+    //console.log("Oracle ALUMNO connect");
     let user = datos.nombre.toUpperCase() + datos.idAlumno;
     await comprobarProcedimineto(tablas,user,datos.solucion,sql,(err,sol)=>{
       if(err){
@@ -142,7 +142,7 @@ async function corregirProcedimiento(user,connection, sql,callback){
       allErr = allErr + "\nError al corregir procedimiento" +  err + JSON.stringify(err);
       console.log("corregirProcedimiento:"+allErr);
     }*/
-    console.log("corregirProcedimiento:"+err);
+    //console.log("corregirProcedimiento:"+err);
   }
   await connection.close();
   //console.log("corregirProcedimiento:"+allErr);

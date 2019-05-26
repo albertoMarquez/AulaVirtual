@@ -47,18 +47,19 @@ $(document).ready(function() {
         
         $("#evaluar").click(function(event) {//Dale al boton y deberia de ejecutarse la funcion 
             $( "#evaluar" ).prop( "disabled", true );
+           
             reloading++;
             event.preventDefault();
             //console.log("boton pulsado");
             var link = window.location.href;
             var res = link.split("/");
-            console.log(res);
+            //console.log(res);
             let idEjercicio = res[4];//coger del id
             //document.getElementById("myTextarea").value;
             //let solucion = $("#solAlmun").val();
             //console.log(user.idAlumno);
             crearAlumno(user,function (err) {
-                console.log("entra en subirScriptAlumno subirScriptAlumno");
+                //console.log("entra en subirScriptAlumno subirScriptAlumno");
                 subirScriptAlumno(user, idEjercicio);
             });
 
@@ -87,7 +88,7 @@ $(document).ready(function() {
   }*/
 function crearAlumno(alumno, callback) {
     let user = alumno.nombre.toUpperCase() + alumno.idAlumno.toString();
-    console.log("usuario "+user);
+    //console.log("usuario "+user);
     $.ajax({
         method: "POST",
         url: "/crearAlumno",
@@ -135,35 +136,35 @@ function subirScriptAlumno(user, idEjercicio){
     numeroDeIntentos(idEjercicio, (num)=>{
         //get intentos alumno, comparar y si es menor, sumar 1 y actualizar tabla
         getIntentosAlumno(idEjercicio, idAlumno, (numIntentos)=>{
-            // console.log(numIntentos);
-            // console.log("numTotales " + num);
-            //if(numIntentos < num){
-            let resultado = ""; //se tiene que coger del oracledb
-            let fechaActual = new Date();
-            let nombre = user.nombre;
-            let usuario = user.user;
-            intentos = numIntentos + 1;
-            leerArchivo((contenido)=>{
-                //console.log(user.user);
-                //if(true){//reader.EMPTY){
-                let solucion2 = contenido;
-                var info = {};
-                if(solucion === ""){
-                    if(solucion2 === undefined){
-                        alert("sube una solucion");
+            console.log(numIntentos);
+            console.log("numTotales " + num);
+            if(numIntentos < num){
+                let resultado = ""; //se tiene que coger del oracledb
+                let fechaActual = new Date();
+                let nombre = user.nombre;
+                let usuario = user.user;
+                intentos = numIntentos + 1;
+                leerArchivo((contenido)=>{
+                    //console.log(user.user);
+                    //if(true){//reader.EMPTY){
+                    let solucion2 = contenido;
+                    var info = {};
+                    if(solucion === ""){
+                        if(solucion2 === undefined){
+                            alert("sube una solucion");
+                        }else{
+                            info = {idEjercicio:idEjercicio, nombre:nombre, usuario:usuario, numOk: numOk, entregaRetrasada: entregaRetrasada, idAlumno:idAlumno, idGrupo:idGrupo,intentos:intentos,resultado:resultado,fechaActual:fechaActual,solucion:solucion2};
+                            ejecutaProcedimiento(info);
+                        }
                     }else{
-                        info = {idEjercicio:idEjercicio, nombre:nombre, usuario:usuario, numOk: numOk, entregaRetrasada: entregaRetrasada, idAlumno:idAlumno, idGrupo:idGrupo,intentos:intentos,resultado:resultado,fechaActual:fechaActual,solucion:solucion2};
+                        info = {idEjercicio:idEjercicio, nombre:nombre, usuario:usuario, numOk: numOk, entregaRetrasada: entregaRetrasada, idAlumno:idAlumno, idGrupo:idGrupo,intentos:intentos,resultado:resultado,fechaActual:fechaActual,solucion:solucion};
                         ejecutaProcedimiento(info);
                     }
-                }else{
-                    info = {idEjercicio:idEjercicio, nombre:nombre, usuario:usuario, numOk: numOk, entregaRetrasada: entregaRetrasada, idAlumno:idAlumno, idGrupo:idGrupo,intentos:intentos,resultado:resultado,fechaActual:fechaActual,solucion:solucion};
-                    ejecutaProcedimiento(info);
-                }
-            
-            });
-            /*}else{
+                
+                });
+            }else{
                 alert("Numero de intentos superado");
-            }*/
+            }
         });
     });
 }
@@ -180,7 +181,13 @@ function ejecutaProcedimiento(info){
             //data = JSON.parse(data);
             //console.log("subirAlumno");
             //console.log(resultado);
+            if(resultado.errores.lenght !== 0){
+                let i = Number($( "#intentos strong" ).text());//intentos temporales 
+                i = i-1;
+                $( "#intentos strong" ).text(i);
+            }
             resultado.errores.forEach(e=>{
+                
                 formatearResultado(e,(texto)=>{
                     var elem = $("#plantilla1" ).clone();
                     elem.removeClass("hidden");
@@ -241,7 +248,7 @@ function ejecutaProcedimiento(info){
 function getIntentosAlumno(idEjercicio, idAlumno, callback){
     var sol = {};
     sol.idEjercicio = idEjercicio;
-    sol.idA = idAlumno;
+    sol.idAlumno = idAlumno;
     $.ajax({
         method: "GET",
         url: "/getIntentosAlumno",
@@ -257,26 +264,22 @@ function getIntentosAlumno(idEjercicio, idAlumno, callback){
     });
 }
 function formatearResultado(texto, callback){
-    console.log("texto");
+    //console.log("texto");
     //console.log(texto);
     var t = texto.split("-- ");
     texto="";
     t.forEach(e => {
         texto += e+"<br>";
     });
-    console.log(texto);
+    //console.log(texto);
     var t = texto.split("\n");
-    
-    
-    console.log("texto2");
-    console.log(texto);
     callback(t);
 }
 
 function leerArchivo(callback) {
     var archivo = $('input[type=file]')[0].files[0];
-    console.log("archivo");
-    console.log(archivo);
+    // console.log("archivo");
+    // console.log(archivo);
     if (!archivo) {
         callback(undefined);
     }else{

@@ -59,7 +59,8 @@ app.get("/getId", (request, response) => {
     })
     
 });
-//import Cookie from "./public/js/cookie";
+
+
 app.post("/login", (request, response) => {
     daoU.isProfesor(request.body.login, request.body.password, (err, op, profesor) =>{
         if (err){
@@ -77,7 +78,6 @@ app.post("/login", (request, response) => {
                             response.end(); 
                         }
                         else{ //es profesor
-                            //console.log(alumno);
                             response.json(alumno);
                             response.status(201); //el usuario es correcto
                             response.end();
@@ -85,7 +85,6 @@ app.post("/login", (request, response) => {
                     }
                 })
             }else{
-                //console.log(profesor);
                 response.json(profesor);
                 response.status(201); //el alumno es correcto
                 response.end();
@@ -93,6 +92,7 @@ app.post("/login", (request, response) => {
         }
     });
 });
+
 
 app.post("/logout", (request, response) =>{
     response.status(200);
@@ -519,11 +519,25 @@ app.get("/subirAlumno/:id/:idAlumno", (request, response) => {
                                             solucion = highlight(sol.comentarioProfe, sol.solAlumno);
                                         }
                                         infoRender.solucionProfe = solucion;
-                                        //console.log(infoRender);
-                                        response.render("subirAlumno", {data:infoRender});
+                                        daoE.getIntentosAlumno(datos, (err, intentos)=>{
+                                            if(err){
+                                                console.log("getIntentosAlumno");
+                                                console.log(err);
+                                            }else{
+                                                daoE.numeroDeIntentos(datos.idEjercicio, (err, numeroIntentos)=>{
+                                                    if(err){
+                                                        console.log("numeroDeIntentos");
+                                                        console.log(err);
+                                                    }else{
+                                                        infoRender.intentos = numeroIntentos-intentos;
+                                                        response.render("subirAlumno", {data:infoRender});
+                                                    }
+                                                })
+                                            }
+                                        });
+                                       
                                     }
                                 });
-                                
                             }
                         })
                     }
