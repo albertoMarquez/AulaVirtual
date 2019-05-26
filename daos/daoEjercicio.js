@@ -890,6 +890,58 @@ class DAOEjercicio {
             }
         })
     }
+
+    actualizarEjercicio(data, callback){
+        console.log(data);
+        this.pool.getConnection((err, con)=>{
+            if(err){
+                callback(err);
+            }else{
+                var sql = `UPDATE ejercicio SET creacionTablas = ?, solucionProfesor = ?, numScriptsSol = ?, enunciado = ?, titulo = ?
+                WHERE idEjercicio = ?`;
+                
+                con.query(sql, [data.scriptTablas64, data.scrSolucion64, data.solScriptOracle.length,
+                     data.enunciado, data.titulo, data.idEjercicio], (err)=>{
+                         if(err){
+                             callback(err);
+                         }else{
+                            //  callback(undefined);
+                            var sql2 = `delete from scriptspruebas where idEjercicio = ?`
+                             con.query(sql2, [data.idEjercicio], (err)=>{
+                                 if(err){
+                                     callback(err);
+                                 }else{
+                                     var sql3 = `insert into scriptspruebas (idEjercicio, idPrueba, script, solucionPrueba) VALUES `;
+                                     for(var i = 0; i < data.solScriptOracle.length;i++){
+                                         sql3 += `(?, ?, ?, ?)`
+                                         if(i != data.solScriptOracle.length - 1){
+                                             sql3 += `,`;
+                                         }
+                                     }
+                                    
+                                     var variables = [];
+                                     for(var j = 0; j < data.listaScriptsTotales.length;j++){
+                                         variables.push(data.idEjercicio);
+                                         variables.push(j + 1);
+                                         variables.push(data.listaScriptsTotales[j]);
+                                         variables.push(data.solScriptOracle[j].toString());
+                                     }
+
+                                     con.query(sql3, variables, (err)=>{
+                                         if(err){
+                                             callback(err);
+                                         }else{
+                                             callback(undefined);
+                                         }
+                                     })
+                                 }
+                             });
+                         }
+                     });
+                
+            }
+        })
+    }
 }
 module.exports = {
     DAOEjercicio: DAOEjercicio

@@ -373,7 +373,7 @@ app.post("/subirEjercicio", (request, response) =>{
                         }else{
                             if(op !== undefined){
                                 response.json(op);
-                                console.log(data.usuario);
+                                // console.log(data.usuario);
                                 let user = "P"+data.usuario.toUpperCase()+data.idProfesor.toString();
                                 oracleProfesor.altaUsuario(user,(resul)=>{
                                     oracleProfesor.connectProfesor(op,user,(sol)=>{
@@ -593,7 +593,50 @@ app.post("/deleteScripts", (request, response)=>{
 });
 
 app.post("/actualizarEjercicio", (request, response)=>{
-    console.log(request.body);
+    // console.log(request.body);
+    var data = request.body.info;
+    if(data.script64 !== undefined){
+        data.script = new Buffer.from(data.script64.split(",")[1], 'base64').toString('ascii');
+    }
+    var sql = [];
+    sql.push(data.scriptTablas);
+    sql.push(data.scrSolucion);
+
+    data.listaScriptsTotales = [];
+    
+
+    for(var i = 0; i < data.scriptPruebas.length;i++){
+        sql.push(data.scriptPruebas[i].script);
+        data.listaScriptsTotales.push("data:text/plain;base64,"+Buffer(data.scriptPruebas[i].script).toString('base64'));
+    }
+    if(data.script !== undefined){
+        sql.push(data.script);
+        data.listaScriptsTotales.push("data:text/plain;base64,"+Buffer(data.script).toString('base64'));
+        
+    }
+
+    let user = "P"+data.usuario.toUpperCase()+data.idProfesor.toString();
+    oracleProfesor.altaUsuario(user,(resul)=>{
+        oracleProfesor.connectProfesor(sql,user,(sol)=>{
+            // console.log("sol");
+            // console.log(sol);
+
+            data.solScriptOracle = sol;
+            
+            daoE.actualizarEjercicio(data, (err) =>{
+                if(err){
+                    response.status(400);
+                    response.end();
+                }else{
+                    response.status(200);
+                    response.end();
+                }
+            });
+
+        });
+    });
+    response.status(201);
+    response.end();
 });
 
 app.get("/mostrarListaEjerNoAsignados", (request, response) =>{
