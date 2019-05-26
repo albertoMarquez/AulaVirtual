@@ -129,12 +129,22 @@ function mostrarListaEjerciciosAlta(){
            $('.dataTables_length').addClass('bs-select');
            // el orden de la tabla lo he sacado de aqui https://mdbootstrap.com/docs/jquery/tables/sort/
 
-           $("#tablaEjercicios").on('click', 'tbody tr', function(){
-            // console.log('TR cell textContent : ', this);
-            var data = tableData.row( this ).data();
-            //console.log(data);
-            abrirModal(data);
-        }); 
+            $("#tablaEjercicios").on('click', 'tbody tr', function(){
+                // console.log('TR cell textContent : ', this);
+                var data = tableData.row( this ).data();
+                //console.log(data);
+                $(".scri").remove();
+                abrirModal(data);
+            }); 
+
+            $("#tablaEjerciciosNA").on('click', 'tbody tr', function(){
+                // console.log('TR cell textContent : ', this);
+                var data = tableData.row( this ).data();
+                //console.log(data);
+                $(".scri").remove();
+                abrirModal(data);
+            
+            }); 
            
         },
         error: function() {
@@ -257,6 +267,7 @@ function listarCursoYgrupo(idA){
 function abrirModal(info){
     // Get the modal
     // console.log(info);
+    
     $(".scri").remove();
     $.ajax({
         method: "GET",

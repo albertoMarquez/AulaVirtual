@@ -24,6 +24,7 @@
 function redireccionarBoton(dir){
     var link = window.location.href;
     var res = link.split("/");
-    window.location = res[1] + dir;
+    console.log(res);
+    window.location = res[1] + "/" + dir;
 }
 </script>
