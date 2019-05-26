@@ -58,8 +58,9 @@ async function altaUsuario(usuario, callback){
 async function connectProfesor(sql,user,callback){
   try {
     await run(sql,user,(resultado) =>{
-      console.log("connect)");
+      console.log("connect");
       callback(resultado);
+      return;
     });//la funcion que le pasamos(oracle.run)
   } catch (err) {
     console.error('connectProfesor() error: ' + err.message);
@@ -83,8 +84,10 @@ async function run(sql,user,callback){//sql tiene la cracion de las tablas, el p
         else{
           await createTables(connection,sql[0]);
           await createProcedure(connection,sql[1]);
-          await callProcedures(connection,sql,user,(sol)=>{
+          await callProcedures(connection,sql,user, async function (sol){
+            await connection.close();
             callback(sol);
+            return;
           });
         }
       }
@@ -132,7 +135,7 @@ async function createProcedure(connection,sql){
   }
 }
 
-async function callProcedures(connection, sql,user,callback){
+async function callProcedures(connection,sql,user,callback){
   let resultado = [];
   let sq;
   for(let i = 2; i < sql.length; i++){//Las dos primeras posiciones del array son las tablas y el procedimiento

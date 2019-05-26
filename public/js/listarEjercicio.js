@@ -2,11 +2,12 @@ var idA;
 var idG;
 var tipo;
 var tableData;
-var user;
+var user, modal;
 $(document).ready(function() {
     var options={}
     $.galleta(options);
     user = $.galleta().getc("usuario");
+    console.log(user);
     
     if(user != "undefined"){
         user = JSON.parse(user);
@@ -265,7 +266,7 @@ function abrirModal(info){
         contentType: "application/json",
         success: function(ejercicio) {
             // console.log(ejercicio);
-            var modal = document.getElementById('myModal');
+            modal = document.getElementById('myModal');
             var span = document.getElementsByClassName("close")[0];
             modal.style.display = "block";
 
@@ -304,7 +305,7 @@ function abrirModal(info){
                     success: function() {
                         //los scripts se han borrado satisfactoriamente
                         //actualizar el resto de información
-                       actualizarInformacion();
+                       actualizarInformacion(ejercicio.scripts, info[0]);
                         
                     },
                     error: function() {
@@ -325,18 +326,19 @@ function abrirModal(info){
     })
 }
 
-function actualizarInformacion(){
+function actualizarInformacion(scriptsPruebas, idEjercicio){
+    // console.log(scriptsPruebas);
     var  enun = $('input[type=file]')[0].files[0];
-    var script = $('input[type=file]')[1].files[0];
+    var scriptNuevo = $('input[type=file]')[1].files[0];
     var titulo = $("#tituloInput").val();
     var scriptTablas = $("#scriptTablas").val();
     var scriptSolucion = $("#scriptSolucion").val();
-  
+
 
     var scriptTablas64 = "data:text/plain;base64,";
     scriptTablas64 += utf8_to_b64(scriptTablas);
     var scrSol64 = "data:text/plain;base64,"
-    scriptSolucion += utf8_to_b64(scriptSolucion);
+    scrSol64 += utf8_to_b64(scriptSolucion);
     var info;
     if(enun !== undefined){ //hay enunciado
         getBase64(enun).then(enunciado =>{
@@ -344,23 +346,61 @@ function actualizarInformacion(){
             if(script !== undefined){ // hay script
                 getBase64(script).then(script =>{
                     var script64 = script;
-                    info = {titulo:titulo, scriptTablas:scriptTablas64, srcSolucion:scrSol64, enun:enun64, script:script64};
+                    info = {idEjercicio:idEjercicio,
+                        idProfesor:user.idProfesor, 
+                        usuario:user.nombre,
+                        scriptPruebas:scriptsPruebas,  
+                        titulo:titulo, 
+                        scriptTablas64:scriptTablas64, 
+                        scriptTablas:scriptTablas, 
+                        scrSolucion64:scrSol64, 
+                        scrSolucion:scriptSolucion,
+                        enun:enun64, 
+                        script64:script64
+                    };
                     actualizarEjercicio(info);
                 });
             }else{ // hay enunciado pero no script
-                info = {titulo:titulo, scriptTablas:scriptTablas64, srcSolucion:scrSol64, enun:enun64};
+                info = {idEjercicio:idEjercicio,
+                    idProfesor:user.idProfesor, 
+                    usuario:user.nombre,
+                    scriptPruebas:scriptsPruebas,  
+                    titulo:titulo, 
+                    scriptTablas64:scriptTablas64, 
+                    scriptTablas:scriptTablas, 
+                    scrSolucion64:scrSol64, 
+                    scrSolucion:scriptSolucion,
+                    enun:enun64};
                 actualizarEjercicio(info);
             }
         });
     }else{ // no hay enunciado
-        if(script !== undefined){ // hay escript
-            getBase64(script).then(script =>{
+        if(scriptNuevo !== undefined){ // hay script
+            getBase64(scriptNuevo).then(script =>{
                 var script64 = script;
-                info = {titulo:titulo, scriptTablas:scriptTablas64, srcSolucion:scrSol64, script:script64};
+                info = {idEjercicio:idEjercicio,
+                    idProfesor:user.idProfesor, 
+                    usuario:user.nombre,
+                    scriptPruebas:scriptsPruebas,  
+                    titulo:titulo, 
+                    scriptTablas64:scriptTablas64, 
+                    scriptTablas:scriptTablas, 
+                    scrSolucion64:scrSol64, 
+                    scrSolucion:scriptSolucion,
+                    script64:script64
+                    };
                 actualizarEjercicio(info);
             });
         }else{
-            info = {titulo:titulo, scriptTablas:scriptTablas64, srcSolucion:scrSol64};
+            info = {idEjercicio:idEjercicio,
+                idProfesor:user.idProfesor, 
+                usuario:user.nombre,
+                scriptPruebas:scriptsPruebas,  
+                titulo:titulo, 
+                scriptTablas64:scriptTablas64, 
+                scriptTablas:scriptTablas, 
+                scrSolucion64:scrSol64, 
+                scrSolucion:scriptSolucion};
             actualizarEjercicio(info);
         }
     }     
@@ -386,10 +426,12 @@ function actualizarEjercicio(info){
         data:JSON.stringify({info:info}),
         contentType: "application/json",
         success: function() {
+            modal.style.display = "none";
+            alert("actualizado!");
             
         },
         error: function() {
-            alert("Error al mostrar los ejercicios");
+            alert("Error al actualizar los ejercicios");
         }
     });
 }
