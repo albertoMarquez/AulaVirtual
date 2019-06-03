@@ -406,21 +406,40 @@ class DAOUsers {
     evaluaAlumno(data, callback){
         //console.log(data);
         var ev = 1;
-        if(data.tipo === 1){
+
+        var sql = `SELECT * 
+        from (SELECT a.nombre, a.apellidos, a.idAlumno, a.idGrupo, ea.idEjercicio, ea.solucion, ea.nota, ea.numFallos, ea.entregaRetrasada, ea.intentos, ea.resultado 
+               from ejercicioalumno ea join alumno a 
+                ON ea.idAlumno = a.idAlumno and a.idGrupo = ?) a JOIN 
+                    (select e.idEjercicio, e.numScriptsSol, e.titulo, ae.evaluacion, ae.numeroIntentos, ae.idGrupo
+                     from ejercicio e join altaejercicio ae 
+                     ON ae.idEj = e.idEjercicio and ae.evaluacion = ?) b
+        ON a.idEjercicio = b.idEjercicio
+        and a.idGrupo = b.idGrupo`; 
+        var todos = [Number(data.grupo), Number(ev)];
+      
+        if(Number(data.tipo) === 1){
             ev = 0;
+        }else if(Number(data.tipo) === 2){
+            sql = `SELECT * 
+            from (SELECT a.nombre, a.apellidos, a.idAlumno, a.idGrupo, ea.idEjercicio, ea.solucion, ea.nota, ea.numFallos, ea.entregaRetrasada, ea.intentos, ea.resultado 
+                   from ejercicioalumno ea join alumno a 
+                    ON ea.idAlumno = a.idAlumno and a.idGrupo = ?) a JOIN 
+                        (select e.idEjercicio, e.numScriptsSol, e.titulo, ae.evaluacion, ae.numeroIntentos, ae.idGrupo
+                         from ejercicio e join altaejercicio ae 
+                         ON ae.idEj = e.idEjercicio) b
+            ON a.idEjercicio = b.idEjercicio
+            and a.idGrupo = b.idGrupo`;
+            todos = [Number(data.grupo)];
         }
+        console.log(sql);
+        console.log(todos);
         this.pool.getConnection((err, con)=>{
             if(err){
                 callback(err);
             }else{
-                var sql = `SELECT * 
-                from (SELECT a.nombre, a.apellidos, a.idAlumno, a.idGrupo, ea.idEjercicio, ea.solucion, ea.nota, ea.numFallos, ea.entregaRetrasada, ea.intentos, ea.resultado 
-                    from ejercicioalumno ea join alumno a 
-                    ON ea.idAlumno = a.idAlumno and a.idGrupo = ?) a JOIN (select e.idEjercicio, e.numScriptsSol, e.titulo, ae.evaluacion, ae.numeroIntentos 
-                                                                            from ejercicio e join altaejercicio ae 
-                                                                            ON ae.idEj = e.idEjercicio and ae.evaluacion = ?) b
-                ON a.idEjercicio = b.idEjercicio`; 
-                con.query(sql, [Number(data.grupo), Number(ev)], (err, filas)=>{
+               
+                con.query(sql, todos, (err, filas)=>{
                     if(err){
                         callback(err);
                     }else{

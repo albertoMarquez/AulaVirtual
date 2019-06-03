@@ -338,6 +338,7 @@ function abrirModal(info){
 }
 
 function actualizarInformacion(scriptsPruebas, idEjercicio){
+    
     // console.log(scriptsPruebas);
     var  enun = $('input[type=file]')[0].files[0];
     var scriptNuevo = $('input[type=file]')[1].files[0];
@@ -351,10 +352,12 @@ function actualizarInformacion(scriptsPruebas, idEjercicio){
     var scrSol64 = "data:text/plain;base64,"
     scrSol64 += utf8_to_b64(scriptSolucion);
     var info;
+    
     if(enun !== undefined){ //hay enunciado
         getBase64(enun).then(enunciado =>{
             var enun64 = enunciado;
-            if(script !== undefined){ // hay script
+            console.log("comprueba el script dentro de enun");
+            if(scriptNuevo !== undefined){ // hay script
                 getBase64(script).then(script =>{
                     var script64 = script;
                     info = {idEjercicio:idEjercicio,
