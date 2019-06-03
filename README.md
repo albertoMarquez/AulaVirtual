@@ -36,7 +36,7 @@ externo (en nuestro caso Oracle) para ejecutar los procedimientos almacenados SQ
 (PL/SQL).
 Parte de funcionalidad tiene similitud con muchos jueces en línea que se pueden encontrar
 en internet además de los que se usan en otras asignaturas, como DomJudge o el juez de
-la Universidad de Valladolid [19]. Sin embargo, la dificultad de esta herramienta se
+la Universidad de Valladolid. Sin embargo, la dificultad de esta herramienta se
 encuentra en que no compara resultados uno a uno como hacen otros jueces. Esta crea un
 entorno de prueba en el servidor Oracle con tablas y datos propios de cada ejercicio,
 almacena el procedimiento del alumno y ejecuta unos scripts de prueba.
