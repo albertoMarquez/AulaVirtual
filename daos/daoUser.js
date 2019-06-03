@@ -404,7 +404,7 @@ class DAOUsers {
    
 
     evaluaAlumno(data, callback){
-        //console.log(data);
+        
         var ev = 1;
 
         var sql = `SELECT * 
@@ -432,8 +432,7 @@ class DAOUsers {
             and a.idGrupo = b.idGrupo`;
             todos = [Number(data.grupo)];
         }
-        console.log(sql);
-        console.log(todos);
+      
         this.pool.getConnection((err, con)=>{
             if(err){
                 callback(err);
