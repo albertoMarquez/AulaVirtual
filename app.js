@@ -26,8 +26,7 @@ let pool = mysql.createPool({
     user: config.mysqlConfig.user,
     password: config.mysqlConfig.password
 });
-console.log("pool");
-console.log(pool);
+
 let daoU = new daoUser.DAOUsers(pool);
 let daoE = new daoEjer.DAOEjercicio(pool);
 let daoA = new daoAsig.DAOAsignatura(pool);
@@ -63,7 +62,7 @@ app.get("/getId", (request, response) => {
 
 
 app.post("/login", (request, response) => {
-    console.log("entra");
+    //console.log("entra");
     daoU.isProfesor(request.body.login, request.body.password, (err, op, profesor) =>{
         console.log("request.body.login");
         console.log(request.body.login);

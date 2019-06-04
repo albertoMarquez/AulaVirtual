@@ -247,7 +247,8 @@ class DAOUsers {
                                 profesor.user="profesor";
                                 sol.push(profesor);
                             });
-                            //console.log(profesor);
+                            console.log("profesor");
+                            console.log(profesor);
                             callback(undefined, true, sol)
                         }
                     }
