@@ -230,15 +230,13 @@ class DAOUsers {
         console.log("profesor");
         this.pool.getConnection((err, conexion) =>{
             if(err){
+                console.log(err);
                 callback(err);
             }
             else{
                 conexion.query(`select * from profesor where correo = ? and pass = ?`, [login , password], 
                 (err, resultado) =>{ 
-                    console.log("resultado");
-                    console.log(resultado);
-                    console.log("err");
-                    console.log(err);
+                   
                     if(!err){
                         if(resultado.length === 0){
                             callback(undefined, false, undefined)

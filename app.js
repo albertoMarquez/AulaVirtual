@@ -64,8 +64,6 @@ app.get("/getId", (request, response) => {
 app.post("/login", (request, response) => {
     //console.log("entra");
     daoU.isProfesor(request.body.login, request.body.password, (err, op, profesor) =>{
-        console.log("request.body.login");
-        console.log(request.body.login);
         if (err){
             
             response.status(400); //mal introducido
