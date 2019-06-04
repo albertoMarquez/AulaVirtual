@@ -729,11 +729,13 @@ app.get("/getCursoGrupo", (request, response) =>{
     var idProfe = Number(request.query.idP);
     daoA.listarCursoGrupo(id, idProfe, (err, filas) =>{
         if(err){
+            console.log("err en listarCursoGrupo");
+            console.log(err);
             response.status(400);
             response.end();
         }else{
-            response.status(200);
             response.json(filas);
+            response.status(200);
             response.end();
         }
     })

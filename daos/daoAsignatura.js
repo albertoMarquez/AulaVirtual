@@ -160,8 +160,12 @@ class DAOAsignatura {
                  [idAsignatura, anioHoy, idProfe],
                 (err, filas) =>{
                     if(err){
+                        console.log("error en la consulta");
+                        console.log(err);
                         callback(err, undefined);
                     }else{
+                        console.log(filas);
+                        console.log(filas);
                         var row = {};
                         var sol = [];
 
