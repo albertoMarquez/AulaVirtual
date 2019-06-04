@@ -67,6 +67,7 @@ app.post("/login", (request, response) => {
         console.log("request.body.login");
         console.log(request.body.login);
         if (err){
+            
             response.status(400); //mal introducido
             response.end();
         }else {

@@ -227,6 +227,7 @@ class DAOUsers {
     }
 
     isProfesor(login, password, callback) { //comprobacion usuario  
+        console.log("profesor");
         this.pool.getConnection((err, conexion) =>{
             if(err){
                 callback(err);
@@ -234,6 +235,10 @@ class DAOUsers {
             else{
                 conexion.query(`select * from profesor where correo = ? and pass = ?`, [login , password], 
                 (err, resultado) =>{ 
+                    console.log("resultado");
+                    console.log(resultado);
+                    console.log("err");
+                    console.log(err);
                     if(!err){
                         if(resultado.length === 0){
                             callback(undefined, false, undefined)
@@ -247,8 +252,7 @@ class DAOUsers {
                                 profesor.user="profesor";
                                 sol.push(profesor);
                             });
-                            console.log("profesor");
-                            console.log(profesor);
+                            
                             callback(undefined, true, sol)
                         }
                     }
