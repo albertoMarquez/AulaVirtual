@@ -66,10 +66,10 @@ class DAOEjercicio {
         this.pool.getConnection((err, con) =>{
             var fecha = new Date();
             var anio = fecha.getFullYear();
-            console.log(fecha);
-            console.log(anio);
-            console.log(datos);
-            console.log(idAlumno);
+            // console.log(fecha);
+            // console.log(anio);
+            // console.log(datos);
+            // console.log(idAlumno);
             if(err){
                 callback(err);
             }else{
