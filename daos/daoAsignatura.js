@@ -239,6 +239,8 @@ class DAOAsignatura {
                  [data.idA, anioHoy, data.idP, data.idE],
                 (err, filas) =>{
                     if(err){
+                        console.log("listarCursoGrupoNoAlta");
+                        console.log(err);
                         callback(err, undefined);
                     }else{
                         var row = {};

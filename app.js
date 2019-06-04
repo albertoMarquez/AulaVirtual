@@ -24,10 +24,9 @@ let pool = mysql.createPool({
     database: config.mysqlConfig.database,
     host: config.mysqlConfig.host,
     user: config.mysqlConfig.user,
-    password: config.mysqlConfig.password,
-    port: '/opt/lampp/var/mysql/mysql.sock'
+    password: config.mysqlConfig.password
+    //port: '/opt/lampp/var/mysql/mysql.sock'
 });
-console.log(pool);
 let daoU = new daoUser.DAOUsers(pool);
 let daoE = new daoEjer.DAOEjercicio(pool);
 let daoA = new daoAsig.DAOAsignatura(pool);
@@ -756,9 +755,11 @@ app.get("/getCursoGrupoSinAlumnos", (request, response) =>{
 });
 
 app.get("/getCursoGrupoNoAlta", (request, response) =>{
-   // console.log(request.query);
+    console.log(request.query);
     daoA.listarCursoGrupoNoAlta(request.query, (err, filas) =>{
         if(err){
+            console.log("daoA.listarCursoGrupoNoAlta");
+            console.log(err);
             response.status(400);
             response.end();
         }else{
