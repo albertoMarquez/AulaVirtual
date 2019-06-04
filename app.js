@@ -26,7 +26,7 @@ let pool = mysql.createPool({
     user: config.mysqlConfig.user,
     password: config.mysqlConfig.password
 });
-
+console.log(pool);
 let daoU = new daoUser.DAOUsers(pool);
 let daoE = new daoEjer.DAOEjercicio(pool);
 let daoA = new daoAsig.DAOAsignatura(pool);
