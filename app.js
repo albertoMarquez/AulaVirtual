@@ -24,8 +24,8 @@ let pool = mysql.createPool({
     database: config.mysqlConfig.database,
     host: config.mysqlConfig.host,
     user: config.mysqlConfig.user,
-    password: config.mysqlConfig.password
-    //port: '/opt/lampp/var/mysql/mysql.sock'
+    password: config.mysqlConfig.password,
+    port: '/opt/lampp/var/mysql/mysql.sock'
 });
 let daoU = new daoUser.DAOUsers(pool);
 let daoE = new daoEjer.DAOEjercicio(pool);
