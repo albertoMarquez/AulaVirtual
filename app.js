@@ -42,7 +42,6 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json());
 let usuario;
 
-
 app.get("/", (request, response) => {
     response.status(200);
     response.redirect("/index.html");

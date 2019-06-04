@@ -46,7 +46,7 @@ async function comprobarProcedimineto(tablas, user,solucion,sql, callback){//sql
     conection = await oracledb.getConnection({
       user:  user,
       password: user,
-      connectString: 'localhost',
+      connectString: dbConfig.connectString,
     },
     async function(err, conection) {
       if (err)
