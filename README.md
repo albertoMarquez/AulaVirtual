@@ -29,8 +29,7 @@ encuentre una solución válida. Además, podrá calificarle y ponerle nota hast
 como el alumno necesite.
 Esta herramienta da apoyo tanto a profesores como a alumnos a la hora de resolver
 problemas de PL/SQL. Con una sencilla e intuitiva página web que utiliza una base de
-datos en el servidor web para guardar toda la información relacionada con asignaturas,
-
+datos en el servidor web para guardar toda la información relacionada con asignaturas, 
 alumnos, grupos y ejercicios, además de conectarse a un servidor de bases de datos
 externo (en nuestro caso Oracle) para ejecutar los procedimientos almacenados SQL/PSM
 (PL/SQL).
