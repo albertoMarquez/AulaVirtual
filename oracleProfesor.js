@@ -12,8 +12,8 @@ async function altaUsuario(usuario, callback){
   try {
     connection = await oracledb.getConnection(
       {
-        user: 'SYS',
-        password: 'adbd18',
+        user: dbConfig.user,
+        password: dbConfig.password,
         connectString:  dbConfig.connectString,
         privilege: oracledb.SYSDBA
       },
