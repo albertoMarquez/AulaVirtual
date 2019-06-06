@@ -404,10 +404,6 @@ app.post("/subirEjercicio", (request, response) =>{
 
 function highlight(newElem, oldElem,tipo){ 
     var text = "";
-    // console.log("oldElem");
-    // console.log(oldElem);
-    // console.log("newElem");
-    // console.log(newElem);
     if(tipo==="texto"){
         var d = diff.diffWordsWithSpace(oldElem, newElem);
         d.forEach(elem =>{
@@ -424,6 +420,7 @@ function highlight(newElem, oldElem,tipo){
             text = "<span>No tienes comentarios</span>";
         }else{
             var d = diff.diffWordsWithSpace(oldElem, newElem);
+            // console.log(d);
             d.forEach(elem =>{
             
                 if(elem.value === '\n' || elem.value === '\r\n' || elem.value === '\r\n \r\n' || 
@@ -440,6 +437,9 @@ function highlight(newElem, oldElem,tipo){
                 }else{
                     if(elem.added === undefined && elem.removed === undefined){
                         text += "<span>" + elem.value + "</span>";
+                        while(text.indexOf('\n') !== -1){
+                            text = text.replace("\n", "<br>", "gi");
+                        }
                     }else{
                         if(elem.added === true){
                             text += "<span class='highlight'>" + elem.value + "</span>";
@@ -554,7 +554,7 @@ app.get("/mostrarAlumnos", (request, response)=>{
         if(err){
             console.log("ha habido un error");
         }else{
-            console.log(filas);
+            // console.log(filas);
             response.status(201);
             response.json(filas);
             response.end();
@@ -1075,8 +1075,8 @@ app.post("/solucionOracleAlumno", (request, response)=>{
                     // console.log("solAlumno");
                     // console.log(solAlumno);
                     let solResaltada = highlight(solAlumno,solProfesorAux,"texto");
-                    console.log("solResaltada");
-                    console.log(solResaltada);
+                    // console.log("solResaltada");
+                    // console.log(solResaltada);
                     response.json(solResaltada);
                     response.status(201);
                     response.end();
