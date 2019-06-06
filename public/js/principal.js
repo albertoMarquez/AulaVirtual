@@ -21,6 +21,8 @@ $(document).ready(function() {
                 
                 $("#desconectar").click(function(event) {
                     $.galleta().setc("usuario", "undefined", "Thu, 01 Jan 1970 00:00:01 GMT");
+                    $.galleta().setc("listarEjercicioOPT", "undefined", "Thu, 01 Jan 1970 00:00:01 GMT");
+                    $.galleta().setc("evaluarAlumnoOPT", "undefined", "Thu, 01 Jan 1970 00:00:01 GMT");
                     var link = window.location.href;
                     var res = link.split("/");
                     window.location = res[1] + "/";

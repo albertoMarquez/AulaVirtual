@@ -557,15 +557,18 @@ class DAOEjercicio {
     }
 
     actualizaEjercicioAlumno(datos, callback){
+        // console.log(datos);
         this.pool.getConnection((err, con)=>{
             if(err){
                 callback(err);
             }else{
-                var sql = `UPDATE ejercicioalumno SET correccionProfesor =?, nota=? WHERE idEjercicio = ? AND idAlumno = ?;`
-                con.query(sql, [datos.comentario, Number(datos.nota), datos.idEjercicio, datos.idAlumno], (err, filas)=>{
+                var sql = `UPDATE ejercicioalumno SET correccionProfesor =?, nota=? WHERE idAlumno = ? and idEjercicio = ?;`
+                con.query(sql, [datos.comentario, Number(datos.nota), Number(datos.idAlumno), Number(datos.idEjercicio)], (err, filas)=>{
                     if(err){
+                        
                         callback(err, undefined);
                     }else{
+                        // console.log(filas);
                         callback(undefined, true);
                     }
                 });
@@ -580,8 +583,8 @@ class DAOEjercicio {
             if(err){
                 callback(err, undefined);
             }else{
-                con.query(`SELECT count(*) as e from ejercicioalumno where idEjercicio =?`,
-                [datos.idEjercicio], (err,sol) =>{
+                con.query(`SELECT count(*) as e from ejercicioalumno where idEjercicio =? and idAlumno = ?`,
+                [datos.idEjercicio, datos.idAlumno], (err,sol) =>{
                     if(err){
                         callback(err, undefined);
                     }

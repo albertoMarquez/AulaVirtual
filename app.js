@@ -856,6 +856,7 @@ app.post("/actualizaComentarioNota", (request, response)=>{
     }else if(request.body.nota < 0){
         info.nota = 0;
     }
+    // console.log("actualizaEjercicioAlumno");
     // console.log(info);
     daoE.actualizaEjercicioAlumno(info, (err, filas)=>{
         if(err){

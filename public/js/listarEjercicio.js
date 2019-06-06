@@ -1,6 +1,7 @@
 var idA;
 var idG;
 var tipo;
+var grupoVal;
 var tableData;
 var user, modal;
 $(document).ready(function() {
@@ -25,14 +26,42 @@ $(document).ready(function() {
                 }
                 $("#desconectar").click(function(event) {
                     $.galleta().setc("usuario", "undefined", "Thu, 01 Jan 1970 00:00:01 GMT");
+                    $.galleta().setc("listarEjercicioOPT", "undefined", "Thu, 01 Jan 1970 00:00:01 GMT");
+                    $.galleta().setc("evaluarAlumnoOPT", "undefined", "Thu, 01 Jan 1970 00:00:01 GMT");
                     var link = window.location.href;
                     var res = link.split("/");
                     window.location = res[1] + "/";
                 });
             }  
         });
+
+        var cookie = $.galleta().getc("listarEjercicioOPT");
+        console.log(cookie);
+        if(cookie != "undefined"){
+            cookie = JSON.parse(cookie);
+        }
     
         cargarAsignatura();
+        
+        if(cookie.a != undefined){
+            idA = cookie.a;
+            idG = cookie.g;
+            tipo = cookie.t;
+            $("#asignatura").val(cookie.a).change();
+            $("#asignatura option[value=" + cookie.a + "]").attr("selected", true);
+
+            listarCursoYgrupo(cookie.a);
+            $("#cursoGrupo").val("'" + Number(cookie.gval) + "'").change();
+            $("#cursoGrupo option[value='"+ Number(cookie.gval) + "']").attr('selected', 'selected');
+
+            if(cookie.t != undefined){
+                if(cookie.t == 1){ //ejercicios dados de alta
+                    mostrarListaEjerciciosAlta();
+                }else if(cookie.t == 2){ //ejercicios no asignados
+                    mostrarListaEjerciciosNoAsignados();
+                }
+            }
+        }
 
         $('#asignatura').on('change', function() {
             idA = $(this).find(':selected').data('idAsig');
@@ -42,6 +71,7 @@ $(document).ready(function() {
 
         $("#cursoGrupo").on('change', function(){
             idG = $(this).find(':selected').data('idGrupo');
+            grupoVal = $(this).find(':selected').val();
             if(tipo != undefined){
                 if(tipo == 1){ //ejercicios dados de alta
                     mostrarListaEjerciciosAlta();
@@ -441,7 +471,13 @@ function actualizarEjercicio(info){
         contentType: "application/json",
         success: function() {
             modal.style.display = "none";
-            alert("actualizado!");
+            var opt = {};
+            opt.a=idA;
+            opt.g=idG;
+            opt.t=tipo;
+            opt.gval = grupoVal; 
+            $.galleta().setc("listarEjercicioOPT", JSON.stringify(opt), 1);
+            location.reload();
             
         },
         error: function() {

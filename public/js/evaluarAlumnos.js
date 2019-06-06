@@ -1,5 +1,6 @@
+
 var tableData;
-let asig, grupo, tipo, cursoGrupo;
+let asig, grupo, tipo, cursoGrupo, grupoVal;
 var user;
 $(document).ready(function() {
     var options={}
@@ -22,14 +23,37 @@ $(document).ready(function() {
                 }
                 $("#desconectar").click(function(event) {
                     $.galleta().setc("usuario", "undefined", "Thu, 01 Jan 1970 00:00:01 GMT");
+                    $.galleta().setc("listarEjercicioOPT", "undefined", "Thu, 01 Jan 1970 00:00:01 GMT");
+                    $.galleta().setc("evaluarAlumnoOPT", "undefined", "Thu, 01 Jan 1970 00:00:01 GMT");
                     var link = window.location.href;
                     var res = link.split("/");
                     window.location = res[1] + "/";
                 });
             }  
         });
-    
+        var cookie = $.galleta().getc("evaluarAlumnoOPT");
+        if(cookie != "undefined"){
+            cookie = JSON.parse(cookie);
+        }
+     
         cargarAsignatura();
+        console.log(cookie);
+        if(cookie.a !== undefined){
+            asig = cookie.a;
+            grupo = cookie.g;
+            cursoGrupo = cookie.cyg;
+            tipo = cookie.t;
+            $("#asignatura").val(cookie.a).change();
+            $("#asignatura option[value=" + cookie.a + "]").attr("selected", true);
+
+            listarCursoYgrupo(cookie.a);
+            $("#cursoGrupo").val("'" + Number(cookie.gval) + "'").change();
+            $("#cursoGrupo option[value='"+ Number(cookie.gval) + "']").attr('selected', 'selected');
+
+            $("#problema").val(Number(cookie.t)).change();
+            $("#problema option[value=" + Number(cookie.t) + "]").attr("selected", true);
+            cargarListaAlumnosEvaluar(cookie.a, cookie.g, Number(cookie.t), cookie.cyg);
+        }
         
        
         $('#asignatura').on('change', function() {
@@ -40,6 +64,7 @@ $(document).ready(function() {
 
         $("#cursoGrupo").on('change', function() {
             grupo = $(this).find(':selected').data('idGrupo');
+            grupoVal = $(this).find(':selected').val();
             cursoGrupo = $(this).find(':selected').text();
            // console.log(grupo);
            if(asig !== undefined && grupo !== undefined && tipo !== undefined){
@@ -49,17 +74,15 @@ $(document).ready(function() {
         });
        
         $("#problema").on('change', function(){
+            
             tipo = $(this).find(':selected').val();
+            
            // console.log(tipo);
            if(asig !== undefined && grupo !== undefined && tipo !== undefined){               
                // $("tbody .elem").remove();
                 cargarListaAlumnosEvaluar(asig, grupo, tipo, cursoGrupo);
             }
         });
-
-        if(tipo !== undefined){
-            $("#problema").val(tipo).change();
-        }
     }
     else{
         var link = window.location.href;
@@ -72,6 +95,7 @@ $(document).ready(function() {
 //por lo que en la query no hace falta dicha comprobación
  
 function cargarListaAlumnosEvaluar(idA, idG, tipoEjer, cursoGrupo){
+    console.log(`data: idA: ${idA}, idG: ${idG}, tipo:${tipoEjer}`);
     $.ajax({
         method: "GET",
         url: "/evaluaAlumno",
@@ -139,13 +163,9 @@ function cargarListaAlumnosEvaluar(idA, idG, tipoEjer, cursoGrupo){
             });
             
             $('.dataTables_length').addClass('bs-select');
-            // el orden de la tabla lo he sacado de aqui https://mdbootstrap.com/docs/jquery/tables/sort/ 
-            // edicionTablaDataTable();
-
+          
             $('#tablaA').on('click', 'tbody tr', function(){
-                // console.log('TR cell textContent : ', this);
                 var data = tableData.row( this ).data();
-                //console.log(data);
                 abrirModal(data);
             }); 
         },
@@ -158,7 +178,6 @@ function cargarListaAlumnosEvaluar(idA, idG, tipoEjer, cursoGrupo){
 
 function abrirModal(info){
     // Get the modal
-    console.log(info);
     $.ajax({
         method: "GET",
         url: "/getUltimaEntrega",
@@ -166,7 +185,7 @@ function abrirModal(info){
         dataType:"JSON",
         contentType: "application/json",
         success: function(ultimaEntrega) {
-            console.log(ultimaEntrega);
+            // console.log(ultimaEntrega);
             var modal = document.getElementById('myModal');
             var span = document.getElementsByClassName("close")[0];
             modal.style.display = "block";
@@ -205,6 +224,7 @@ function abrirModal(info){
 
             $("#botonModal").click(function(event) {
                 event.preventDefault();
+                // console.log(info);
                 $.ajax({
                     method: "POST",
                     url: "/actualizaComentarioNota",
@@ -213,8 +233,15 @@ function abrirModal(info){
                     success: function() {
                        // alert("Actualizado correctamente");
                         modal.style.display = "none";
-                                         
-                        $("#problema").val(0).change();
+                        //$("#problema").val(0).change();
+                        var opt = {};
+                        opt.a = asig;
+                        opt.g = grupo;
+                        opt.t = tipo;
+                        opt.cyg = cursoGrupo;
+                        opt.gval = grupoVal;
+                        $.galleta().setc("evaluarAlumnoOPT", JSON.stringify(opt), 1);
+                        location.reload();
                    
                     },
                     error: function(){

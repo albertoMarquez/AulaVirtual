@@ -47,8 +47,8 @@ function login() {
         success: function(usuario){
            
             date = new Date();
-            console.log("usuario[0].user === 'profesor'");
-            console.log(usuario[0].user === "profesor");
+            // console.log("usuario[0].user === 'profesor'");
+            // console.log(usuario[0].user === "profesor");
             if(usuario[0].user === "alumno" && usuario[0].nAsignaturas > 1){
                 abrirModal(usuario, function (escogido){
                     console.log(escogido);
@@ -57,6 +57,8 @@ function login() {
                     var fecha = new Date(escogido.cambioContrasenia);
                     usuAux= JSON.stringify(escogido);//Para castearlo a un objeto y despues cogerlo en ese formato de la cookie cuando lo necesite
                     $.galleta().setc("usuario",usuAux, 1);
+                    $.galleta().setc("listarEjercicioOPT","undefined", 1);
+                    $.galleta().setc("evaluarAlumnoOPT","undefined", 1);
                     if(fecha.getFullYear() > date.getFullYear() || usuario.user.localeCompare("profesor")===0){//ya ha cambiado su contraseña
                         var link = window.location.href;
                         var res = link.split("/");
