@@ -13,8 +13,8 @@ async function altaUsuario(usuario, callback){
     connection = await oracledb.getConnection(
       {
         user: 'SYS',
-        password: 'SYS',
-        connectString: 'localhost',
+        password: 'adbd18',
+        connectString:  dbConfig.connectString,
         privilege: oracledb.SYSDBA
       },
       function(err, connection) {
@@ -75,7 +75,7 @@ async function run(sql,user,callback){//sql tiene la cracion de las tablas, el p
       {
         user: user,
         password: user,
-        connectString: 'localhost'
+        connectString: dbConfig.connectString
         //privilege: oracledb.SYSDBA
       },
       async function(err,connection){

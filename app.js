@@ -25,8 +25,8 @@ let pool = mysql.createPool({
     host: config.mysqlConfig.host,
     user: config.mysqlConfig.user,
     password: config.mysqlConfig.password
+    //port: '/opt/lampp/var/mysql/mysql.sock'
 });
-
 let daoU = new daoUser.DAOUsers(pool);
 let daoE = new daoEjer.DAOEjercicio(pool);
 let daoA = new daoAsig.DAOAsignatura(pool);
@@ -41,7 +41,6 @@ app.use(passport.initialize());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json());
 let usuario;
-
 
 app.get("/", (request, response) => {
     response.status(200);
@@ -62,8 +61,10 @@ app.get("/getId", (request, response) => {
 
 
 app.post("/login", (request, response) => {
+    //console.log("entra");
     daoU.isProfesor(request.body.login, request.body.password, (err, op, profesor) =>{
         if (err){
+            
             response.status(400); //mal introducido
             response.end();
         }else {
@@ -727,11 +728,13 @@ app.get("/getCursoGrupo", (request, response) =>{
     var idProfe = Number(request.query.idP);
     daoA.listarCursoGrupo(id, idProfe, (err, filas) =>{
         if(err){
+            console.log("err en listarCursoGrupo");
+            console.log(err);
             response.status(400);
             response.end();
         }else{
-            response.status(200);
             response.json(filas);
+            response.status(200);
             response.end();
         }
     })
@@ -753,9 +756,11 @@ app.get("/getCursoGrupoSinAlumnos", (request, response) =>{
 });
 
 app.get("/getCursoGrupoNoAlta", (request, response) =>{
-   // console.log(request.query);
+    console.log(request.query);
     daoA.listarCursoGrupoNoAlta(request.query, (err, filas) =>{
         if(err){
+            console.log("daoA.listarCursoGrupoNoAlta");
+            console.log(err);
             response.status(400);
             response.end();
         }else{
