@@ -1,4 +1,15 @@
+
 # AulaVirtual
+
+Acceso al sistema en la siguiente dirección: 
+http://147.96.80.139:3000
+
+Profesor: p@ucm.es
+Pass: a
+
+Alumno: alberto@ucm.es
+Pass: a
+
 Aprender a programar en un lenguaje procedural de base de datos SQL/PSM, tiene una
 complejidad mayor al aprendizaje de un lenguaje de programación de propósito
 general. Por una parte, para realizar programas sencillos se requiere construir
