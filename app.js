@@ -410,7 +410,7 @@ function highlight(newElem, oldElem,tipo){
             if(elem.added === undefined && elem.removed === undefined){
                 text += elem.value;
             }else{
-                if(elem.added === true){
+                if(elem.added === true || elem.removed === true){
                     text += "****" + elem.value;
                 }
             }
